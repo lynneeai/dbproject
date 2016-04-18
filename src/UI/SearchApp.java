@@ -24,7 +24,7 @@ import DAO.AuthorDAO;
 public class SearchApp extends JFrame {
 
     private JPanel contentPane;
-    private JTextField lastNameTextField;
+    private JTextField NameTextField;
     private JButton btnSearch;
     private JScrollPane scrollPane;
     private JTable table;
@@ -69,26 +69,26 @@ public class SearchApp extends JFrame {
         flowLayout.setAlignment(FlowLayout.LEFT);
         contentPane.add(panel, BorderLayout.NORTH);
 		
-        JLabel lblEnterLastName = new JLabel("Enter Name of Author");
-        panel.add(lblEnterLastName);
+        JLabel lblEnterName = new JLabel("Enter Name of Author");
+        panel.add(lblEnterName);
 		
-        lastNameTextField = new JTextField();
-        panel.add(lastNameTextField);
-        lastNameTextField.setColumns(10);
+        NameTextField = new JTextField();
+        panel.add(NameTextField);
+        NameTextField.setColumns(10);
 		
         btnSearch = new JButton("Search");
         btnSearch.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             // Get last name from the text field
 
-            // Call DAO and get employees for the last name
+            // Call DAO and get authors for the name
 
-            // If last name is empty, then get all employees
+            // If last name is empty, then get all authors
 
-            // Print out employees				
+            // Print out first five authors				
 				
             try {
-                String Name = lastNameTextField.getText();
+                String Name = NameTextField.getText();
 
                 List<Author> authors = null;
 
