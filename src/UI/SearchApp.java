@@ -28,11 +28,11 @@ public class SearchApp extends JFrame {
 
     private JPanel contentPane;
     private JPanel panel;
+    private JPanel interPanel;
     private JTextField NameTextField;
     private JButton btnSearch;
     private JScrollPane scrollPane;
     private JTable table;
-    private JLabel lblEnterName;
 
     private AuthorDAO AuthorDAO;
 	
@@ -71,7 +71,9 @@ public class SearchApp extends JFrame {
         panel = new JPanel();
         FlowLayout flowLayout = (FlowLayout) panel.getLayout();
         flowLayout.setAlignment(FlowLayout.LEFT);
-        contentPane.add(panel, BorderLayout.NORTH);
+        contentPane.add(panel, BorderLayout.NORTH); 
+        GridLayout experimentLayout1 = new GridLayout(2,2);
+        panel.setLayout(experimentLayout1);
         
         JLabel lblSearchItem = new JLabel("What do you want to search? ");
         panel.add(lblSearchItem);
@@ -85,46 +87,58 @@ public class SearchApp extends JFrame {
         choice.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent ie) {               
                 if (choice.getSelectedItem() == "Authors") {
+                    interPanel.removeAll();
                     init_authorGUI();
                 }
                 else if (choice.getSelectedItem() == "Titles") {
+                    interPanel.removeAll();
                     init_titleGUI();
                 }
                 else if (choice.getSelectedItem() == "Publications") {
+                    interPanel.removeAll();
                     init_publicationGUI();
                 }
                 else if (choice.getSelectedItem() == "Publishers") {
+                    interPanel.removeAll();
                     init_publisherGUI();
                 }
                 else if (choice.getSelectedItem() == "Awards") {
+                    interPanel.removeAll();
                     init_awardGUI();
                 }
                 else if (choice.getSelectedItem() == "Languages") {
+                    interPanel.removeAll();
                     init_languageGUI();
                 }
             }      
         }); 
         panel.add(choice);
-        lblEnterName = new JLabel();
-        panel.add(lblEnterName);
         
-        NameTextField = new JTextField();
-        panel.add(NameTextField);
-        NameTextField.setColumns(10);
-        
-        btnSearch = new JButton("Search");
+        GridLayout experimentLayout2 = new GridLayout(0,3);
+        interPanel = new JPanel();
+        FlowLayout interflowLayout = (FlowLayout) interPanel.getLayout();
+        panel.add(interPanel, BorderLayout.LINE_START);
+        interPanel.setLayout(experimentLayout2);
         
         init_authorGUI();
         
-        panel.add(btnSearch);
         scrollPane = new JScrollPane();
-        contentPane.add(scrollPane, BorderLayout.CENTER);
+        contentPane.add(scrollPane, BorderLayout.PAGE_END);
 		
         table = new JTable();
         scrollPane.setViewportView(table);
     }
     
     public void init_authorGUI() {
+        JLabel lblEnterName= new JLabel();
+        interPanel.add(lblEnterName);
+        
+        NameTextField = new JTextField();
+        interPanel.add(NameTextField);
+        NameTextField.setColumns(10);
+        
+        btnSearch = new JButton("Search");
+        interPanel.add(btnSearch);
         lblEnterName.setText("Name of Author");		
         
         btnSearch.addActionListener(new ActionListener() {
@@ -167,6 +181,15 @@ public class SearchApp extends JFrame {
     } 
     
     public void init_titleGUI() {
+        JLabel lblEnterName= new JLabel();
+        interPanel.add(lblEnterName);
+        
+        NameTextField = new JTextField();
+        interPanel.add(NameTextField);
+        NameTextField.setColumns(10);
+        
+        btnSearch = new JButton("Search");
+        interPanel.add(btnSearch);
         lblEnterName.setText("Name of Title");
 
         btnSearch.addActionListener(new ActionListener() {
@@ -208,6 +231,15 @@ public class SearchApp extends JFrame {
     } 
     
     public void init_publicationGUI() {
+        JLabel lblEnterName= new JLabel();
+        interPanel.add(lblEnterName);
+        
+        NameTextField = new JTextField();
+        interPanel.add(NameTextField);
+        NameTextField.setColumns(10);
+        
+        btnSearch = new JButton("Search");
+        interPanel.add(btnSearch);
         lblEnterName.setText("Name of Publication");
 
         btnSearch.addActionListener(new ActionListener() {
@@ -249,6 +281,15 @@ public class SearchApp extends JFrame {
     } 
     
     public void init_publisherGUI() {
+        JLabel lblEnterName= new JLabel();
+        interPanel.add(lblEnterName);
+        
+        NameTextField = new JTextField();
+        interPanel.add(NameTextField);
+        NameTextField.setColumns(10);
+        
+        btnSearch = new JButton("Search");
+        interPanel.add(btnSearch);
         lblEnterName.setText("Name of Publisher");
 
         btnSearch.addActionListener(new ActionListener() {
@@ -290,6 +331,15 @@ public class SearchApp extends JFrame {
     } 
     
     public void init_awardGUI() {
+        JLabel lblEnterName= new JLabel();
+        interPanel.add(lblEnterName);
+        
+        NameTextField = new JTextField();
+        interPanel.add(NameTextField);
+        NameTextField.setColumns(10);
+        
+        btnSearch = new JButton("Search");
+        interPanel.add(btnSearch);
         lblEnterName.setText("Name of Award");
 
         btnSearch.addActionListener(new ActionListener() {
@@ -331,6 +381,15 @@ public class SearchApp extends JFrame {
     } 
     
     public void init_languageGUI() {
+        JLabel lblEnterName= new JLabel();
+        interPanel.add(lblEnterName);
+        
+        NameTextField = new JTextField();
+        interPanel.add(NameTextField);
+        NameTextField.setColumns(10);
+        
+        btnSearch = new JButton("Search");
+        interPanel.add(btnSearch);
         lblEnterName.setText("Name of Language");
 
         btnSearch.addActionListener(new ActionListener() {
