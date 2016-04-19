@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*; 
 import java.applet.Applet; 
 
+import  javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -27,12 +28,15 @@ import DAO.AuthorDAO;
 public class SearchApp extends JFrame {
 
     private JPanel contentPane;
-    private JPanel panel;
-    private JPanel interPanel;
-    private JTextField NameTextField;
+    private JPanel panel1;
+    private JPanel panel2;
+    private JPanel panel3;
+    private JTextField searchTextField;
+    private Choice methodChoice;
+    private Choice searchChoice;
+    private JButton advancedOption;
+    private JLabel placeHolder;
     private JButton btnSearch;
-    private JScrollPane scrollPane;
-    private JTable table;
 
     private AuthorDAO AuthorDAO;
 	
@@ -60,377 +64,90 @@ public class SearchApp extends JFrame {
             JOptionPane.showMessageDialog(this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
         }
 		
-        setTitle("Author Search App");
+        setTitle("Book Search App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 1000, 1000);
+        setBounds(100, 100, 800, 180);
+        initialPage();
+    }
+    
+    public void initialPage() {
         contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
 		
-        panel = new JPanel();
-        FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-        flowLayout.setAlignment(FlowLayout.LEFT);
-        contentPane.add(panel, BorderLayout.NORTH); 
-        GridLayout experimentLayout1 = new GridLayout(2,2);
-        panel.setLayout(experimentLayout1);
+        panel1 = new JPanel();
+        FlowLayout flowLayout1 = (FlowLayout) panel1.getLayout();
+        flowLayout1.setAlignment(FlowLayout.LEFT);
+        contentPane.add(panel1, BorderLayout.NORTH); 
+        panel1.setLayout(new GridLayout(1,1));
         
-        JLabel lblSearchItem = new JLabel("What do you want to search? ");
-        panel.add(lblSearchItem);
-        Choice choice =new Choice(); 
-        choice.addItem("Authors"); 
-        choice.addItem("Titles"); 
-        choice.addItem("Publications"); 
-        choice.addItem("Publishers"); 
-        choice.addItem("Awards"); 
-        choice.addItem("Languages"); 
-        choice.addItemListener(new ItemListener(){
-            public void itemStateChanged(ItemEvent ie) {               
-                if (choice.getSelectedItem() == "Authors") {
-                    interPanel.removeAll();
-                    init_authorGUI();
-                }
-                else if (choice.getSelectedItem() == "Titles") {
-                    interPanel.removeAll();
-                    init_titleGUI();
-                }
-                else if (choice.getSelectedItem() == "Publications") {
-                    interPanel.removeAll();
-                    init_publicationGUI();
-                }
-                else if (choice.getSelectedItem() == "Publishers") {
-                    interPanel.removeAll();
-                    init_publisherGUI();
-                }
-                else if (choice.getSelectedItem() == "Awards") {
-                    interPanel.removeAll();
-                    init_awardGUI();
-                }
-                else if (choice.getSelectedItem() == "Languages") {
-                    interPanel.removeAll();
-                    init_languageGUI();
-                }
-            }      
-        }); 
-        panel.add(choice);
+        JLabel lblSearchItem = new JLabel("Book Search ", SwingConstants.CENTER);
+        panel1.add(lblSearchItem);
         
-        GridLayout experimentLayout2 = new GridLayout(0,3);
-        interPanel = new JPanel();
-        FlowLayout interflowLayout = (FlowLayout) interPanel.getLayout();
-        panel.add(interPanel, BorderLayout.LINE_START);
-        interPanel.setLayout(experimentLayout2);
+        panel2 = new JPanel();
+        FlowLayout flowLayout2 = (FlowLayout) panel2.getLayout();
+        flowLayout2.setAlignment(FlowLayout.LEFT);
+        panel2.setBorder(new EmptyBorder(32, 5, 33, 5));
+        contentPane.add(panel2, BorderLayout.CENTER); 
+        panel2.setLayout(new GridLayout(1,3));
         
-        init_authorGUI();
+        methodChoice = new Choice();
+        methodChoice.addItem("Exact Search"); 
+        methodChoice.addItem("Approximate Search"); 
+        panel2.add(methodChoice);
         
-        scrollPane = new JScrollPane();
-        contentPane.add(scrollPane, BorderLayout.PAGE_END);
-		
-        table = new JTable();
-        scrollPane.setViewportView(table);
+        searchTextField = new JTextField();
+        panel2.add(searchTextField);
+        searchTextField.setColumns(10);
+        
+        searchChoice = new Choice();
+        searchChoice.addItem("Authors"); 
+        searchChoice.addItem("Titles"); 
+        searchChoice.addItem("Publications"); 
+        searchChoice.addItem("Publishers"); 
+        searchChoice.addItem("Awards"); 
+        searchChoice.addItem("Languages"); 
+        panel2.add(searchChoice);
+        
+        panel3 = new JPanel();
+        FlowLayout flowLayout3 = (FlowLayout) panel3.getLayout();
+        flowLayout3.setAlignment(FlowLayout.LEFT);
+        contentPane.add(panel3, BorderLayout.SOUTH); 
+        panel3.setLayout(new GridLayout(1,3));
+        
+        advancedOption = new JButton("Advanced Search Option");
+        advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
+        panel3.add(advancedOption);
+        
+        placeHolder = new JLabel("Book Search ");
+        placeHolder.setFont(new Font("Serif", Font.BOLD, 10));
+        placeHolder.setForeground(new Color(0, 255, 0, 0));
+        panel3.add(placeHolder);
+        
+        btnSearch = new JButton("Search");
+        btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
+        panel3.add(btnSearch);
+        
+        advancedOption.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("pressed");
+                detailSearch();
+            }
+        });    
     }
     
-    public void init_authorGUI() {
-        JLabel lblEnterName= new JLabel();
-        interPanel.add(lblEnterName);
-        
-        NameTextField = new JTextField();
-        interPanel.add(NameTextField);
-        NameTextField.setColumns(10);
-        
-        btnSearch = new JButton("Search");
-        interPanel.add(btnSearch);
-        lblEnterName.setText("Name of Author");		
-        
-        btnSearch.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            // Get name from the text field
-
-            // Call DAO and get authors for the name
-
-            // If name is empty, then get all authors
-
-            // Print out first five authors				
-				
-            try {
-                String Name = NameTextField.getText();
-
-                List<Author> authors = null;
-
-                if (Name != null && Name.trim().length() > 0) {
-                    authors = AuthorDAO.searchAuthors(Name);
-                } else {
-                    authors = AuthorDAO.getfiveAuthors();
-                }
-					
-                // create the model and update the "table"
-		AuthorTableModel model = new AuthorTableModel(authors);	
-                
-		table.setModel(model);
-					
-		/*
-                for (Author temp : authors) {
-                    System.out.println(temp);
-		}
-		*/
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-                }			
-            }
-        });     
-        
-    } 
+    public void detailSearch() {
+        setTitle("Book Search App");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 800);
+        panel1.removeAll();
+        panel2.removeAll();
+        panel3.removeAll();
+        JLabel lblSearchItem = new JLabel("Advanced Search ", SwingConstants.CENTER);
+        panel1.add(lblSearchItem);
+    }
     
-    public void init_titleGUI() {
-        JLabel lblEnterName= new JLabel();
-        interPanel.add(lblEnterName);
-        
-        NameTextField = new JTextField();
-        interPanel.add(NameTextField);
-        NameTextField.setColumns(10);
-        
-        btnSearch = new JButton("Search");
-        interPanel.add(btnSearch);
-        lblEnterName.setText("Name of Title");
-
-        btnSearch.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            // Get name from the text field
-
-            // Call DAO and get authors for the name
-
-            // If name is empty, then get all authors
-
-            // Print out first five authors				
-				
-            try {
-                String Name = NameTextField.getText();
-
-                List<Author> authors = null;
-
-                if (Name != null && Name.trim().length() > 0) {
-                    authors = AuthorDAO.searchAuthors(Name);
-                } else {
-                    authors = AuthorDAO.getfiveAuthors();
-                }
-					
-                // create the model and update the "table"
-		AuthorTableModel model = new AuthorTableModel(authors);	
-                
-		table.setModel(model);
-					
-		/*
-                for (Author temp : authors) {
-                    System.out.println(temp);
-		}
-		*/
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-                }			
-            }
-        });           
-    } 
     
-    public void init_publicationGUI() {
-        JLabel lblEnterName= new JLabel();
-        interPanel.add(lblEnterName);
-        
-        NameTextField = new JTextField();
-        interPanel.add(NameTextField);
-        NameTextField.setColumns(10);
-        
-        btnSearch = new JButton("Search");
-        interPanel.add(btnSearch);
-        lblEnterName.setText("Name of Publication");
-
-        btnSearch.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            // Get name from the text field
-
-            // Call DAO and get authors for the name
-
-            // If name is empty, then get all authors
-
-            // Print out first five authors				
-				
-            try {
-                String Name = NameTextField.getText();
-
-                List<Author> authors = null;
-
-                if (Name != null && Name.trim().length() > 0) {
-                    authors = AuthorDAO.searchAuthors(Name);
-                } else {
-                    authors = AuthorDAO.getfiveAuthors();
-                }
-					
-                // create the model and update the "table"
-		AuthorTableModel model = new AuthorTableModel(authors);	
-                
-		table.setModel(model);
-					
-		/*
-                for (Author temp : authors) {
-                    System.out.println(temp);
-		}
-		*/
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-                }			
-            }
-        });           
-    } 
+}  
     
-    public void init_publisherGUI() {
-        JLabel lblEnterName= new JLabel();
-        interPanel.add(lblEnterName);
-        
-        NameTextField = new JTextField();
-        interPanel.add(NameTextField);
-        NameTextField.setColumns(10);
-        
-        btnSearch = new JButton("Search");
-        interPanel.add(btnSearch);
-        lblEnterName.setText("Name of Publisher");
-
-        btnSearch.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            // Get name from the text field
-
-            // Call DAO and get authors for the name
-
-            // If name is empty, then get all authors
-
-            // Print out first five authors				
-				
-            try {
-                String Name = NameTextField.getText();
-
-                List<Author> authors = null;
-
-                if (Name != null && Name.trim().length() > 0) {
-                    authors = AuthorDAO.searchAuthors(Name);
-                } else {
-                    authors = AuthorDAO.getfiveAuthors();
-                }
-					
-                // create the model and update the "table"
-		AuthorTableModel model = new AuthorTableModel(authors);	
-                
-		table.setModel(model);
-					
-		/*
-                for (Author temp : authors) {
-                    System.out.println(temp);
-		}
-		*/
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-                }			
-            }
-        });            
-    } 
-    
-    public void init_awardGUI() {
-        JLabel lblEnterName= new JLabel();
-        interPanel.add(lblEnterName);
-        
-        NameTextField = new JTextField();
-        interPanel.add(NameTextField);
-        NameTextField.setColumns(10);
-        
-        btnSearch = new JButton("Search");
-        interPanel.add(btnSearch);
-        lblEnterName.setText("Name of Award");
-
-        btnSearch.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            // Get name from the text field
-
-            // Call DAO and get authors for the name
-
-            // If name is empty, then get all authors
-
-            // Print out first five authors				
-				
-            try {
-                String Name = NameTextField.getText();
-
-                List<Author> authors = null;
-
-                if (Name != null && Name.trim().length() > 0) {
-                    authors = AuthorDAO.searchAuthors(Name);
-                } else {
-                    authors = AuthorDAO.getfiveAuthors();
-                }
-					
-                // create the model and update the "table"
-		AuthorTableModel model = new AuthorTableModel(authors);	
-                
-		table.setModel(model);
-					
-		/*
-                for (Author temp : authors) {
-                    System.out.println(temp);
-		}
-		*/
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-                }			
-            }
-        });            
-    } 
-    
-    public void init_languageGUI() {
-        JLabel lblEnterName= new JLabel();
-        interPanel.add(lblEnterName);
-        
-        NameTextField = new JTextField();
-        interPanel.add(NameTextField);
-        NameTextField.setColumns(10);
-        
-        btnSearch = new JButton("Search");
-        interPanel.add(btnSearch);
-        lblEnterName.setText("Name of Language");
-
-        btnSearch.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            // Get name from the text field
-
-            // Call DAO and get authors for the name
-
-            // If name is empty, then get all authors
-
-            // Print out first five authors				
-				
-            try {
-                String Name = NameTextField.getText();
-
-                List<Author> authors = null;
-
-                if (Name != null && Name.trim().length() > 0) {
-                    authors = AuthorDAO.searchAuthors(Name);
-                } else {
-                    authors = AuthorDAO.getfiveAuthors();
-                }
-					
-                // create the model and update the "table"
-		AuthorTableModel model = new AuthorTableModel(authors);	
-                
-		table.setModel(model);
-					
-		/*
-                for (Author temp : authors) {
-                    System.out.println(temp);
-		}
-		*/
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-                }			
-            }
-        });           
-    } 
-        
- }
-        
-        		
-        

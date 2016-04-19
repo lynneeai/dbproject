@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 /bin/
 .metadata
 .classpath
 .project
+=======
+/build/
+>>>>>>> Stashed changes
