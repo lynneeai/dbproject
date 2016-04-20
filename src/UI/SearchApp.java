@@ -231,6 +231,11 @@ public class SearchApp extends JFrame {
         
         advancedOption.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                panel1.removeAll();
+                panel2.removeAll();
+                panel3.removeAll();
+                panel4.removeAll();
+                contentPane.removeAll();
                 table.setModel(new DefaultTableModel());
                 detailSearch();
             }
@@ -278,13 +283,12 @@ public class SearchApp extends JFrame {
     	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setBounds(100, 100, 800, 600);
+        
         panel1.removeAll();
         panel2.removeAll();
         panel3.removeAll();
-        panel4.removeAll();
         contentPane.removeAll();
-    	
-    	//contentPane = new JPanel();
+        
         contentPane.setBorder(new EmptyBorder(10, 10, 18, 10));
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
