@@ -80,7 +80,7 @@ public class SearchApp extends JFrame {
     
     public void initialPage() {
         contentPane = new JPanel();
-        //contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
+        contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
 		
