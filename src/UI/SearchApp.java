@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.applet.Applet; 
 
 import  javax.swing.*;
+import javax.swing.table.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -31,12 +32,15 @@ public class SearchApp extends JFrame {
     private JPanel panel1;
     private JPanel panel2;
     private JPanel panel3;
+    private JPanel panel4;
     private JTextField searchTextField;
     private Choice methodChoice;
     private Choice searchChoice;
     private JButton advancedOption;
     private JLabel placeHolder;
     private JButton btnSearch;
+    private JScrollPane scrollPane;
+    private JTable table;
 
     private AuthorDAO AuthorDAO;
 	
@@ -103,9 +107,8 @@ public class SearchApp extends JFrame {
         searchTextField.setColumns(10);
         
         searchChoice = new Choice();
-        searchChoice.addItem("Authors"); 
-        searchChoice.addItem("Titles"); 
-        searchChoice.addItem("Publications"); 
+        searchChoice.addItem("Authors");  
+        searchChoice.addItem("Books"); 
         searchChoice.addItem("Publishers"); 
         searchChoice.addItem("Awards"); 
         searchChoice.addItem("Languages"); 
@@ -136,10 +139,138 @@ public class SearchApp extends JFrame {
         
         advancedOption.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("pressed");
                 detailSearch();
             }
-        });    
+        });
+        
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                searchResult();
+            }
+        });
+    }
+    
+    public void searchResult() {
+        setTitle("Book Search App");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 600);
+        panel1.removeAll();
+        panel2.removeAll();
+        panel3.removeAll();
+        
+        GridBagLayout gridbag = new GridBagLayout();
+        GridBagConstraints c = new GridBagConstraints();
+        
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(10, 0, 18, 0));
+        contentPane.setLayout(gridbag);
+        setContentPane(contentPane);
+		
+        panel1 = new JPanel();
+        FlowLayout flowLayout1 = (FlowLayout) panel1.getLayout();
+        flowLayout1.setAlignment(FlowLayout.LEFT);
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridheight = 1;
+        contentPane.add(panel1,c); 
+        panel1.setLayout(new GridLayout(1,1));
+        
+        JLabel lblSearchItem = new JLabel("Book Search ", SwingConstants.CENTER);
+        panel1.add(lblSearchItem);
+        
+        panel2 = new JPanel();
+        FlowLayout flowLayout2 = (FlowLayout) panel2.getLayout();
+        flowLayout2.setAlignment(FlowLayout.LEFT);
+        panel2.setBorder(new EmptyBorder(25, 5, 25, 5));
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        contentPane.add(panel2,c); 
+        panel2.setLayout(new GridLayout(1,3));
+        
+        methodChoice = new Choice();
+        methodChoice.addItem("Exact Search"); 
+        methodChoice.addItem("Approximate Search"); 
+        panel2.add(methodChoice);
+        
+        searchTextField = new JTextField();
+        panel2.add(searchTextField);
+        searchTextField.setColumns(10);
+        
+        searchChoice = new Choice();
+        searchChoice.addItem("Authors"); 
+        searchChoice.addItem("Books");  
+        searchChoice.addItem("Publishers"); 
+        searchChoice.addItem("Awards"); 
+        searchChoice.addItem("Languages"); 
+        panel2.add(searchChoice);
+        
+        panel3 = new JPanel();
+        FlowLayout flowLayout3 = (FlowLayout) panel3.getLayout();
+        flowLayout3.setAlignment(FlowLayout.LEFT);
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridheight = 1;
+        contentPane.add(panel3,c); 
+        panel3.setLayout(new GridLayout(1,3));
+        
+        advancedOption = new JButton("Advanced Search Option");
+        advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
+        panel3.add(advancedOption);
+        
+        placeHolder = new JLabel("Book Search ");
+        placeHolder.setFont(new Font("Serif", Font.BOLD, 10));
+        placeHolder.setForeground(new Color(0, 255, 0, 0));
+        panel3.add(placeHolder);
+        
+        btnSearch = new JButton("Search");
+        btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
+        panel3.add(btnSearch);
+        
+        advancedOption.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                table.setModel(new DefaultTableModel());
+                detailSearch();
+            }
+        });
+        
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                table.removeAll();
+                try {
+                    String Name = searchTextField.getText();
+                    List<Author> authors = null;
+                    
+                    if (Name != null && Name.trim().length() > 0) {
+                        authors = AuthorDAO.searchAuthors(Name);
+                    } else {
+                    authors = AuthorDAO.getfiveAuthors();
+                    }					
+                    AuthorTableModel model = new AuthorTableModel(authors);	               
+                    table.setModel(model);
+                } catch (Exception exc) {
+                    JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
+                }			
+            }
+        });
+        
+        panel4 = new JPanel();
+        FlowLayout flowLayout4 = (FlowLayout) panel4.getLayout();
+        flowLayout4.setAlignment(FlowLayout.LEFT);
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridheight = 3;
+        c.anchor = GridBagConstraints.PAGE_END; //bottom of space
+        c.weighty = 0.5;
+        contentPane.add(panel4,c); 
+        panel4.setLayout(new GridLayout(1,1));
+        
+        scrollPane = new JScrollPane();
+        panel4.add(scrollPane, BorderLayout.PAGE_END);
+		
+        table = new JTable();
+        scrollPane.setViewportView(table);
     }
     
     public void detailSearch() {
