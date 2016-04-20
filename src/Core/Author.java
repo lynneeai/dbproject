@@ -28,6 +28,7 @@ public class Author {
     public String getAuthorName() {
     	return AUTHOR_NAME;
     }
+    
 
     public String getBirthplace() {
     	return BIRTHPLACE;

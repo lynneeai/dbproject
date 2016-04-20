@@ -23,6 +23,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.border.Border;
+
 import Core.Author;
 import DAO.AuthorDAO;
   
@@ -77,7 +80,7 @@ public class SearchApp extends JFrame {
     
     public void initialPage() {
         contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
+        //contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
 		
@@ -122,9 +125,7 @@ public class SearchApp extends JFrame {
         
         advancedOption = new JButton("Advanced Search Option");
         advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
-        if (advancedOption.getModel().isPressed()) {
-        	detailSearch();
-        }
+
         
         panel3.add(advancedOption);
         
@@ -286,7 +287,7 @@ public class SearchApp extends JFrame {
         JPanel panelTitle = new JPanel();
         FlowLayout flowLayout1 = (FlowLayout) panelTitle.getLayout();
         flowLayout1.setAlignment(FlowLayout.LEFT);
-        contentPane.add(panelTitle, BorderLayout.NORTH); 
+        //contentPane.add(panelTitle, BorderLayout.NORTH); 
         panelTitle.setLayout(new GridLayout(1,1));
         
         JLabel lblSearchItem = new JLabel("Advanced Book Search ", SwingConstants.CENTER);
@@ -297,60 +298,170 @@ public class SearchApp extends JFrame {
         JPanel panelFields = new JPanel();
         panelFields.setLayout(new GridBagLayout());
         GridBagConstraints grid = new GridBagConstraints();
+        
         JLabel authorName = new JLabel("Author Name");
         JLabel bookTitle = new JLabel("Book Title");
         JLabel publisher = new JLabel("Publisher");
-        JLabel date = new JLabel("Date");
+        JLabel startDate = new JLabel("Start Date");
+        JLabel endDate = new JLabel("End Date");
         JLabel language = new JLabel("Language");
+        JLabel bookSeries = new JLabel("Book Series");
+        JLabel type = new JLabel("Type");
+        JLabel transparent1 = new JLabel("");
+        JLabel transparent2 = new JLabel("");
+        JLabel transparent3 = new JLabel("");
+       
         
         JTextField text1 = new JTextField();
         JTextField text2 = new JTextField();
         JTextField text3 = new JTextField();
+        JTextField text4 = new JTextField();
+        JTextField text5 = new JTextField();
         text1.setColumns(20);
         text2.setColumns(20);
         text3.setColumns(20);
+        text4.setColumns(20);
+        text5.setColumns(20);
+        
         
         Choice languageChoice = new Choice();
-        languageChoice.addItem("English");
-        languageChoice.addItem("French");
+        String[] avail_Languages = {"English", "French", "Chinese", "Spanish", "Arabic", "German", "Other"};
+        for (int i = 0; i < avail_Languages.length; i++) {
+        	languageChoice.addItem(avail_Languages[i]);
+        }
         languageChoice.setPreferredSize(new Dimension(255, 25));
         
-        Choice year = new Choice();
-        Choice month = new Choice();
-        Choice day = new Choice();
+        
+        Choice bookType = new Choice();
+        String[] avail_Type = {"Anthology", "Back Cover Art", "Collection", "Cover Art", "Interior Art", "Editor", "Essay", "Interview", "Novel", "Non Fiction", "Omnibus", "Poem", "Review", "Serial", "Short Fiction", "Chapbook"};
+        for (int i = 0; i < avail_Type.length; i++) {
+        	bookType.addItem(avail_Type[i]);
+        }
+        bookType.setPreferredSize(new Dimension(255, 25));
+        
+        Choice startYear = new Choice();
+        startYear.setPreferredSize(new Dimension(255, 25));
+
+        Choice endYear = new Choice();
+        endYear.setPreferredSize(new Dimension(255, 25));
+        
+        for (int i = 2016; i >= 1; i--) {
+        	if (i >= 1000) {
+        		startYear.addItem(Integer.toString(i));
+        		endYear.addItem(Integer.toString(i));
+        	}
+        	if ((i >= 100) && (i <= 999)) {
+        		startYear.addItem("0" + Integer.toString(i));
+        		endYear.addItem("0" + Integer.toString(i));
+        	}
+        	if ((i >= 10) && (i <= 99)) {
+        		startYear.addItem("00" + Integer.toString(i));
+        		endYear.addItem("00" + Integer.toString(i));
+        	}
+        	if ((i >= 1) && (i <= 9)) {
+        		startYear.addItem("000" + Integer.toString(i));
+        		endYear.addItem("000" + Integer.toString(i));
+        	}
+        }
+            
+        
+        JCheckBox awardedBook = new JCheckBox("Is this book awarded?");
+        
+        JButton search = new JButton("Search");
         
         
         grid.gridx = 0;
         grid.gridy = 0;
+        grid.ipady = 40;
+        panelFields.add(transparent3, grid);
+        grid.ipady = 0;
+        
+        grid.gridx = 0;
+        grid.gridy = 1;
         panelFields.add(authorName, grid);
+
         grid.gridx = 1;
-        grid.gridy = 0;
+        grid.gridy = 1;
         panelFields.add(text1, grid);
         
+        
         grid.gridx = 0;
-        grid.gridy = 1;
+        grid.gridy = 2;
         panelFields.add(bookTitle, grid);
         grid.gridx = 1;
-        grid.gridy = 1;
+        grid.gridy = 2;
         panelFields.add(text2, grid);
         
         grid.gridx = 0;
-        grid.gridy = 2;
+        grid.gridy = 3;
         panelFields.add(publisher, grid);
         grid.gridx = 1;
-        grid.gridy = 2;
+        grid.gridy = 3;
         panelFields.add(text3, grid);
         
         grid.gridx = 0;
-        grid.gridy = 3;
-        panelFields.add(language, grid);
+        grid.gridy = 4;
+        panelFields.add(bookSeries, grid);
         grid.gridx = 1;
-        grid.gridy = 3;
+        grid.gridy = 4;
+        panelFields.add(text5, grid);
+        
+        grid.gridx = 2;
+        grid.gridy = 1;
+        grid.ipadx = 20;
+        panelFields.add(transparent2, grid);
+        grid.ipadx = 0;
+        
+        grid.gridx = 3;
+        grid.gridy = 1;
+        panelFields.add(language, grid);
+        grid.gridx = 4;
+        grid.gridy = 1;
         panelFields.add(languageChoice, grid);
         
+        grid.gridx = 3;
+        grid.gridy = 2;
+        panelFields.add(type, grid);
+        grid.gridx = 4;
+        grid.gridy = 2;
+        panelFields.add(bookType, grid);
+        
+        
+        grid.gridx = 3;
+        grid.gridy = 3;
+        panelFields.add(startDate, grid);
+        grid.gridx = 4;
+        grid.gridy = 3;
+        panelFields.add(startYear, grid);
+        
+        grid.gridx = 3;
+        grid.gridy = 4;
+        panelFields.add(endDate, grid);
+        grid.gridx = 4;
+        grid.gridy = 4;
+        panelFields.add(endYear, grid);
+        
+        grid.gridx = 4;
+        grid.gridy = 5;
+        grid.ipady = 30;
+        panelFields.add(transparent1, grid);
+        
+        grid.gridx = 4;
+        grid.gridy = 6;
+        grid.ipady = 30;
+        panelFields.add(awardedBook, grid);
+        
+        grid.gridx = 4;
+        grid.gridy = 7;
+        grid.ipady = 0;
+        panelFields.add(search, grid);
+        
+        
+        Border title = BorderFactory.createTitledBorder("Advanced Book Search");
+        panelFields.setBorder(title);
         
       
-        contentPane.add(panelFields, BorderLayout.WEST);
+        contentPane.add(panelFields, BorderLayout.NORTH);
         
         
     }
