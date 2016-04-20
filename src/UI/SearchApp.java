@@ -237,7 +237,7 @@ public class SearchApp extends JFrame {
         
         btnSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                table.removeAll();
+                table.setModel(new DefaultTableModel());
                 try {
                     String Name = searchTextField.getText();
                     List<Author> authors = null;
