@@ -68,6 +68,7 @@ public class SearchApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 180);
         initialPage();
+        //detailSearch();
     }
     
     public void initialPage() {
@@ -118,6 +119,10 @@ public class SearchApp extends JFrame {
         
         advancedOption = new JButton("Advanced Search Option");
         advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
+        if (advancedOption.getModel().isPressed()) {
+        	detailSearch();
+        }
+        
         panel3.add(advancedOption);
         
         placeHolder = new JLabel("Book Search ");
@@ -138,14 +143,85 @@ public class SearchApp extends JFrame {
     }
     
     public void detailSearch() {
-        setTitle("Book Search App");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 800);
-        panel1.removeAll();
-        panel2.removeAll();
-        panel3.removeAll();
-        JLabel lblSearchItem = new JLabel("Advanced Search ", SwingConstants.CENTER);
-        panel1.add(lblSearchItem);
+    	
+    	setBounds(100, 100, 800, 600);
+    	
+    	contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(10, 10, 18, 10));
+        contentPane.setLayout(new BorderLayout(0, 0));
+        setContentPane(contentPane);
+		
+        // Title
+        JPanel panelTitle = new JPanel();
+        FlowLayout flowLayout1 = (FlowLayout) panelTitle.getLayout();
+        flowLayout1.setAlignment(FlowLayout.LEFT);
+        contentPane.add(panelTitle, BorderLayout.NORTH); 
+        panelTitle.setLayout(new GridLayout(1,1));
+        
+        JLabel lblSearchItem = new JLabel("Advanced Book Search ", SwingConstants.CENTER);
+        panelTitle.add(lblSearchItem);
+        
+        
+        // Fields
+        JPanel panelFields = new JPanel();
+        panelFields.setLayout(new GridBagLayout());
+        GridBagConstraints grid = new GridBagConstraints();
+        JLabel authorName = new JLabel("Author Name");
+        JLabel bookTitle = new JLabel("Book Title");
+        JLabel publisher = new JLabel("Publisher");
+        JLabel date = new JLabel("Date");
+        JLabel language = new JLabel("Language");
+        
+        JTextField text1 = new JTextField();
+        JTextField text2 = new JTextField();
+        JTextField text3 = new JTextField();
+        text1.setColumns(20);
+        text2.setColumns(20);
+        text3.setColumns(20);
+        
+        Choice languageChoice = new Choice();
+        languageChoice.addItem("English");
+        languageChoice.addItem("French");
+        languageChoice.setPreferredSize(new Dimension(255, 25));
+        
+        Choice year = new Choice();
+        Choice month = new Choice();
+        Choice day = new Choice();
+        
+        
+        grid.gridx = 0;
+        grid.gridy = 0;
+        panelFields.add(authorName, grid);
+        grid.gridx = 1;
+        grid.gridy = 0;
+        panelFields.add(text1, grid);
+        
+        grid.gridx = 0;
+        grid.gridy = 1;
+        panelFields.add(bookTitle, grid);
+        grid.gridx = 1;
+        grid.gridy = 1;
+        panelFields.add(text2, grid);
+        
+        grid.gridx = 0;
+        grid.gridy = 2;
+        panelFields.add(publisher, grid);
+        grid.gridx = 1;
+        grid.gridy = 2;
+        panelFields.add(text3, grid);
+        
+        grid.gridx = 0;
+        grid.gridy = 3;
+        panelFields.add(language, grid);
+        grid.gridx = 1;
+        grid.gridy = 3;
+        panelFields.add(languageChoice, grid);
+        
+        
+      
+        contentPane.add(panelFields, BorderLayout.WEST);
+        
+        
     }
     
     
