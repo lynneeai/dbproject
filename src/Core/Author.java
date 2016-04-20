@@ -1,7 +1,7 @@
 package Core;
 
 public class Author {
-    private int AUTHOR_ID;
+    private int AUTHOR_ID; 
     private String AUTHOR_NAME;
     private String LEGAL_NAME;
     private String LAST_NAME;
