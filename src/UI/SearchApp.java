@@ -28,6 +28,7 @@ import javax.swing.border.Border;
 
 import Core.Author;
 import DAO.AuthorDAO;
+import DAO.UserInput;
   
 public class SearchApp extends JFrame {
 
@@ -46,6 +47,7 @@ public class SearchApp extends JFrame {
     private JTable table;
 
     private AuthorDAO AuthorDAO;
+    private UserInput UserInput = new UserInput();
 	
     /**
      * Launch the application.
@@ -322,39 +324,90 @@ public class SearchApp extends JFrame {
         JLabel transparent3 = new JLabel("");
        
         
-        JTextField text1 = new JTextField();
-        JTextField text2 = new JTextField();
-        JTextField text3 = new JTextField();
-        JTextField text4 = new JTextField();
-        JTextField text5 = new JTextField();
-        text1.setColumns(20);
-        text2.setColumns(20);
-        text3.setColumns(20);
-        text4.setColumns(20);
-        text5.setColumns(20);
+        JTextField authorNameText = new JTextField();
+        JTextField bookTitleText = new JTextField();
+        JTextField publisherNameText = new JTextField();
+        JTextField bookSeriesText = new JTextField();
+         
+        authorNameText.setColumns(20);
+        authorNameText.setEditable(true);
+        authorNameText.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e) {}
+        	public void focusLost(FocusEvent e) {
+        		UserInput.set_Author_Name(authorNameText.getText());
+        	}
+        });
+        
+        bookTitleText.setColumns(20);
+        bookTitleText.setEditable(true);
+        bookTitleText.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e){}
+        	public void focusLost(FocusEvent e) {
+        		UserInput.set_Title_Name(bookTitleText.getText());
+        		UserInput.set_Publication_Name(bookTitle.getText());
+        	}
+        });
+        
+        publisherNameText.setColumns(20);
+        publisherNameText.setEditable(true);
+        publisherNameText.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e){}
+        	public void focusLost(FocusEvent e) {
+        		UserInput.set_Publisher_Name(publisherNameText.getText());
+        	}
+        });
+        
+        bookSeriesText.setColumns(20);
+        bookSeriesText.setEditable(true);
+        bookSeriesText.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e) {}
+        	public void focusLost(FocusEvent e) {
+        		UserInput.set_Title_Series_Name(bookSeriesText.getText());
+        		UserInput.set_Publication_Series_Name(bookSeriesText.getText());
+        	}
+        });
         
         
         Choice languageChoice = new Choice();
-        String[] avail_Languages = {"English", "French", "Chinese", "Spanish", "Arabic", "German", "Other"};
+        Choice bookType = new Choice();
+        Choice startYear = new Choice();
+        Choice endYear = new Choice();
+        
+        String[] avail_Languages = {"None", "English", "French", "Chinese", "Spanish", "Arabic", "German", "Other"};
         for (int i = 0; i < avail_Languages.length; i++) {
         	languageChoice.addItem(avail_Languages[i]);
         }
         languageChoice.setPreferredSize(new Dimension(255, 25));
+        languageChoice.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e) {}
+        	public void focusLost(FocusEvent e) {
+        		String language = languageChoice.getSelectedItem();
+        		if (language != "None") {
+        			UserInput.set_Language(language);
+        		}
+        	}
+        });
         
         
-        Choice bookType = new Choice();
-        String[] avail_Type = {"Anthology", "Back Cover Art", "Collection", "Cover Art", "Interior Art", "Editor", "Essay", "Interview", "Novel", "Non Fiction", "Omnibus", "Poem", "Review", "Serial", "Short Fiction", "Chapbook"};
+        String[] avail_Type = {"None", "ANTHOLOGY", "BACKCOVERART", "COLLECTION", "COVERART", "INTERIORART", "EDITOR", "ESSAY", "INTERVIEW", "NOVEL", "NONFICTION", "OMNIBUS", "POEM", "REVIEW", "SERIAL", "SHORTFICTION", "CHAPBOOK", "MAGAZINE", "FANZINE"};
         for (int i = 0; i < avail_Type.length; i++) {
         	bookType.addItem(avail_Type[i]);
         }
         bookType.setPreferredSize(new Dimension(255, 25));
+        bookType.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e) {}
+        	public void focusLost(FocusEvent e) {
+        		String type = bookType.getSelectedItem();
+        		if (type != "None") {
+        			UserInput.set_Title_Type(type);
+        			UserInput.set_Publication_Type(type);
+        		}
+        	}
+        });
         
-        Choice startYear = new Choice();
-        startYear.setPreferredSize(new Dimension(255, 25));
-
-        Choice endYear = new Choice();
-        endYear.setPreferredSize(new Dimension(255, 25));
         
+        startYear.addItem("None");
+        endYear.addItem("None");
         for (int i = 2016; i >= 1; i--) {
         	if (i >= 1000) {
         		startYear.addItem(Integer.toString(i));
@@ -373,11 +426,52 @@ public class SearchApp extends JFrame {
         		endYear.addItem("000" + Integer.toString(i));
         	}
         }
-            
+        
+        startYear.setPreferredSize(new Dimension(255, 25));
+        startYear.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e) {}
+        	public void focusLost(FocusEvent e) {
+        		String start_Year = startYear.getSelectedItem();
+        		if (start_Year != "None") {
+        			UserInput.set_Start_Date(start_Year + "-01-01");
+        		}
+        	}
+        });
+
+        endYear.setPreferredSize(new Dimension(255, 25));
+        endYear.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e) {}
+        	public void focusLost(FocusEvent e) {
+        		String end_Year = endYear.getSelectedItem();
+        		if (end_Year != "None") {
+        			UserInput.set_Start_Date(end_Year + "-01-01");
+        		}
+        	}
+        });
+        
         
         JCheckBox awardedBook = new JCheckBox("Is this book awarded?");
+        awardedBook.addFocusListener(new FocusListener() {
+        	public void focusGained(FocusEvent e) {}
+        	public void focusLost(FocusEvent e) {
+        		UserInput.set_Awarded(awardedBook.isSelected());
+        	}
+        });
         
         JButton search = new JButton("Search");
+        search.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+                System.out.println("Author Name = " + UserInput.get_Author_Name());
+        		System.out.println("Book Title = " + UserInput.get_Title_Name());
+        		System.out.println("Publisher = " + UserInput.get_Publisher_Name());
+        		System.out.println("Book Series Name = " + UserInput.get_Title_Series_Name());
+        		System.out.println("Language = " + UserInput.get_Language());
+        		System.out.println("Book Type = " + UserInput.get_Title_Type());
+        		System.out.println("Start Date = " + UserInput.get_Start_Date());
+        		System.out.println("End Date = " + UserInput.get_End_Date());
+        		System.out.println("Awarded Book = " + UserInput.get_Awarded());
+        	}
+        });
         
         
         grid.gridx = 0;
@@ -389,10 +483,9 @@ public class SearchApp extends JFrame {
         grid.gridx = 0;
         grid.gridy = 1;
         panelFields.add(authorName, grid);
-
         grid.gridx = 1;
         grid.gridy = 1;
-        panelFields.add(text1, grid);
+        panelFields.add(authorNameText, grid);
         
         
         grid.gridx = 0;
@@ -400,21 +493,21 @@ public class SearchApp extends JFrame {
         panelFields.add(bookTitle, grid);
         grid.gridx = 1;
         grid.gridy = 2;
-        panelFields.add(text2, grid);
+        panelFields.add(bookTitleText, grid);
         
         grid.gridx = 0;
         grid.gridy = 3;
         panelFields.add(publisher, grid);
         grid.gridx = 1;
         grid.gridy = 3;
-        panelFields.add(text3, grid);
+        panelFields.add(publisherNameText, grid);
         
         grid.gridx = 0;
         grid.gridy = 4;
         panelFields.add(bookSeries, grid);
         grid.gridx = 1;
         grid.gridy = 4;
-        panelFields.add(text5, grid);
+        panelFields.add(bookSeriesText, grid);
         
         grid.gridx = 2;
         grid.gridy = 1;
@@ -478,4 +571,3 @@ public class SearchApp extends JFrame {
     
     
 }  
-    
