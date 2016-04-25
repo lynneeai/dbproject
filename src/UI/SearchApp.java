@@ -30,7 +30,9 @@ import Core.Author;
 import Core.Book;
 import DAO.AuthorDAO;
 import DAO.UserInput;
+import DAO.BasicSearchInput;
 import DAO.BookDAO;
+import DAO.BasicBookDAO;
 
   
 public class SearchApp extends JFrame {
@@ -51,7 +53,9 @@ public class SearchApp extends JFrame {
 
     private AuthorDAO AuthorDAO;
     private BookDAO BookDAO;
+    private BasicBookDAO BasicBookDAO;
     private UserInput UserInput;
+    private BasicSearchInput BasicSearchInput;
 	
     /**
      * Launch the application.
@@ -160,7 +164,7 @@ public class SearchApp extends JFrame {
     public void searchResult() {
         setTitle("Book Search App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 600);
+        setBounds(100, 100, 800, 1000);
         panel1.removeAll();
         panel2.removeAll();
         panel3.removeAll();
@@ -204,6 +208,29 @@ public class SearchApp extends JFrame {
         searchTextField = new JTextField();
         panel2.add(searchTextField);
         searchTextField.setColumns(10);
+        searchTextField.setForeground(Color.gray);
+        searchTextField.setText("Please Enter Exact Name of");
+        
+        BasicSearchInput = new BasicSearchInput();
+        
+        searchTextField.setEditable(true);
+        searchTextField.setForeground(Color.gray);
+        searchTextField.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+        	String content = searchTextField.getText();
+                if (content.trim().equals("Please Enter Exact Name of")) {
+                    searchTextField.setText("");
+                    searchTextField.setForeground(Color.black);
+                }
+            }
+            public void focusLost(FocusEvent e) {
+        	String content = searchTextField.getText();
+        	if (content.trim().equals("")) {
+                    searchTextField.setForeground(Color.gray);
+                    searchTextField.setText("Please Enter Exact Name of");
+        	} 
+            }
+        });
         
         searchChoice = new Choice();
         searchChoice.addItem("Authors"); 
@@ -249,21 +276,52 @@ public class SearchApp extends JFrame {
         
         btnSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                table.setModel(new DefaultTableModel());
+                table.setModel(new DefaultTableModel());             
+                String Name = searchTextField.getText();
+                
+                BasicSearchInput.set_Author_Name(null);
+                BasicSearchInput.set_Publication_Name(null);
+                BasicSearchInput.set_Publisher_Name(null);
+                BasicSearchInput.set_Award(null);
+                BasicSearchInput.set_Language(null);
+                                                   
+                if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Authors")) {
+                    BasicSearchInput.set_Author_Name(Name);
+                }
+                else if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Books")) {
+                    BasicSearchInput.set_Publication_Name(Name);
+                }
+                else if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Publishers")) {
+                    BasicSearchInput.set_Publisher_Name(Name);
+                }
+                else if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Awards")) {
+                    BasicSearchInput.set_Award(Name);
+                }
+                else if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Languages")) {
+                    BasicSearchInput.set_Language(Name);
+                }
+                
+                System.out.println("");
+        	System.out.println("***********NEW SEARCH************");
+                System.out.println("Basic Search Input = " + searchTextField.getText());
+    
+        	BasicBookDAO = new BasicBookDAO();
                 try {
-                    String Name = searchTextField.getText();
-                    List<Author> authors = null;
-                    
                     if (Name != null && Name.trim().length() > 0) {
-                        authors = AuthorDAO.searchAuthors(Name);
-                    } else {
-                    authors = AuthorDAO.getfiveAuthors();
-                    }					
-                    AuthorTableModel model = new AuthorTableModel(authors);	               
-                    table.setModel(model);
+                        if (methodChoice.getItem(methodChoice.getSelectedIndex()).equals("Approximate Search")) {
+                            List<Book> books = BasicBookDAO.fuzzySearchBook(BasicSearchInput);
+                            BookTableModel model = new BookTableModel(books);	               
+                            table.setModel(model);
+                        }
+                        else {
+                            List<Book> books = BasicBookDAO.searchBook(BasicSearchInput);
+                            BookTableModel model = new BookTableModel(books);	               
+                            table.setModel(model);
+                        }                     					
+                    }
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-                }			
+                }            			
             }
         });
         
@@ -279,7 +337,12 @@ public class SearchApp extends JFrame {
         panel4.setLayout(new GridLayout(1,1));
         
         scrollPane = new JScrollPane();
-        panel4.add(scrollPane, BorderLayout.PAGE_END);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setPreferredSize(new Dimension(775, 590));
+        panel4.add(scrollPane);
+        //scrollPane = new JScrollPane();
+        //panel4.add(scrollPane, BorderLayout.PAGE_END);
 		
         table = new JTable();
         scrollPane.setViewportView(table);

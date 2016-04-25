@@ -7,7 +7,7 @@ import Core.Book;
 
 public class BookTableModel extends AbstractTableModel {
 	
-	private static final int PUBLICATION_NAME_COL = 0;
+    private static final int PUBLICATION_NAME_COL = 0;
     private static final int AUTHOR_NAME_COL = 1;
     private static final int PUBLICATION_DATE_COL = 2;
     private static final int LANGUAGE_COL = 3;
