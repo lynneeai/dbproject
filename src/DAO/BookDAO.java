@@ -68,7 +68,6 @@ public class BookDAO {
 			firstConstraint = false;
 		}
 		
-		//char
 		
 		if (input.get_Publication_Series_Name() != null) {
 			if (!firstConstraint) {
