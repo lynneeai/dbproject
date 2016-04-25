@@ -3,6 +3,11 @@
 .metadata
 .classpath
 .project
+.xml
+/lib/
+/nbproject/
+ojdbc7.jar
+.mf
 =======
 /build/
 >>>>>>> Stashed changes
