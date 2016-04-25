@@ -43,13 +43,13 @@ public class SearchApp extends JFrame {
     private JPanel panel3;
     private JPanel panel4;
     private JTextField searchTextField;
-    private Choice methodChoice;
-    private Choice searchChoice;
+    private Choice methodChoice = new Choice();
+    private Choice searchChoice = new Choice();
     private JButton advancedOption;
     private JLabel placeHolder;
     private JButton btnSearch;
     private JScrollPane scrollPane;
-    private JTable table;
+    private JTable table = new JTable();;
 
     private AuthorDAO AuthorDAO;
     private BookDAO BookDAO;
@@ -109,8 +109,7 @@ public class SearchApp extends JFrame {
         panel2.setBorder(new EmptyBorder(32, 5, 33, 5));
         contentPane.add(panel2, BorderLayout.CENTER); 
         panel2.setLayout(new GridLayout(1,3));
-        
-        methodChoice = new Choice();
+
         methodChoice.addItem("Exact Search"); 
         methodChoice.addItem("Approximate Search"); 
         panel2.add(methodChoice);
@@ -118,8 +117,26 @@ public class SearchApp extends JFrame {
         searchTextField = new JTextField();
         panel2.add(searchTextField);
         searchTextField.setColumns(10);
+        searchTextField.setForeground(Color.gray);
+        searchTextField.setText("Please Enter Exact Name of");
         
-        searchChoice = new Choice();
+        searchTextField.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+        	String content = searchTextField.getText();
+                if (content.trim().equals("Please Enter Exact Name of")) {
+                    searchTextField.setText("");
+                    searchTextField.setForeground(Color.black);
+                }
+            }
+            public void focusLost(FocusEvent e) {
+        	String content = searchTextField.getText();
+        	if (content.trim().equals("")) {
+                    searchTextField.setForeground(Color.gray);
+                    searchTextField.setText("Please Enter Exact Name of");
+        	} 
+            }
+        });
+        
         searchChoice.addItem("Authors");  
         searchChoice.addItem("Books"); 
         searchChoice.addItem("Publishers"); 
@@ -156,12 +173,64 @@ public class SearchApp extends JFrame {
         
         btnSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                searchResult();
+                String name = searchTextField.getText();
+                int searchChoiceContent = searchChoice.getSelectedIndex();
+                int methodChoiceContent = methodChoice.getSelectedIndex();
+                searchResult(name, searchChoiceContent, methodChoiceContent);
             }
         });
     }
     
-    public void searchResult() {
+    public void displayResult(String Name, int searchChoiceContent, int methodChoiceContent) { 
+        
+        BasicSearchInput = new BasicSearchInput();
+        
+        BasicSearchInput.set_Author_Name(null);
+        BasicSearchInput.set_Publication_Name(null);
+        BasicSearchInput.set_Publisher_Name(null);
+        BasicSearchInput.set_Award(null);
+        BasicSearchInput.set_Language(null);
+                                                   
+        if (searchChoice.getItem(searchChoiceContent).equals("Authors")) {
+            BasicSearchInput.set_Author_Name(Name);
+        }
+        else if (searchChoice.getItem(searchChoiceContent).equals("Books")) {
+            BasicSearchInput.set_Publication_Name(Name);
+        }
+        else if (searchChoice.getItem(searchChoiceContent).equals("Publishers")) {
+            BasicSearchInput.set_Publisher_Name(Name);
+        }
+        else if (searchChoice.getItem(searchChoiceContent).equals("Awards")) {
+            BasicSearchInput.set_Award(Name);
+        }
+        else if (searchChoice.getItem(searchChoiceContent).equals("Languages")) {
+            BasicSearchInput.set_Language(Name);
+        }
+                
+        System.out.println("");
+        System.out.println("***********NEW SEARCH************");
+        System.out.println("Basic Search Input = " + Name);
+    
+        BasicBookDAO = new BasicBookDAO();
+        try {
+            if (Name != null && Name.trim().length() > 0) {
+                if (methodChoice.getItem(methodChoiceContent).equals("Approximate Search")) {
+                    List<Book> books = BasicBookDAO.fuzzySearchBook(BasicSearchInput);
+                    BookTableModel model = new BookTableModel(books);	               
+                    table.setModel(model);
+                }
+                else {
+                    List<Book> books = BasicBookDAO.searchBook(BasicSearchInput);
+                    BookTableModel model = new BookTableModel(books);	               
+                    table.setModel(model);
+                }                     					
+            }
+        } catch (Exception exc) {
+            JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
+        }            			
+    }
+    
+    public void searchResult(String content, int searchChoiceContent1, int methodChoiceContent1) {
         setTitle("Book Search App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 1000);
@@ -200,18 +269,12 @@ public class SearchApp extends JFrame {
         contentPane.add(panel2,c); 
         panel2.setLayout(new GridLayout(1,3));
         
-        methodChoice = new Choice();
-        methodChoice.addItem("Exact Search"); 
-        methodChoice.addItem("Approximate Search"); 
         panel2.add(methodChoice);
         
         searchTextField = new JTextField();
         panel2.add(searchTextField);
         searchTextField.setColumns(10);
-        searchTextField.setForeground(Color.gray);
-        searchTextField.setText("Please Enter Exact Name of");
-        
-        BasicSearchInput = new BasicSearchInput();
+        searchTextField.setForeground(Color.gray);   
         
         searchTextField.setEditable(true);
         searchTextField.setForeground(Color.gray);
@@ -232,12 +295,15 @@ public class SearchApp extends JFrame {
             }
         });
         
-        searchChoice = new Choice();
-        searchChoice.addItem("Authors"); 
-        searchChoice.addItem("Books");  
-        searchChoice.addItem("Publishers"); 
-        searchChoice.addItem("Awards"); 
-        searchChoice.addItem("Languages"); 
+        if(!content.equals("")) {
+            displayResult(content, searchChoiceContent1, methodChoiceContent1);
+            searchTextField.setForeground(Color.black);
+            searchTextField.setText(content);
+        }
+        else {
+            searchTextField.setText("Please Enter Exact Name of");
+        }   
+
         panel2.add(searchChoice);
         
         panel3 = new JPanel();
@@ -278,50 +344,9 @@ public class SearchApp extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 table.setModel(new DefaultTableModel());             
                 String Name = searchTextField.getText();
-                
-                BasicSearchInput.set_Author_Name(null);
-                BasicSearchInput.set_Publication_Name(null);
-                BasicSearchInput.set_Publisher_Name(null);
-                BasicSearchInput.set_Award(null);
-                BasicSearchInput.set_Language(null);
-                                                   
-                if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Authors")) {
-                    BasicSearchInput.set_Author_Name(Name);
-                }
-                else if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Books")) {
-                    BasicSearchInput.set_Publication_Name(Name);
-                }
-                else if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Publishers")) {
-                    BasicSearchInput.set_Publisher_Name(Name);
-                }
-                else if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Awards")) {
-                    BasicSearchInput.set_Award(Name);
-                }
-                else if (searchChoice.getItem(searchChoice.getSelectedIndex()).equals("Languages")) {
-                    BasicSearchInput.set_Language(Name);
-                }
-                
-                System.out.println("");
-        	System.out.println("***********NEW SEARCH************");
-                System.out.println("Basic Search Input = " + searchTextField.getText());
-    
-        	BasicBookDAO = new BasicBookDAO();
-                try {
-                    if (Name != null && Name.trim().length() > 0) {
-                        if (methodChoice.getItem(methodChoice.getSelectedIndex()).equals("Approximate Search")) {
-                            List<Book> books = BasicBookDAO.fuzzySearchBook(BasicSearchInput);
-                            BookTableModel model = new BookTableModel(books);	               
-                            table.setModel(model);
-                        }
-                        else {
-                            List<Book> books = BasicBookDAO.searchBook(BasicSearchInput);
-                            BookTableModel model = new BookTableModel(books);	               
-                            table.setModel(model);
-                        }                     					
-                    }
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(SearchApp.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-                }            			
+                int searchChoiceContent2 = searchChoice.getSelectedIndex();
+                int methodChoiceContent2 = methodChoice.getSelectedIndex();
+                displayResult(Name, searchChoiceContent2, methodChoiceContent2);    			
             }
         });
         
@@ -343,8 +368,7 @@ public class SearchApp extends JFrame {
         panel4.add(scrollPane);
         //scrollPane = new JScrollPane();
         //panel4.add(scrollPane, BorderLayout.PAGE_END);
-		
-        table = new JTable();
+        
         scrollPane.setViewportView(table);
     }
     
