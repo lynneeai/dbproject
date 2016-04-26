@@ -35,9 +35,10 @@ import DAO.BookDAO;
 import DAO.BasicBookDAO;
 
   
-public class SearchApp extends JFrame {
+public class SearchApp extends JPanel {
 
-    public static JPanel contentPane = new JPanel();
+    private JPanel contentPane;
+    //public static SearchApp frame = new SearchApp();
     private JPanel panel1;
     private JPanel panel2;
     private JPanel panel3;
@@ -60,6 +61,7 @@ public class SearchApp extends JFrame {
     /**
      * Launch the application.
      */
+    /*
     public static void main(String[] args) {
 	EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -72,6 +74,7 @@ public class SearchApp extends JFrame {
             }
         });
     }
+    */
 
     public SearchApp() {
         // create the DAO
@@ -81,17 +84,20 @@ public class SearchApp extends JFrame {
             JOptionPane.showMessageDialog(this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
         }
 		
-        setTitle(" The Two Billions Books Search Engine ");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 180);
+        //setTitle(" The Two Billions Books Search Engine ");
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setBounds(100, 100, 800, 180);
         initialPage();
     }
     
     public void initialPage() {
-        //contentPane = new JPanel();
+        contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
-        setContentPane(contentPane);
+        //Main.mainFrame.setContentPane(contentPane);
+        Main.mainFrame.add(contentPane);
+        Main.mainFrame.revalidate();
+        Main.mainFrame.repaint();
 		
         panel1 = new JPanel();
         FlowLayout flowLayout1 = (FlowLayout) panel1.getLayout();
@@ -164,8 +170,7 @@ public class SearchApp extends JFrame {
                 panel2.removeAll();
                 panel3.removeAll();
                 contentPane.removeAll();
-                setBounds(100, 100, 800, 1000);
-            	SpecificSearchPage specificSearchPage = new SpecificSearchPage();
+                SpecificSearchPage specificSearchPage = new SpecificSearchPage();
             	specificSearchPage.specificSearch();
             	
             }
@@ -181,7 +186,8 @@ public class SearchApp extends JFrame {
                 panel2.removeAll();
                 panel3.removeAll();
                 contentPane.removeAll();
-                setBounds(100, 100, 800, 1000);
+                Main.mainFrame.remove(contentPane);
+                Main.mainFrame.setBounds(100, 100, 800, 1000);
             	DetailSearchPage detailSearchPage = new DetailSearchPage();
             	detailSearchPage.detailSearch();
             	
@@ -248,8 +254,8 @@ public class SearchApp extends JFrame {
     }
     
     public void searchResult(String content, int searchChoiceContent1, int methodChoiceContent1) {
-        setTitle("Book Search App");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setTitle("Book Search App");
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 1000);
         panel1.removeAll();
         panel2.removeAll();
@@ -261,7 +267,7 @@ public class SearchApp extends JFrame {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 0, 18, 0));
         contentPane.setLayout(gridbag);
-        setContentPane(contentPane);
+        //setContentPane(contentPane);
 		
         panel1 = new JPanel();
         FlowLayout flowLayout1 = (FlowLayout) panel1.getLayout();

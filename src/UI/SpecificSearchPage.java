@@ -37,20 +37,35 @@ import DAO.BasicBookDAO;
 
 public class SpecificSearchPage {
     
-    private JPanel contentPane;
+    private JPanel specificSearchPanel;
     private final JTabbedPane pane = new JTabbedPane();
 	
     public void specificSearch() {
-        contentPane = SearchApp.contentPane;
-        contentPane.setBorder(new EmptyBorder(10, 10, 18, 10));
-        contentPane.setLayout(new BorderLayout(0, 0));
+        specificSearchPanel = new JPanel();
+        specificSearchPanel.setBorder(new EmptyBorder(10, 10, 18, 10));
+        specificSearchPanel.setLayout(new BorderLayout(0, 0));
         
         String[] tabContents = {"All Publishers", "All authors", "Most Popular Books", "Books Published", "All Comics"};
         
         for (int i = 0; i < 5; i++) {
             pane.add(tabContents[i], new TabContent(i));        
         }
-        contentPane.add(pane);
+        
+        JPanel backPanel = new JPanel();
+        JButton back = new JButton("back");
+        back.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		backPanel.removeAll();
+        		pane.removeAll();
+        		specificSearchPanel.removeAll();
+        		DetailSearchPage detailSearchPage = new DetailSearchPage();
+        		detailSearchPage.detailSearch();
+        		
+        	}
+        });
+        backPanel.add(back);
+        specificSearchPanel.add(pane, BorderLayout.CENTER);
+        specificSearchPanel.add(backPanel, BorderLayout.SOUTH);
     }
     
     private static class TabContent extends JPanel {
@@ -76,6 +91,7 @@ public class SpecificSearchPage {
         
         private void getAllPublishers() {
             add(new JLabel("Tab content " + "Publishers"));
+            
         }
         
         private void getAllAuthors() {

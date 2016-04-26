@@ -36,22 +36,30 @@ import DAO.BasicBookDAO;
 
 
 public class DetailSearchPage extends JPanel {
-	private JPanel contentPane;
+	private JPanel detailSearchPanel;
 	private BookDAO BookDAO;
 	private UserInput UserInput;
 	
 	public void detailSearch() {
     	
-    	contentPane = SearchApp.contentPane;
-        contentPane.setBorder(new EmptyBorder(10, 10, 18, 10));
-        contentPane.setLayout(new BorderLayout(0, 0));
+    	detailSearchPanel = new JPanel();
+        detailSearchPanel.setBorder(new EmptyBorder(10, 10, 18, 10));
+        detailSearchPanel.setLayout(new BorderLayout(0, 0));
+        
+        Main.mainFrame.add(detailSearchPanel);
+        Main.mainFrame.revalidate();
+        Main.mainFrame.repaint();
+        
+        //SearchApp.add(detailSearchPanel);
+        //SearchApp.frame.revalidate();
+        //SearchApp.frame.repaint();
         
 		
         // Title
         JPanel panelTitle = new JPanel();
         FlowLayout flowLayout1 = (FlowLayout) panelTitle.getLayout();
         flowLayout1.setAlignment(FlowLayout.LEFT);
-        contentPane.add(panelTitle, BorderLayout.NORTH); 
+        detailSearchPanel.add(panelTitle, BorderLayout.NORTH); 
         panelTitle.setLayout(new GridLayout(1,1));
         
         JLabel lblSearchItem = new JLabel("Advanced Book Search ", SwingConstants.CENTER);
@@ -69,7 +77,7 @@ public class DetailSearchPage extends JPanel {
         JTable tableTemp = new JTable();
         scrollPane1.setViewportView(tableTemp);
         
-        contentPane.add(panelResult, BorderLayout.SOUTH);
+        detailSearchPanel.add(panelResult, BorderLayout.SOUTH);
         
         
         // Fields
@@ -328,11 +336,25 @@ public class DetailSearchPage extends JPanel {
         		panelTitle.removeAll();
         		panelResult.removeAll();
         		panelFields.removeAll();
-        		contentPane.removeAll();
-        		setBounds(100, 100, 800, 100);
-        		//SearchApp searchApp = new SearchApp();
-        		//searchApp.searchResult();
+        		detailSearchPanel.removeAll();
+        		Main.mainFrame.remove(detailSearchPanel);
+        		Main.mainFrame.setBounds(100, 100, 800, 100);
+        		SearchApp searchApp = new SearchApp();
+        		searchApp.initialPage();;
         	}
+        });
+        
+        JButton specificSearch = new JButton("Specific Search");
+        specificSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	panelTitle.removeAll();
+                panelResult.removeAll();
+                panelFields.removeAll();
+                detailSearchPanel.removeAll();
+                setBounds(100, 100, 800, 1000);
+            	SpecificSearchPage specificSearchPage = new SpecificSearchPage();
+            	specificSearchPage.specificSearch();       	
+            }
         });
         
         
@@ -426,13 +448,16 @@ public class DetailSearchPage extends JPanel {
         grid.ipady = 0;
         panelFields.add(back, grid);
         
+        grid.gridx = 1;
+        grid.gridy = 7;
+        grid.ipady = 0;
+        panelFields.add(specificSearch, grid);
+        
         
         Border title = BorderFactory.createTitledBorder("Advanced Book Search");
         panelFields.setBorder(title);
         
-        contentPane.add(panelFields, BorderLayout.NORTH);  
-        
-        
-        
+        detailSearchPanel.add(panelFields, BorderLayout.NORTH);  
+            
     }
 }
