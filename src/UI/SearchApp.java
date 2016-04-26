@@ -49,7 +49,7 @@ public class SearchApp extends JFrame {
     private JLabel placeHolder;
     private JButton btnSearch;
     private JScrollPane scrollPane;
-    private JTable table = new JTable();;
+    private JTable table = new JTable();
 
     private AuthorDAO AuthorDAO;
     private BookDAO BookDAO;
