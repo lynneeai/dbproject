@@ -1,14 +1,11 @@
 package UI;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.*; 
 import java.awt.event.*; 
-import java.applet.Applet; 
 
 import javax.swing.*;
 import javax.swing.table.*;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;

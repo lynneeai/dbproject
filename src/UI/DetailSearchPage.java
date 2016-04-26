@@ -1,18 +1,14 @@
 package UI;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.*; 
-import java.awt.event.*; 
-import java.applet.Applet; 
+import java.awt.event.*;  
 
 import javax.swing.*;
 import javax.swing.table.*;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import java.awt.FlowLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -26,13 +22,9 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
-import Core.Author;
 import Core.Book;
-import DAO.AuthorDAO;
 import DAO.UserInput;
-import DAO.BasicSearchInput;
 import DAO.BookDAO;
-import DAO.BasicBookDAO;
 
 public class DetailSearchPage extends JPanel {
 	private JPanel detailSearchPanel;
@@ -292,7 +284,7 @@ public class DetailSearchPage extends JPanel {
         	public void actionPerformed(ActionEvent e) {
         		System.out.println("");
         		System.out.println("****System*******NEW SEARCH************");
-                System.out.println("Author Name = " + UserInput.get_Author_Name());
+                        System.out.println("Author Name = " + UserInput.get_Author_Name());
         		System.out.println("Book Title = " + UserInput.get_Publication_Name());
         		System.out.println("Publisher = " + UserInput.get_Publisher_Name());
         		System.out.println("Book Series Name = " + UserInput.get_Title_Series_Name());

@@ -1,9 +1,4 @@
 package DAO;
-
-import java.util.*;
-import java.sql.*;
-import java.io.*;
-
 /**
  *
  * @author mengdong

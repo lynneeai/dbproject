@@ -2,10 +2,8 @@ package DAO;
 
 import java.util.*;
 import java.sql.*;
-import java.io.*;
 
 import Core.Book;
-import DAO.connectDB;
 
 public class BasicBookDAO {
     private Connection myConn = connectDB.getConnection();
