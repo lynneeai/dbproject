@@ -5,7 +5,7 @@ import javax.swing.table.AbstractTableModel;
 
 import Core.Author;
 
-public class BasicSearchTableModel extends AbstractTableModel  {
+public class AuthorTableModel extends AbstractTableModel  {
     private static final int AUTHOR_ID_COL = 0;
     private static final int AUTHOR_NAME_COL = 1;
     private static final int BIRTHPLACE_COL = 2;
@@ -13,7 +13,7 @@ public class BasicSearchTableModel extends AbstractTableModel  {
     private String[] columnNames = { "AUTHOR_ID", "AUTHOR_NAME", "BIRTHPLACE"};
     private List<Author> authors;
     
-    public BasicSearchTableModel(List<Author> theAuthors) {
+    public AuthorTableModel(List<Author> theAuthors) {
 	authors = theAuthors;
     }
     

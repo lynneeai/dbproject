@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.*; 
 import java.awt.event.*; 
 
+import java.util.*;
+import java.awt.font.TextAttribute;
+
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.JPanel;
@@ -20,10 +23,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.border.Border;
-
-import Core.Author;
 import Core.Book;
 import DAO.AuthorDAO;
 import DAO.UserInput;
@@ -109,8 +108,8 @@ public class SearchApp extends JPanel {
             }
         });
         
-        searchChoice.addItem("Authors");  
-        searchChoice.addItem("Books"); 
+        searchChoice.addItem("Author");  
+        searchChoice.addItem("Book"); 
         panel2.add(searchChoice);
         
         panel3 = new JPanel();
@@ -122,9 +121,15 @@ public class SearchApp extends JPanel {
         advancedOption = new JButton("Advanced Book Search");
         advancedOption.setBorder(null);
         advancedOption.setOpaque(true);
+        advancedOption.setForeground(Color.blue);
+        advancedOption.setFont(new Font("Plain", Font.PLAIN, 13));
+        Font font = advancedOption.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        advancedOption.setFont(font.deriveFont(attributes));       
         advancedOption.setFocusPainted(true);
         advancedOption.setBorderPainted(true);
-        advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
+        advancedOption.setHorizontalAlignment(SwingConstants.CENTER);
         panel3.add(advancedOption);
         
         //A transparent label as placeholder 
@@ -133,11 +138,7 @@ public class SearchApp extends JPanel {
         placeHolder.setForeground(new Color(0, 255, 0, 0));
         panel3.add(placeHolder);
         
-        btnSearch = new JButton("Search");
-        btnSearch.setForeground(Color.BLUE);
-        btnSearch.setOpaque(true);
-        btnSearch.setFocusPainted(true);
-        btnSearch.setBorderPainted(true);
+        btnSearch = new JButton("Search");;
         btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
         panel3.add(btnSearch);
         
@@ -178,10 +179,10 @@ public class SearchApp extends JPanel {
         BasicSearchInput.set_Author_Name(null);
         BasicSearchInput.set_Publication_Name(null);
                                                    
-        if (searchChoice.getItem(searchChoiceContent).equals("Authors")) {
+        if (searchChoice.getItem(searchChoiceContent).equals("Author")) {
             BasicSearchInput.set_Author_Name(Name);
         }
-        else if (searchChoice.getItem(searchChoiceContent).equals("Books")) {
+        else if (searchChoice.getItem(searchChoiceContent).equals("Book")) {
             BasicSearchInput.set_Publication_Name(Name);
         }
                 
@@ -293,9 +294,15 @@ public class SearchApp extends JPanel {
         advancedOption = new JButton("Advanced Book Search");
         advancedOption.setBorder(null);
         advancedOption.setOpaque(true);
+        advancedOption.setForeground(Color.blue);
+        advancedOption.setFont(new Font("Plain", Font.PLAIN, 13));
+        Font font = advancedOption.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        advancedOption.setFont(font.deriveFont(attributes));       
         advancedOption.setFocusPainted(true);
         advancedOption.setBorderPainted(true);
-        advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
+        advancedOption.setHorizontalAlignment(SwingConstants.CENTER);
         panel3.add(advancedOption);
         
         placeHolder = new JLabel("Book Search ");

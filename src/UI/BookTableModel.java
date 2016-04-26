@@ -43,8 +43,8 @@ public class BookTableModel extends AbstractTableModel {
     	
     	
     	switch (col) {
-        	case PUBLICATION_NAME_COL:
-        		return tempBook.get_BOOK_NAME();
+            case PUBLICATION_NAME_COL:
+        	return tempBook.get_BOOK_NAME();
             case AUTHOR_NAME_COL:
             	return tempBook.get_AUTHOR();
             case PUBLICATION_DATE_COL:
