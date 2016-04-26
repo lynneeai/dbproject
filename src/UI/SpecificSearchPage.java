@@ -96,7 +96,7 @@ public class SpecificSearchPage {
             add(panel1); 
             panel1.setLayout(new GridLayout(3,2));
             
-            Border title = BorderFactory.createTitledBorder("Advanced Book Search");
+            Border title = BorderFactory.createTitledBorder("All Publishers Search");
             panel1.setBorder(title);
             
             JCheckBox minPricePublisher = new JCheckBox("Show minimum price of the publisher");
