@@ -20,13 +20,6 @@ public class BasicBookDAO {
 	String price = myRs.getString("PRICE");
         
         Book tempBook = new Book(bookName, publishedDate, isbn, price);
-        
-        /*if(myRs.getString("AUTHOR") != null) {
-            tempBook.set_Author(myRs.getString("AUTHOR"));
-        }
-        else if(myRs.getString("LANGUAGE") != null) {
-            tempBook.set_Language(myRs.getString("LANGUAGE"));
-        }*/
               
 	return tempBook;
         
@@ -48,18 +41,6 @@ public class BasicBookDAO {
                                     + "WRITTEN_PUBL_AUT.AUTHOR_ID=AUTHORS.AUTHOR_ID" + " AND "
                                     + "PUBLICATIONS.PUBL_ID=WRITTEN_PUBL_AUT.PUBL_ID";
 	}		
-        else if (input.get_Publisher_Name() != null) {
-            from = from + ", PUBLISHERS ";
-            where = where + "PUBLISHERS.PUBLISHER_NAME='" + input.get_Publisher_Name() + "'" + " AND "
-				       + "PUBLICATIONS.PUBLISHER_ID=PUBLISHERS.PUBLISHER_ID";
-	}		
-        else if (input.get_Language() != null) {
-            from = from + ", LANGUAGES ";
-            where = where + "LANGUAGES.LANGUAGE_NAME='" + input.get_Language() + "'" + " AND "
-			  + "TITLES.LANGUAGE_ID=LANGUAGES.LANGUAGE_ID" + " AND "
-			  + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID" + " AND "
-			  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID";
-	}
 		
 	System.out.println(select);
 	System.out.println(from);
@@ -100,18 +81,6 @@ public class BasicBookDAO {
                                     + "WRITTEN_PUBL_AUT.AUTHOR_ID=AUTHORS.AUTHOR_ID" + " AND "
                                     + "PUBLICATIONS.PUBL_ID=WRITTEN_PUBL_AUT.PUBL_ID";
 	}		
-        else if (input.get_Publisher_Name() != null) {
-            from = from + ", PUBLISHERS ";
-            where = where + "PUBLISHERS.PUBLISHER_NAME LIKE '%" + input.get_Publisher_Name() + "%'" + " AND "
-				       + "PUBLICATIONS.PUBLISHER_ID=PUBLISHERS.PUBLISHER_ID";
-	}		
-        else if (input.get_Language() != null) {
-            from = from + ", LANGUAGES ";
-            where = where + "LANGUAGES.LANGUAGE_NAME LIKE '%" + input.get_Language() + "%'" + " AND "
-			  + "TITLES.LANGUAGE_ID=LANGUAGES.LANGUAGE_ID" + " AND "
-			  + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID" + " AND "
-			  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID";
-	}
 		
 	System.out.println(select);
 	System.out.println(from);

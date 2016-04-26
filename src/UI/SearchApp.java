@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*; 
 import java.applet.Applet; 
 
-import  javax.swing.*;
+import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,7 +38,6 @@ import DAO.BasicBookDAO;
 public class SearchApp extends JPanel {
 
     private JPanel contentPane;
-    //public static SearchApp frame = new SearchApp();
     private JPanel panel1;
     private JPanel panel2;
     private JPanel panel3;
@@ -99,7 +98,7 @@ public class SearchApp extends JPanel {
         searchTextField.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
         	String content = searchTextField.getText();
-                if (content.trim().equals("Please Enter Exact Name of")) {
+                if (content.trim().equals("What are you look for ?")) {
                     searchTextField.setText("");
                     searchTextField.setForeground(Color.black);
                 }
@@ -108,7 +107,7 @@ public class SearchApp extends JPanel {
         	String content = searchTextField.getText();
         	if (content.trim().equals("")) {
                     searchTextField.setForeground(Color.gray);
-                    searchTextField.setText("Please Enter Exact Name of");
+                    searchTextField.setText("What are you look for ?");
         	} 
             }
         });
@@ -181,24 +180,12 @@ public class SearchApp extends JPanel {
         
         BasicSearchInput.set_Author_Name(null);
         BasicSearchInput.set_Publication_Name(null);
-        BasicSearchInput.set_Publisher_Name(null);
-        BasicSearchInput.set_Award(null);
-        BasicSearchInput.set_Language(null);
                                                    
         if (searchChoice.getItem(searchChoiceContent).equals("Authors")) {
             BasicSearchInput.set_Author_Name(Name);
         }
         else if (searchChoice.getItem(searchChoiceContent).equals("Books")) {
             BasicSearchInput.set_Publication_Name(Name);
-        }
-        else if (searchChoice.getItem(searchChoiceContent).equals("Publishers")) {
-            BasicSearchInput.set_Publisher_Name(Name);
-        }
-        else if (searchChoice.getItem(searchChoiceContent).equals("Awards")) {
-            BasicSearchInput.set_Award(Name);
-        }
-        else if (searchChoice.getItem(searchChoiceContent).equals("Languages")) {
-            BasicSearchInput.set_Language(Name);
         }
                 
         System.out.println("");
@@ -287,7 +274,7 @@ public class SearchApp extends JPanel {
             }
         });
         
-        if(!content.equals("")) {
+        if(!content.equals("What are you look for ?")) {
             displayResult(content, searchChoiceContent1, methodChoiceContent1);
             searchTextField.setForeground(Color.black);
             searchTextField.setText(content);
