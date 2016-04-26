@@ -34,7 +34,6 @@ import DAO.BasicSearchInput;
 import DAO.BookDAO;
 import DAO.BasicBookDAO;
 
-
 public class DetailSearchPage extends JPanel {
 	private JPanel detailSearchPanel;
 	private BookDAO BookDAO;
@@ -54,16 +53,8 @@ public class DetailSearchPage extends JPanel {
         //SearchApp.frame.revalidate();
         //SearchApp.frame.repaint();
         
-		
-        // Title
-        JPanel panelTitle = new JPanel();
-        FlowLayout flowLayout1 = (FlowLayout) panelTitle.getLayout();
-        flowLayout1.setAlignment(FlowLayout.LEFT);
-        detailSearchPanel.add(panelTitle, BorderLayout.NORTH); 
-        panelTitle.setLayout(new GridLayout(1,1));
-        
-        JLabel lblSearchItem = new JLabel("Advanced Book Search ", SwingConstants.CENTER);
-        panelTitle.add(lblSearchItem);
+        //JLabel lblSearchItem = new JLabel("Advanced Book Search ", SwingConstants.CENTER);
+        //panelTitle.add(lblSearchItem);
         
         // Result
         JPanel panelResult = new JPanel();
@@ -307,7 +298,7 @@ public class DetailSearchPage extends JPanel {
         search.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		System.out.println("");
-        		System.out.println("***********NEW SEARCH************");
+        		System.out.println("****System*******NEW SEARCH************");
                 System.out.println("Author Name = " + UserInput.get_Author_Name());
         		System.out.println("Book Title = " + UserInput.get_Publication_Name());
         		System.out.println("Publisher = " + UserInput.get_Publisher_Name());
@@ -333,7 +324,6 @@ public class DetailSearchPage extends JPanel {
         JButton back = new JButton("Back");
         back.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		panelTitle.removeAll();
         		panelResult.removeAll();
         		panelFields.removeAll();
         		detailSearchPanel.removeAll();
@@ -347,7 +337,6 @@ public class DetailSearchPage extends JPanel {
         JButton specificSearch = new JButton("Specific Search");
         specificSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	panelTitle.removeAll();
                 panelResult.removeAll();
                 panelFields.removeAll();
                 detailSearchPanel.removeAll();

@@ -402,7 +402,7 @@ public class SearchApp extends JPanel {
     
     public void detailSearch() {
     	
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Main.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setBounds(100, 100, 800, 1000);
         
         panel1.removeAll();
@@ -412,7 +412,7 @@ public class SearchApp extends JPanel {
         
         contentPane.setBorder(new EmptyBorder(10, 10, 18, 10));
         contentPane.setLayout(new BorderLayout(0, 0));
-        setContentPane(contentPane);
+        Main.mainFrame.add(contentPane);
 		
         // Title
         JPanel panelTitle = new JPanel();
