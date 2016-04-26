@@ -172,11 +172,6 @@ public class SearchApp extends JFrame {
         });
         
         btnSearch = new JButton("Search");
-        btnSearch.setForeground(Color.BLUE);
-        btnSearch.setOpaque(true);
-        btnSearch.setFocusPainted(true);
-        btnSearch.setBorderPainted(true);
-        //btnSearch.setContentAreaFilled(true);
         btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
         panel3.add(btnSearch);
         
