@@ -61,40 +61,11 @@ public class SearchApp extends JPanel {
     /**
      * Launch the application.
      */
-    /*
-    public static void main(String[] args) {
-	EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    SearchApp frame = new SearchApp();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-    */
-
-    public SearchApp() {
-        // create the DAO
-        try {
-            AuthorDAO = new AuthorDAO();
-        } catch (Exception exc) {
-            JOptionPane.showMessageDialog(this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
-        }
-		
-        //setTitle(" The Two Billions Books Search Engine ");
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //setBounds(100, 100, 800, 180);
-        initialPage();
-    }
     
     public void initialPage() {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
-        //Main.mainFrame.setContentPane(contentPane);
         Main.mainFrame.add(contentPane);
         Main.mainFrame.revalidate();
         Main.mainFrame.repaint();
@@ -123,7 +94,7 @@ public class SearchApp extends JPanel {
         panel2.add(searchTextField);
         searchTextField.setColumns(10);
         searchTextField.setForeground(Color.gray);
-        searchTextField.setText("What are you looking for ?");
+        searchTextField.setText("Please Enter Exact Name of");
         
         searchTextField.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
@@ -155,26 +126,12 @@ public class SearchApp extends JPanel {
         advancedOption = new JButton("Advanced Book Search");
         advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
 
-        
         panel3.add(advancedOption);
         
-        /*placeHolder = new JLabel("Book Search ");
+        placeHolder = new JLabel("Book Search ");
         placeHolder.setFont(new Font("Serif", Font.BOLD, 10));
         placeHolder.setForeground(new Color(0, 255, 0, 0));
-        panel3.add(placeHolder);*/
-        JButton specificSearch = new JButton("Specific Search");
-        panel3.add(specificSearch);
-        specificSearch.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	panel1.removeAll();
-                panel2.removeAll();
-                panel3.removeAll();
-                contentPane.removeAll();
-                SpecificSearchPage specificSearchPage = new SpecificSearchPage();
-            	specificSearchPage.specificSearch();
-            	
-            }
-        });
+        panel3.add(placeHolder);
         
         btnSearch = new JButton("Search");
         btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
@@ -199,6 +156,12 @@ public class SearchApp extends JPanel {
                 String name = searchTextField.getText();
                 int searchChoiceContent = searchChoice.getSelectedIndex();
                 int methodChoiceContent = methodChoice.getSelectedIndex();
+                panel1.removeAll();
+                panel2.removeAll();
+                panel3.removeAll();
+                contentPane.removeAll();
+                Main.mainFrame.remove(contentPane);
+                Main.mainFrame.setBounds(100, 100, 800, 1000);
                 searchResult(name, searchChoiceContent, methodChoiceContent);
             }
         });
@@ -254,12 +217,6 @@ public class SearchApp extends JPanel {
     }
     
     public void searchResult(String content, int searchChoiceContent1, int methodChoiceContent1) {
-        //setTitle("Book Search App");
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 1000);
-        panel1.removeAll();
-        panel2.removeAll();
-        panel3.removeAll();
         
         GridBagLayout gridbag = new GridBagLayout();
         GridBagConstraints c = new GridBagConstraints();
@@ -268,6 +225,10 @@ public class SearchApp extends JPanel {
         contentPane.setBorder(new EmptyBorder(10, 0, 18, 0));
         contentPane.setLayout(gridbag);
         //setContentPane(contentPane);
+        
+        Main.mainFrame.add(contentPane);
+        Main.mainFrame.revalidate();
+        Main.mainFrame.repaint();
 		
         panel1 = new JPanel();
         FlowLayout flowLayout1 = (FlowLayout) panel1.getLayout();

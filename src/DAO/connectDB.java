@@ -31,13 +31,13 @@ public class connectDB {
         System.out.println("JDBC Class found");
         
         
-        /*try {
+        try {
             myConn = DriverManager.getConnection(connection_url,USER_NAME,PASSWORD); 
             System.out.println("Connected");
         }
         catch(SQLException e){
             System.out.println("SQL exception occured" + e);
-        }*/
+        }
         
         return myConn;
     }
@@ -77,12 +77,5 @@ public class connectDB {
             myConn.close();
 	}
     }
-
-    /*public static void main(String[] args) {
-        connectDB book = new connectDB();
-        book.getConnection();
-        book.query();
-        System.out.println("Terminated");
-    }*/
     
 }

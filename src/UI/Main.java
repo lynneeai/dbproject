@@ -40,10 +40,9 @@ public class Main {
 	//public static JPanel mainPanel = new JPanel();
 	
 	public Main() {
-		mainFrame.setVisible(true);
-		mainFrame.setBounds(100, 100, 800, 180);
+            mainFrame.setVisible(true);
+            mainFrame.setBounds(100, 100, 800, 180);
 	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    //mainFrame.setContentPane(mainPanel);
 	    SearchApp searchApp = new SearchApp();
 	    searchApp.initialPage();
 	}
