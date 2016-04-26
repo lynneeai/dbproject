@@ -45,6 +45,10 @@ public class SpecificSearchPage {
         specificSearchPanel.setBorder(new EmptyBorder(10, 10, 18, 10));
         specificSearchPanel.setLayout(new BorderLayout(0, 0));
         
+        Main.mainFrame.add(specificSearchPanel);
+        Main.mainFrame.revalidate();
+        Main.mainFrame.repaint();
+        
         String[] tabContents = {"All Publishers", "All authors", "Most Popular Books", "Books Published", "All Comics"};
         
         for (int i = 0; i < 5; i++) {
@@ -58,6 +62,7 @@ public class SpecificSearchPage {
         		backPanel.removeAll();
         		pane.removeAll();
         		specificSearchPanel.removeAll();
+        		Main.mainFrame.remove(specificSearchPanel);
         		DetailSearchPage detailSearchPage = new DetailSearchPage();
         		detailSearchPage.detailSearch();
         		

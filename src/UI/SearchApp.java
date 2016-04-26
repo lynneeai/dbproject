@@ -58,12 +58,10 @@ public class SearchApp extends JPanel {
     private UserInput UserInput;
     private BasicSearchInput BasicSearchInput;
 	
-    /**
-     * Launch the application.
-     */
     
     public void initialPage() {
         contentPane = new JPanel();
+        contentPane.setSize(100, 100);
         contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         Main.mainFrame.add(contentPane);
@@ -71,6 +69,7 @@ public class SearchApp extends JPanel {
         Main.mainFrame.repaint();
 		
         panel1 = new JPanel();
+        panel1.setSize(100, 30);
         FlowLayout flowLayout1 = (FlowLayout) panel1.getLayout();
         flowLayout1.setAlignment(FlowLayout.LEFT);
         contentPane.add(panel1, BorderLayout.NORTH); 
@@ -80,6 +79,7 @@ public class SearchApp extends JPanel {
         panel1.add(lblSearchItem);
         
         panel2 = new JPanel();
+        panel2.setSize(100, 30);
         FlowLayout flowLayout2 = (FlowLayout) panel2.getLayout();
         flowLayout2.setAlignment(FlowLayout.LEFT);
         panel2.setBorder(new EmptyBorder(32, 5, 33, 5));

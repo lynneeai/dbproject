@@ -328,9 +328,9 @@ public class DetailSearchPage extends JPanel {
         		panelFields.removeAll();
         		detailSearchPanel.removeAll();
         		Main.mainFrame.remove(detailSearchPanel);
-        		Main.mainFrame.setBounds(100, 100, 800, 100);
+        		Main.mainFrame.setBounds(100, 100, 800, 1000);
         		SearchApp searchApp = new SearchApp();
-        		searchApp.initialPage();;
+        		searchApp.searchResult("", 0, 0);
         	}
         });
         
@@ -340,7 +340,8 @@ public class DetailSearchPage extends JPanel {
                 panelResult.removeAll();
                 panelFields.removeAll();
                 detailSearchPanel.removeAll();
-                setBounds(100, 100, 800, 1000);
+                Main.mainFrame.remove(detailSearchPanel);
+                Main.mainFrame.setBounds(100, 100, 800, 1000);
             	SpecificSearchPage specificSearchPage = new SpecificSearchPage();
             	specificSearchPage.specificSearch();       	
             }

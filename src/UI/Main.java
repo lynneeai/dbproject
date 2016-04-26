@@ -37,7 +37,6 @@ import DAO.BasicBookDAO;
 public class Main {
 	
 	public static JFrame mainFrame = new JFrame();
-	//public static JPanel mainPanel = new JPanel();
 	
 	public Main() {
             mainFrame.setVisible(true);
@@ -48,7 +47,15 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		new Main();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					new Main();
+				} catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 	}
 	
 	
