@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
@@ -21,6 +23,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import java.awt.Choice;
 
 
 public class SpecificSearchPage {
@@ -172,12 +177,152 @@ public class SpecificSearchPage {
             JScrollPane scrollPane = new JScrollPane();
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.setPreferredSize(new Dimension(710, 570));
+            scrollPane.setPreferredSize(new Dimension(710, 510));
             add(scrollPane);
             
         }
         
         private void getAllAuthors() {
+            JPanel fieldPanel = new JPanel();
+            JPanel resultPanel = new JPanel();
+        	
+            // fieldPanel
+            
+            fieldPanel.setLayout(new GridBagLayout());
+            GridBagConstraints grid = new GridBagConstraints();
+            
+            Border title = BorderFactory.createTitledBorder("All Authors Search");
+            fieldPanel.setBorder(title);
+            
+            
+            JRadioButton inLanguage = new JRadioButton("In Language");
+            JRadioButton withTag = new JRadioButton("With Tag");
+            JRadioButton bookType = new JRadioButton("Book Type");
+            JRadioButton publishedYear = new JRadioButton("Published In");
+            ButtonGroup bg = new ButtonGroup();
+            bg.add(inLanguage);
+            bg.add(withTag);
+            bg.add(bookType);
+            bg.add(publishedYear);
+            
+            
+            
+            Choice language = new Choice();
+            Choice type = new Choice();
+            Choice year = new Choice();
+            Choice authors = new Choice();
+            
+            language.setPreferredSize(new Dimension(180, 20));
+            type.setPreferredSize(new Dimension(180, 20));
+            year.setPreferredSize(new Dimension(180, 20));
+            authors.setPreferredSize(new Dimension(180, 20));
+            
+            String[] avail_Languages = {"", "English", "French", "Chinese"};
+            for (int i = 0; i < avail_Languages.length; i++) {
+            	language.add(avail_Languages[i]);
+            }
+            
+            String[] avail_Type = {"", "ANTHOLOGY", "BACKCOVERART", "COLLECTION", "COVERART", "INTERIORART", "EDITOR", "ESSAY", "INTERVIEW", "NOVEL", "NONFICTION", "OMNIBUS", "POEM", "REVIEW", "SERIAL", "SHORTFICTION", "CHAPBOOK", "MAGAZINE", "FANZINE"};
+            for (int i = 0; i < avail_Type.length; i++) {
+            	type.add(avail_Type[i]);
+            }
+            
+            year.add("");
+            for (int i = 2016; i >= 1; i--) {
+            	if (i >= 1000) {
+            		year.addItem(Integer.toString(i));
+            	}
+            	if ((i >= 100) && (i <= 999)) {
+            		year.addItem("0" + Integer.toString(i));
+            	}
+            	if ((i >= 10) && (i <= 99)) {
+            		year.addItem("00" + Integer.toString(i));
+            	}
+            	if ((i >= 1) && (i <= 9)) {
+            		year.addItem("000" + Integer.toString(i));
+            	}
+            }
+            
+            String[] which_Author = {"All Authors", "Best Author", "Published-Most Author", "Oldest Author", "Youngest Author", "Written-Most Author"};
+            for (int i = 0; i < which_Author.length; i++) {
+            	authors.add(which_Author[i]);
+            }
+            
+            
+            JTextField tag = new JTextField();
+            tag.setColumns(14);
+            tag.setEditable(true);
+            
+            
+            JLabel see = new JLabel("Search For Authors");
+            JLabel transparent = new JLabel("     ");
+            
+            
+            JButton search = new JButton("Search");
+            
+            
+            grid.anchor = GridBagConstraints.WEST;
+            grid.ipady = 5;
+            grid.gridx = 0;
+            grid.gridy = 0;
+            fieldPanel.add(inLanguage, grid);
+            grid.gridx = 1;
+            grid.gridy = 0;
+            fieldPanel.add(language, grid);
+            
+            grid.gridx = 0;
+            grid.gridy = 1;
+            fieldPanel.add(publishedYear, grid);
+            grid.gridx = 1;
+            grid.gridy = 1;
+            fieldPanel.add(year, grid);
+            
+            grid.gridx = 0;
+            grid.gridy = 2;
+            fieldPanel.add(bookType, grid);
+            grid.gridx = 1;
+            grid.gridy = 2;
+            fieldPanel.add(type, grid);
+            
+            grid.gridx = 0;
+            grid.gridy = 3;
+            fieldPanel.add(withTag, grid);
+            grid.gridx = 1;
+            grid.gridy = 3;
+            grid.ipady = 0;
+            fieldPanel.add(tag, grid);
+            
+            
+            grid.ipady = 5;
+            grid.anchor = GridBagConstraints.CENTER;
+            grid.gridx = 2;
+            grid.gridy = 0;
+            fieldPanel.add(transparent, grid);
+            
+            grid.gridx = 3;
+            grid.gridy = 0;
+            fieldPanel.add(see, grid);
+            grid.gridx = 4;
+            grid.gridy = 0;
+            fieldPanel.add(authors, grid);
+            
+            grid.gridx = 4;
+            grid.gridy = 3;
+            grid.ipady = 0;
+            fieldPanel.add(search, grid);
+            
+            
+            // resultPanel
+            
+            JScrollPane scrollPane1 = new JScrollPane();
+            scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setPreferredSize(new Dimension(710, 485));
+            resultPanel.add(scrollPane1);
+            
+            add(fieldPanel, BorderLayout.NORTH);
+            add(resultPanel, BorderLayout.CENTER);
+            
             
         }
         

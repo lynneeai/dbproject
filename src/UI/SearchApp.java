@@ -70,7 +70,7 @@ public class SearchApp extends JPanel {
         contentPane.add(panel1, BorderLayout.NORTH); 
         panel1.setLayout(new GridLayout(1,1));
         
-        JLabel lblSearchItem = new JLabel("Basic Book Search", SwingConstants.CENTER);
+        JLabel lblSearchItem = new JLabel("Two Million Book Search", SwingConstants.CENTER);
         panel1.add(lblSearchItem);
         
         panel2 = new JPanel();

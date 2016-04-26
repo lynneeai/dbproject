@@ -1,6 +1,5 @@
 package UI;
 
-import java.awt.BorderLayout;
 import java.awt.*; 
 import java.awt.event.*;  
 
@@ -14,10 +13,12 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.awt.font.TextAttribute;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
@@ -271,7 +272,7 @@ public class DetailSearchPage extends JPanel {
         });
         
         
-        JCheckBox awardedBook = new JCheckBox("Is this book awarded?");
+        JCheckBox awardedBook = new JCheckBox("Show Only Awarded Books!");
         awardedBook.addFocusListener(new FocusListener() {
         	public void focusGained(FocusEvent e) {}
         	public void focusLost(FocusEvent e) {
@@ -319,7 +320,17 @@ public class DetailSearchPage extends JPanel {
         	}
         });
         
-        JButton specificSearch = new JButton("Specific Search");
+        JButton specificSearch = new JButton("Search For More With Specific Filters");
+        specificSearch.setBorder(null);
+        specificSearch.setOpaque(true);
+        specificSearch.setForeground(Color.blue);
+        specificSearch.setFont(new Font("Plain", Font.PLAIN, 13));
+        Font font = specificSearch.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        specificSearch.setFont(font.deriveFont(attributes));       
+        specificSearch.setFocusPainted(true);
+        specificSearch.setBorderPainted(true);
         specificSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 panelResult.removeAll();
@@ -421,15 +432,20 @@ public class DetailSearchPage extends JPanel {
         grid.ipady = 0;
         panelFields.add(search, grid);
         
+        grid.anchor = GridBagConstraints.WEST;
         grid.gridx = 0;
+        grid.gridy = 6;
+        grid.ipady = 0;
+        grid.weightx = 0;
+        grid.gridwidth = 2;
+        panelFields.add(specificSearch, grid);
+        
+        grid.anchor = GridBagConstraints.WEST;
+        grid.gridx = 1;
         grid.gridy = 7;
         grid.ipady = 0;
         panelFields.add(back, grid);
         
-        grid.gridx = 1;
-        grid.gridy = 7;
-        grid.ipady = 0;
-        panelFields.add(specificSearch, grid);
         
         
         Border title = BorderFactory.createTitledBorder("Advanced Book Search");
