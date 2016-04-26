@@ -93,10 +93,5 @@ public class SpecificSearchPage {
         private void getAllComics() {
             
         }
-
-        @Override
-        public Dimension getPreferredSize() {
-            return new Dimension(320, 140);
-        }
     }
 }
