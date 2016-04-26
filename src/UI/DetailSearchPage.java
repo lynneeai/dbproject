@@ -49,20 +49,13 @@ public class DetailSearchPage extends JPanel {
         Main.mainFrame.revalidate();
         Main.mainFrame.repaint();
         
-        //SearchApp.add(detailSearchPanel);
-        //SearchApp.frame.revalidate();
-        //SearchApp.frame.repaint();
-        
-        //JLabel lblSearchItem = new JLabel("Advanced Book Search ", SwingConstants.CENTER);
-        //panelTitle.add(lblSearchItem);
-        
         // Result
         JPanel panelResult = new JPanel();
         
         JScrollPane scrollPane1 = new JScrollPane();
         scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane1.setPreferredSize(new Dimension(775, 390));
+        scrollPane1.setPreferredSize(new Dimension(775, 437));
         panelResult.add(scrollPane1);
         
         JTable tableTemp = new JTable();
@@ -82,8 +75,8 @@ public class DetailSearchPage extends JPanel {
         JLabel authorName = new JLabel("Author Name");
         JLabel bookTitle = new JLabel("Book Title");
         JLabel publisher = new JLabel("Publisher");
-        JLabel startDate = new JLabel("Start Date");
-        JLabel endDate = new JLabel("End Date");
+        JLabel startDate = new JLabel("Date From");
+        JLabel endDate = new JLabel("Date Till");
         JLabel language = new JLabel("Language");
         JLabel bookSeries = new JLabel("Book Series");
         JLabel type = new JLabel("Type");
@@ -328,9 +321,9 @@ public class DetailSearchPage extends JPanel {
         		panelFields.removeAll();
         		detailSearchPanel.removeAll();
         		Main.mainFrame.remove(detailSearchPanel);
-        		Main.mainFrame.setBounds(100, 100, 800, 1000);
+        		Main.mainFrame.setBounds(100, 100, 800, 180);
         		SearchApp searchApp = new SearchApp();
-        		searchApp.searchResult("", 0, 0);
+        		searchApp.initialPage();
         	}
         });
         

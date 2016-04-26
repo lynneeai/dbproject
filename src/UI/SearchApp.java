@@ -219,7 +219,6 @@ public class SearchApp extends JPanel {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 0, 18, 0));
         contentPane.setLayout(gridbag);
-        //setContentPane(contentPane);
         
         Main.mainFrame.add(contentPane);
         Main.mainFrame.revalidate();
@@ -318,8 +317,9 @@ public class SearchApp extends JPanel {
                 panel3.removeAll();
                 panel4.removeAll();
                 contentPane.removeAll();
+                Main.mainFrame.remove(contentPane);
                 table.setModel(new DefaultTableModel());
-                setBounds(100, 100, 800, 1000);
+                Main.mainFrame.setBounds(100, 100, 800, 1000);
             	DetailSearchPage detailSearchPage = new DetailSearchPage();
             	detailSearchPage.detailSearch();
             }
