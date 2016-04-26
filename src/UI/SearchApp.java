@@ -37,7 +37,7 @@ import DAO.BasicBookDAO;
   
 public class SearchApp extends JFrame {
 
-    private JPanel contentPane;
+    public static JPanel contentPane = new JPanel();
     private JPanel panel1;
     private JPanel panel2;
     private JPanel panel3;
@@ -89,7 +89,7 @@ public class SearchApp extends JFrame {
     }
     
     public void initialPage() {
-        contentPane = new JPanel();
+        //contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
@@ -170,7 +170,14 @@ public class SearchApp extends JFrame {
         
         advancedOption.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                detailSearch();
+            	panel1.removeAll();
+                panel2.removeAll();
+                panel3.removeAll();
+                contentPane.removeAll();
+                setBounds(100, 100, 800, 1000);
+            	DetailSearchPage detailSearchPage = new DetailSearchPage();
+            	detailSearchPage.detailSearch();
+            	
             }
         });
         
@@ -344,7 +351,9 @@ public class SearchApp extends JFrame {
                 panel4.removeAll();
                 contentPane.removeAll();
                 table.setModel(new DefaultTableModel());
-                detailSearch();
+                setBounds(100, 100, 800, 1000);
+            	DetailSearchPage detailSearchPage = new DetailSearchPage();
+            	detailSearchPage.detailSearch();
             }
         });
         
@@ -380,6 +389,7 @@ public class SearchApp extends JFrame {
         scrollPane.setViewportView(table);
     }
     
+<<<<<<< HEAD
     public void detailSearch() {
     	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -766,4 +776,6 @@ public class SearchApp extends JFrame {
     }
     
     
+=======
+>>>>>>> origin/master
 }  
