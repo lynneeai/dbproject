@@ -436,4 +436,3 @@ public class DetailSearchPage extends JPanel {
         
     }
 }
-
