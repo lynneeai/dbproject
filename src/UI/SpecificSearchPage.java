@@ -45,9 +45,11 @@ public class SpecificSearchPage {
         specificSearchPanel.setBorder(new EmptyBorder(10, 10, 18, 10));
         specificSearchPanel.setLayout(new BorderLayout(0, 0));
         
+        
         Main.mainFrame.add(specificSearchPanel);
         Main.mainFrame.revalidate();
         Main.mainFrame.repaint();
+        
         
         String[] tabContents = {"All Publishers", "All authors", "Most Popular Books", "Books Published", "All Comics"};
         
@@ -71,6 +73,9 @@ public class SpecificSearchPage {
         backPanel.add(back);
         specificSearchPanel.add(pane, BorderLayout.CENTER);
         specificSearchPanel.add(backPanel, BorderLayout.SOUTH);
+
+        //Main.mainFrame.pack();
+        Main.mainFrame.setVisible(true);
     }
     
     private static class TabContent extends JPanel {
