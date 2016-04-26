@@ -51,7 +51,7 @@ public class DetailSearchPage extends JPanel {
         JPanel panelTitle = new JPanel();
         FlowLayout flowLayout1 = (FlowLayout) panelTitle.getLayout();
         flowLayout1.setAlignment(FlowLayout.LEFT);
-        //contentPane.add(panelTitle, BorderLayout.NORTH); 
+        contentPane.add(panelTitle, BorderLayout.NORTH); 
         panelTitle.setLayout(new GridLayout(1,1));
         
         JLabel lblSearchItem = new JLabel("Advanced Book Search ", SwingConstants.CENTER);

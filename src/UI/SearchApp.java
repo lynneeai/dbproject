@@ -85,7 +85,6 @@ public class SearchApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 180);
         initialPage();
-        //detailSearch();
     }
     
     public void initialPage() {
@@ -153,11 +152,29 @@ public class SearchApp extends JFrame {
         
         panel3.add(advancedOption);
         
+<<<<<<< Updated upstream
         // What is that (paragraph below?)
         placeHolder = new JLabel("Book Search");
+=======
+        /*placeHolder = new JLabel("Book Search ");
+>>>>>>> Stashed changes
         placeHolder.setFont(new Font("Serif", Font.BOLD, 10));
         placeHolder.setForeground(new Color(0, 255, 0, 0));
-        panel3.add(placeHolder);
+        panel3.add(placeHolder);*/
+        JButton specificSearch = new JButton("Specific Search");
+        panel3.add(specificSearch);
+        specificSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	panel1.removeAll();
+                panel2.removeAll();
+                panel3.removeAll();
+                contentPane.removeAll();
+                setBounds(100, 100, 800, 1000);
+            	SpecificSearchPage specificSearchPage = new SpecificSearchPage();
+            	specificSearchPage.specificSearch();
+            	
+            }
+        });
         
         btnSearch = new JButton("Search");
         btnSearch.setForeground(Color.BLUE);
@@ -383,8 +400,6 @@ public class SearchApp extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setPreferredSize(new Dimension(775, 590));
         panel4.add(scrollPane);
-        //scrollPane = new JScrollPane();
-        //panel4.add(scrollPane, BorderLayout.PAGE_END);
         
         scrollPane.setViewportView(table);
     }

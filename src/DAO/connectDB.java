@@ -30,15 +30,15 @@ public class connectDB {
         }
         System.out.println("JDBC Class found");
         
-        /*
-        try {
+        
+        /*try {
             myConn = DriverManager.getConnection(connection_url,USER_NAME,PASSWORD); 
             System.out.println("Connected");
         }
         catch(SQLException e){
             System.out.println("SQL exception occured" + e);
-        }
-        */
+        }*/
+        
         return myConn;
     }
     
