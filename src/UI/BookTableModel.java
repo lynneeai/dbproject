@@ -14,7 +14,7 @@ public class BookTableModel extends AbstractTableModel {
     private static final int ISBN_COL = 4;
     private static final int PRICE_COL = 5;
 
-    private String[] columnNames = {"Book Name", "Author", "Published Date", "Language", "ISBN", "Price"};
+    private String[] columnNames = {"Book Title", "Author", "Publication Date", "Language", "ISBN", "Price"};
     private List<Book> books;
     
     public BookTableModel(List<Book> theBooks) {

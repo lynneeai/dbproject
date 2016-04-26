@@ -81,7 +81,7 @@ public class SearchApp extends JFrame {
             JOptionPane.showMessageDialog(this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
         }
 		
-        setTitle("Book Search App");
+        setTitle(" The Two Billions Books Search Engine ");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 180);
         initialPage();
@@ -100,7 +100,7 @@ public class SearchApp extends JFrame {
         contentPane.add(panel1, BorderLayout.NORTH); 
         panel1.setLayout(new GridLayout(1,1));
         
-        JLabel lblSearchItem = new JLabel("Book Search ", SwingConstants.CENTER);
+        JLabel lblSearchItem = new JLabel("Basic Book Search", SwingConstants.CENTER);
         panel1.add(lblSearchItem);
         
         panel2 = new JPanel();
@@ -118,7 +118,7 @@ public class SearchApp extends JFrame {
         panel2.add(searchTextField);
         searchTextField.setColumns(10);
         searchTextField.setForeground(Color.gray);
-        searchTextField.setText("Please Enter Exact Name of");
+        searchTextField.setText("What are you looking for ?");
         
         searchTextField.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
@@ -139,9 +139,6 @@ public class SearchApp extends JFrame {
         
         searchChoice.addItem("Authors");  
         searchChoice.addItem("Books"); 
-        searchChoice.addItem("Publishers"); 
-        searchChoice.addItem("Awards"); 
-        searchChoice.addItem("Languages"); 
         panel2.add(searchChoice);
         
         panel3 = new JPanel();
@@ -150,18 +147,24 @@ public class SearchApp extends JFrame {
         contentPane.add(panel3, BorderLayout.SOUTH); 
         panel3.setLayout(new GridLayout(1,3));
         
-        advancedOption = new JButton("Advanced Search Option");
+        advancedOption = new JButton("Advanced Book Search");
         advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
 
         
         panel3.add(advancedOption);
         
-        placeHolder = new JLabel("Book Search ");
+        // What is that (paragraph below?)
+        placeHolder = new JLabel("Book Search");
         placeHolder.setFont(new Font("Serif", Font.BOLD, 10));
         placeHolder.setForeground(new Color(0, 255, 0, 0));
         panel3.add(placeHolder);
         
         btnSearch = new JButton("Search");
+        btnSearch.setForeground(Color.BLUE);
+        btnSearch.setOpaque(true);
+        btnSearch.setFocusPainted(true);
+        btnSearch.setBorderPainted(true);
+        //btnSearch.setContentAreaFilled(true);
         btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
         panel3.add(btnSearch);
         
@@ -315,7 +318,12 @@ public class SearchApp extends JFrame {
         contentPane.add(panel3,c); 
         panel3.setLayout(new GridLayout(1,3));
         
-        advancedOption = new JButton("Advanced Search Option");
+        //
+        advancedOption = new JButton("Advanced Book Search");
+        advancedOption.setBorder(null);
+        advancedOption.setOpaque(true);
+        advancedOption.setFocusPainted(true);
+        advancedOption.setBorderPainted(true);
         advancedOption.setHorizontalAlignment(SwingConstants.LEFT);
         panel3.add(advancedOption);
         
@@ -393,7 +401,7 @@ public class SearchApp extends JFrame {
         //contentPane.add(panelTitle, BorderLayout.NORTH); 
         panelTitle.setLayout(new GridLayout(1,1));
         
-        JLabel lblSearchItem = new JLabel("Advanced Book Search ", SwingConstants.CENTER);
+        JLabel lblSearchItem = new JLabel("Advanced Book Search", SwingConstants.CENTER);
         panelTitle.add(lblSearchItem);
         
         // Result
@@ -422,8 +430,8 @@ public class SearchApp extends JFrame {
         JLabel authorName = new JLabel("Author Name");
         JLabel bookTitle = new JLabel("Book Title");
         JLabel publisher = new JLabel("Publisher");
-        JLabel startDate = new JLabel("Start Date");
-        JLabel endDate = new JLabel("End Date");
+        JLabel startDate = new JLabel("Date from");
+        JLabel endDate = new JLabel("Date till");
         JLabel language = new JLabel("Language");
         JLabel bookSeries = new JLabel("Book Series");
         JLabel type = new JLabel("Type");
@@ -626,7 +634,7 @@ public class SearchApp extends JFrame {
         });
         
         
-        JCheckBox awardedBook = new JCheckBox("Is this book awarded?");
+        JCheckBox awardedBook = new JCheckBox("Show only awarded books");
         awardedBook.addFocusListener(new FocusListener() {
         	public void focusGained(FocusEvent e) {}
         	public void focusLost(FocusEvent e) {
