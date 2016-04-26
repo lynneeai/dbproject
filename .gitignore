@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 /bin/
 .metadata
 .classpath
@@ -8,6 +8,11 @@
 /nbproject/
 ojdbc7.jar
 .mf
-=======
-/build/
->>>>>>> Stashed changes
+
+build/*
+build.xml
+lib/*
+manifest.mf
+nbproject/*
+test/*
+
