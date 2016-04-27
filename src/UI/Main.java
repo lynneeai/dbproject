@@ -14,6 +14,9 @@ public class Main {
 	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    SearchApp searchApp = new SearchApp();
 	    searchApp.initialPage();
+	    
+	    //BasicSearchPage basicSearchPage = new BasicSearchPage();
+	    //basicSearchPage.basicSearch();
 	}
 	
 	public static void main(String[] args) {
