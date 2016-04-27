@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -17,6 +18,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.font.TextAttribute;
+import java.util.Map;
+
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
@@ -30,21 +34,21 @@ import java.awt.Choice;
 
 public class SpecificSearchPage {
     
-    private JPanel specificSearchPanel;
+    private JPanel statsPanel;
     private final JTabbedPane pane = new JTabbedPane();
 	
     public void specificSearch() {
-        specificSearchPanel = new JPanel();
-        specificSearchPanel.setBorder(new EmptyBorder(10, 10, 18, 10));
-        specificSearchPanel.setLayout(new BorderLayout(0, 0));
+        statsPanel = new JPanel();
+        statsPanel.setBorder(new EmptyBorder(10, 10, 18, 10));
+        statsPanel.setLayout(new BorderLayout(0, 0));
         
         
-        Main.mainFrame.add(specificSearchPanel);
+        Main.mainFrame.add(statsPanel);
         Main.mainFrame.revalidate();
         Main.mainFrame.repaint();
         
         
-        String[] tabContents = {"All Publishers", "All authors", "Most Popular Books", "Books Published", "All Comics"};
+        String[] tabContents = {"Publishers", "Authors", "Best Books", "Publication Statistics", "Comics"};
         
         for (int i = 0; i < 5; i++) {
             pane.add(tabContents[i], new TabContent(i));        
@@ -56,16 +60,16 @@ public class SpecificSearchPage {
         	public void actionPerformed(ActionEvent e) {
         		backPanel.removeAll();
         		pane.removeAll();
-        		specificSearchPanel.removeAll();
-        		Main.mainFrame.remove(specificSearchPanel);
+        		statsPanel.removeAll();
+        		Main.mainFrame.remove(statsPanel);
         		DetailSearchPage detailSearchPage = new DetailSearchPage();
         		detailSearchPage.detailSearch();
         		
         	}
         });
         backPanel.add(back);
-        specificSearchPanel.add(pane, BorderLayout.CENTER);
-        specificSearchPanel.add(backPanel, BorderLayout.SOUTH);
+        statsPanel.add(pane, BorderLayout.CENTER);
+        statsPanel.add(backPanel, BorderLayout.SOUTH);
 
         //Main.mainFrame.pack();
         Main.mainFrame.setVisible(true);
@@ -101,7 +105,7 @@ public class SpecificSearchPage {
             add(panel1); 
             panel1.setLayout(new GridLayout(3,2));
             
-            Border title = BorderFactory.createTitledBorder("All Publishers Search");
+            Border title = BorderFactory.createTitledBorder("Publishers");
             panel1.setBorder(title);
             
             JCheckBox minPricePublisher = new JCheckBox("Show minimum price of the publisher");
@@ -191,7 +195,7 @@ public class SpecificSearchPage {
             fieldPanel.setLayout(new GridBagLayout());
             GridBagConstraints grid = new GridBagConstraints();
             
-            Border title = BorderFactory.createTitledBorder("All Authors Search");
+            Border title = BorderFactory.createTitledBorder("Authors");
             fieldPanel.setBorder(title);
             
             
@@ -327,14 +331,207 @@ public class SpecificSearchPage {
         }
         
         private void getMostPopulars() {
+        	
+        	JPanel fieldPanel = new JPanel();
+        	JPanel resultPanel = new JPanel();
+        	
+        	// fieldPanel
+        	fieldPanel.setLayout(new GridBagLayout());
+            GridBagConstraints grid = new GridBagConstraints();
+            
+            Border title = BorderFactory.createTitledBorder("Best Books");
+            fieldPanel.setBorder(title);
+        	
+            JLabel transparent = new JLabel("   ");
+            
+        	JCheckBox reviewed = new JCheckBox("Most Reviewed Books");
+        	JCheckBox awarded = new JCheckBox("Most Awarded Books");
+        	JCheckBox translated = new JCheckBox("Most Translated Books");
+        	
+        	JButton search = new JButton("Search");
+        	
+        	
+        	grid.anchor = GridBagConstraints.WEST;
+        	grid.ipady = 5;
+        	grid.ipadx = 5;
+        	grid.gridx = 0;
+        	grid.gridy = 0;
+        	fieldPanel.add(reviewed, grid);
+        	
+        	grid.gridx = 0;
+        	grid.gridy = 1;
+        	fieldPanel.add(awarded, grid);
+        	
+        	grid.gridx = 1;
+        	grid.gridy = 0;
+        	fieldPanel.add(transparent, grid);
+        	
+        	grid.gridx = 2;
+        	grid.gridy = 0;
+        	fieldPanel.add(translated, grid);
+        	
+        	grid.anchor = GridBagConstraints.CENTER;
+        	grid.ipady = 0;
+        	grid.gridx = 2;
+        	grid.gridy = 1;
+        	fieldPanel.add(search, grid);
+        	
+        	// resultPanel
+        	
+        	JScrollPane scrollPane1 = new JScrollPane();
+            scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setPreferredSize(new Dimension(710, 535));
+            resultPanel.add(scrollPane1);
+        	
+        	add(fieldPanel, BorderLayout.NORTH);
+        	add(resultPanel, BorderLayout.CENTER);
             
         }
         
         private void getBooksPublished() {
+        	
+        	JPanel fieldPanel = new JPanel();
+        	JPanel resultPanel = new JPanel();
+        	
+        	// fieldPanel
+        	fieldPanel.setLayout(new GridBagLayout());
+            GridBagConstraints grid = new GridBagConstraints();
+            
+            Border title = BorderFactory.createTitledBorder("Publication Statistics");
+            fieldPanel.setBorder(title);
+            
+            JLabel bookNum = new JLabel("Total Books Published In Year");
+            
+            
+            Choice year = new Choice();
+            year.setPreferredSize(new Dimension(200, 20));
+            year.add("");
+            for (int i = 2016; i >= 1; i--) {
+            	if (i >= 1000) {
+            		year.addItem(Integer.toString(i));
+            	}
+            	if ((i >= 100) && (i <= 999)) {
+            		year.addItem("0" + Integer.toString(i));
+            	}
+            	if ((i >= 10) && (i <= 99)) {
+            		year.addItem("00" + Integer.toString(i));
+            	}
+            	if ((i >= 1) && (i <= 9)) {
+            		year.addItem("000" + Integer.toString(i));
+            	}
+            }
+            
+            JButton stats = new JButton("Statistics On Publications Per Year");
+            JButton search = new JButton("Search");
+            
+            stats.setBorder(null);
+            stats.setOpaque(true);
+            stats.setForeground(Color.blue);
+            stats.setFont(new Font("Plain", Font.PLAIN, 13));
+            Font font = stats.getFont();
+            Map attributes = font.getAttributes();
+            attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+            stats.setFont(font.deriveFont(attributes));       
+            stats.setFocusPainted(true);
+            stats.setBorderPainted(true);
+            
+            grid.ipadx = 5;
+            grid.ipady = 5;
+            grid.gridx = 0;
+            grid.gridy = 0;
+            fieldPanel.add(bookNum, grid);
+            
+            grid.gridx = 1;
+            grid.gridy = 0;
+            fieldPanel.add(year, grid);
+            
+            grid.anchor = GridBagConstraints.WEST;
+            grid.gridwidth = 2;
+            grid.gridx = 0;
+            grid.gridy = 1;
+            fieldPanel.add(stats, grid);
+            
+            grid.anchor = GridBagConstraints.CENTER;
+            grid.gridwidth = 1;
+            grid.ipadx = 0;
+            grid.ipady = 0;
+            grid.gridx = 1;
+            grid.gridy = 1;
+            fieldPanel.add(search, grid);
+            
+            // resultPanel
+        	
+        	JScrollPane scrollPane1 = new JScrollPane();
+            scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setPreferredSize(new Dimension(710, 540));
+            resultPanel.add(scrollPane1);
+            
+            add(fieldPanel, BorderLayout.NORTH);
+        	add(resultPanel, BorderLayout.CENTER);
             
         }
         
         private void getAllComics() {
+        	
+        	JPanel fieldPanel = new JPanel();
+        	JPanel resultPanel = new JPanel();
+        	
+        	// fieldPanel
+        	fieldPanel.setLayout(new GridBagLayout());
+            GridBagConstraints grid = new GridBagConstraints();
+            
+            Border title = BorderFactory.createTitledBorder("Publication Statistics");
+            fieldPanel.setBorder(title);
+            
+            JLabel transparent = new JLabel("      ");
+            
+            JRadioButton small = new JRadioButton("small comics (<50 pages)");
+            JRadioButton medium = new JRadioButton("medium size comics (< 100 pages)");
+            JRadioButton large = new JRadioButton("long comics (> 100 pages)");
+            ButtonGroup bg = new ButtonGroup();
+            bg.add(small);
+            bg.add(medium);
+            bg.add(large);
+            
+            JButton search = new JButton("Search");
+            
+            grid.anchor = GridBagConstraints.WEST;
+            grid.ipady = 5;
+            grid.gridx = 0;
+            grid.gridy = 0;
+            fieldPanel.add(small, grid);
+            
+            grid.gridx = 0;
+            grid.gridy = 1;
+            fieldPanel.add(medium, grid);
+            
+            grid.gridx = 0;
+            grid.gridy = 2;
+            fieldPanel.add(large, grid);
+            
+            
+            grid.anchor = GridBagConstraints.CENTER;
+            grid.ipady = 0;
+            grid.gridx = 1;
+            grid.gridy = 0;
+            fieldPanel.add(transparent, grid);
+            
+            grid.gridx = 2;
+            grid.gridy = 2;
+            fieldPanel.add(search, grid);
+            
+            // resultPanel
+        	
+        	JScrollPane scrollPane1 = new JScrollPane();
+            scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setPreferredSize(new Dimension(710, 510));
+            resultPanel.add(scrollPane1);
+            
+            add(fieldPanel, BorderLayout.NORTH);
+        	add(resultPanel, BorderLayout.CENTER);
             
         }
     }
