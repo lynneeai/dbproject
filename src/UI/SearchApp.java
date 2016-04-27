@@ -89,12 +89,12 @@ public class SearchApp extends JPanel {
         panel2.add(searchTextField);
         searchTextField.setColumns(10);
         searchTextField.setForeground(Color.gray);
-        searchTextField.setText("What are you look for ?");
+        searchTextField.setText("What are you looking for ?");
         
         searchTextField.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
         	String content = searchTextField.getText();
-                if (content.trim().equals("What are you look for ?")) {
+                if (content.trim().equals("What are you looking for ?")) {
                     searchTextField.setText("");
                     searchTextField.setForeground(Color.black);
                 }
@@ -103,7 +103,7 @@ public class SearchApp extends JPanel {
         	String content = searchTextField.getText();
         	if (content.trim().equals("")) {
                     searchTextField.setForeground(Color.gray);
-                    searchTextField.setText("What are you look for ?");
+                    searchTextField.setText("What are you looking for ?");
         	} 
             }
         });
@@ -271,7 +271,7 @@ public class SearchApp extends JPanel {
             }
         });
         
-        if(!content.equals("What are you look for ?")) {
+        if(!content.equals("What are you looking for ?")) {
             displayResult(content, searchChoiceContent1, methodChoiceContent1);
             searchTextField.setForeground(Color.black);
             searchTextField.setText(content);
