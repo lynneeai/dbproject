@@ -62,6 +62,8 @@ public class SearchApp extends JPanel {
         Main.mainFrame.add(contentPane);
         Main.mainFrame.revalidate();
         Main.mainFrame.repaint();
+        
+        Main.mainFrame.setTitle(" The Two Billions Books Search Engine ");
 		
         panel1 = new JPanel();
         panel1.setSize(100, 30);
@@ -70,7 +72,7 @@ public class SearchApp extends JPanel {
         contentPane.add(panel1, BorderLayout.NORTH); 
         panel1.setLayout(new GridLayout(1,1));
         
-        JLabel lblSearchItem = new JLabel("Two Million Book Search", SwingConstants.CENTER);
+        JLabel lblSearchItem = new JLabel("Basic Book Search", SwingConstants.CENTER);
         panel1.add(lblSearchItem);
         
         panel2 = new JPanel();
@@ -138,7 +140,9 @@ public class SearchApp extends JPanel {
         placeHolder.setForeground(new Color(0, 255, 0, 0));
         panel3.add(placeHolder);
         
-        btnSearch = new JButton("Search");;
+        btnSearch = new JButton("Search");
+        btnSearch.setOpaque(true);
+        btnSearch.setForeground(Color.blue);
         btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
         panel3.add(btnSearch);
         

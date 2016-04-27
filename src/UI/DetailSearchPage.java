@@ -320,7 +320,7 @@ public class DetailSearchPage extends JPanel {
         	}
         });
         
-        JButton specificSearch = new JButton("Search For More With Specific Filters");
+        JButton specificSearch = new JButton("Specific Search");
         specificSearch.setBorder(null);
         specificSearch.setOpaque(true);
         specificSearch.setForeground(Color.blue);
@@ -432,7 +432,7 @@ public class DetailSearchPage extends JPanel {
         grid.ipady = 0;
         panelFields.add(search, grid);
         
-        grid.anchor = GridBagConstraints.WEST;
+        grid.anchor = GridBagConstraints.CENTER;
         grid.gridx = 0;
         grid.gridy = 6;
         grid.ipady = 0;

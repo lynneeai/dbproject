@@ -108,25 +108,7 @@ public class SpecificSearchPage {
             Border title = BorderFactory.createTitledBorder("Publishers");
             panel1.setBorder(title);
             
-            JCheckBox minPricePublisher = new JCheckBox("Show minimum price of the publisher");
-            minPricePublisher.addFocusListener(new FocusListener() {
-        	public void focusGained(FocusEvent e) {}
-        	public void focusLost(FocusEvent e) {
-        		//UserInput.set_Awarded(awardedBook.isSelected());
-        	}
-            });
-            panel1.add(minPricePublisher);
-            
-            JCheckBox avgPricePublisher = new JCheckBox("Show average price of the publisher");
-            avgPricePublisher.addFocusListener(new FocusListener() {
-        	public void focusGained(FocusEvent e) {}
-        	public void focusLost(FocusEvent e) {
-        		//UserInput.set_Awarded(awardedBook.isSelected());
-        	}
-            });
-            panel1.add(avgPricePublisher);
-            
-            JCheckBox minAllPublisher = new JCheckBox("Show minimum price of all publishers");
+            JCheckBox minAllPublisher = new JCheckBox("Show minimum price of their books");
             minAllPublisher.addFocusListener(new FocusListener() {
         	public void focusGained(FocusEvent e) {}
         	public void focusLost(FocusEvent e) {
@@ -135,7 +117,7 @@ public class SpecificSearchPage {
             });
             panel1.add(minAllPublisher);
             
-            JCheckBox avgAllPublisher = new JCheckBox("Show minimum price of all publishers");
+            JCheckBox avgAllPublisher = new JCheckBox("Show average price of their books");
             avgAllPublisher.addFocusListener(new FocusListener() {
         	public void focusGained(FocusEvent e) {}
         	public void focusLost(FocusEvent e) {
@@ -148,12 +130,12 @@ public class SpecificSearchPage {
             panel1.add(publisherTextField);
             publisherTextField.setColumns(10);
             publisherTextField.setForeground(Color.gray);
-            publisherTextField.setText("Publisher name for specific search");
+            publisherTextField.setText("Publisher (Leave empty to show all)");
         
             publisherTextField.addFocusListener(new FocusListener() {
                 public void focusGained(FocusEvent e) {
                     String content = publisherTextField.getText();
-                    if (content.trim().equals("Publisher name for specific search")) {
+                    if (content.trim().equals("Publisher'('Leave empty to show all')")) {
                         publisherTextField.setText("");
                         publisherTextField.setForeground(Color.black);
                     }
@@ -162,7 +144,7 @@ public class SpecificSearchPage {
                     String content = publisherTextField.getText();
                     if (content.trim().equals("")) {
                         publisherTextField.setForeground(Color.gray);
-                        publisherTextField.setText("Publisher name for specific search");
+                        publisherTextField.setText("Publisher'('Leave empty to show all')");
                     } 
                 }
             });
@@ -482,7 +464,7 @@ public class SpecificSearchPage {
         	fieldPanel.setLayout(new GridBagLayout());
             GridBagConstraints grid = new GridBagConstraints();
             
-            Border title = BorderFactory.createTitledBorder("Publication Statistics");
+            Border title = BorderFactory.createTitledBorder("Comics");
             fieldPanel.setBorder(title);
             
             JLabel transparent = new JLabel("      ");
