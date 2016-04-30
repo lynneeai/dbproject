@@ -1,5 +1,9 @@
 package UI;
 
+import Core.publicStat;
+import DAO.publicStatDAO;
+import DAO.publicStatInput;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,6 +34,10 @@ import javax.swing.border.Border;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.Choice;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 
 public class SpecificSearchPage {
@@ -75,8 +83,9 @@ public class SpecificSearchPage {
         Main.mainFrame.setVisible(true);
     }
     
-    private static class TabContent extends JPanel {
+    private class TabContent extends JPanel {
 
+        private JTable table = new JTable();
         private TabContent(int i) {
             setOpaque(true);
             if (i == 0) {
@@ -407,6 +416,22 @@ public class SpecificSearchPage {
             JButton stats = new JButton("Statistics On Publications Per Year");
             JButton search = new JButton("Search");
             
+            search.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    table.setModel(new DefaultTableModel());             
+                    int yearSelected = year.getSelectedIndex();
+                    String Year = year.getItem(yearSelected);
+                    displayPublicStat(Year, false);    			
+                }
+            });
+            
+            stats.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    table.setModel(new DefaultTableModel());             
+                    displayPublicStat(null, true);    			
+                }
+            });
+            
             stats.setBorder(null);
             stats.setOpaque(true);
             stats.setForeground(Color.blue);
@@ -444,15 +469,48 @@ public class SpecificSearchPage {
             
             // resultPanel
         	
-        	JScrollPane scrollPane1 = new JScrollPane();
+            JScrollPane scrollPane1 = new JScrollPane();
             scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setPreferredSize(new Dimension(710, 540));
             resultPanel.add(scrollPane1);
+            scrollPane1.setViewportView(table);
             
             add(fieldPanel, BorderLayout.NORTH);
         	add(resultPanel, BorderLayout.CENTER);
             
+        }
+        
+        public void displayPublicStat(String Year, Boolean showAll) { 
+        
+            publicStatInput publicStatInput = new publicStatInput(Year, showAll);
+            publicStatDAO publicStatDAO = new publicStatDAO(Year);
+        
+            publicStatInput.set_Year(null);
+            publicStatInput.set_showAll(null);
+                                                   
+            if (!showAll) {
+                publicStatInput.set_Year(Year);
+            }
+            publicStatInput.set_showAll(showAll);
+                
+            System.out.println("");
+            System.out.println("***********NEW SEARCH************");
+    
+            try {
+                if (Year != null) {
+                    List<publicStat> statsList = publicStatDAO.searchStat(publicStatInput);
+                    publicStatTableModel model = new publicStatTableModel(statsList);	               
+                    table.setModel(model);
+                }
+                else {
+                    List<publicStat> statsList = publicStatDAO.showAllStat(publicStatInput);
+                    publicStatTableModel model = new publicStatTableModel(statsList);	               
+                    table.setModel(model);
+                }                     					
+            } catch (Exception exc) {
+                JOptionPane.showMessageDialog(TabContent.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
+            }            			
         }
         
         private void getAllComics() {
@@ -506,14 +564,14 @@ public class SpecificSearchPage {
             
             // resultPanel
         	
-        	JScrollPane scrollPane1 = new JScrollPane();
+            JScrollPane scrollPane1 = new JScrollPane();
             scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setPreferredSize(new Dimension(710, 510));
             resultPanel.add(scrollPane1);
             
             add(fieldPanel, BorderLayout.NORTH);
-        	add(resultPanel, BorderLayout.CENTER);
+            add(resultPanel, BorderLayout.CENTER);
             
         }
     }
