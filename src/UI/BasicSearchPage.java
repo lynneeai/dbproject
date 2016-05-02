@@ -199,7 +199,7 @@ public class BasicSearchPage extends JPanel {
 	        JTextField searchTextField = new JTextField();
 	        searchTextField.setColumns(30);
 	        searchTextField.setForeground(Color.gray);
-	        searchTextField.setText("What are you look for ?");
+	        searchTextField.setText("What are you looking for ?");
 	        
 	        Choice searchChoice = new Choice();
 	        searchChoice.setPreferredSize(new Dimension(180, 25));

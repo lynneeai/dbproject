@@ -1,8 +1,11 @@
 package UI;
 
 import Core.publicStat;
+import Core.AuthorTab;
 import DAO.publicStatDAO;
 import DAO.publicStatInput;
+import DAO.AuthorTabDAO;
+import DAO.AuthorTabInput;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -38,6 +41,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.AbstractButton;
 
 
 public class SpecificSearchPage {
@@ -180,6 +184,8 @@ public class SpecificSearchPage {
         private void getAllAuthors() {
             JPanel fieldPanel = new JPanel();
             JPanel resultPanel = new JPanel();
+            
+            AuthorTabInput authorTabInput = new AuthorTabInput();
         	
             // fieldPanel
             
@@ -188,6 +194,11 @@ public class SpecificSearchPage {
             
             Border title = BorderFactory.createTitledBorder("Authors");
             fieldPanel.setBorder(title);
+            
+            JTextField tag = new JTextField("Please Enter Exact Tag");
+            tag.setColumns(14);
+            tag.setEditable(true);
+            tag.setForeground(Color.gray);
             
             
             JRadioButton inLanguage = new JRadioButton("In Language");
@@ -201,7 +212,6 @@ public class SpecificSearchPage {
             bg.add(publishedYear);
             
             
-            
             Choice language = new Choice();
             Choice type = new Choice();
             Choice year = new Choice();
@@ -211,6 +221,120 @@ public class SpecificSearchPage {
             type.setPreferredSize(new Dimension(180, 20));
             year.setPreferredSize(new Dimension(180, 20));
             authors.setPreferredSize(new Dimension(180, 20));
+            
+            ActionListener selectionListener = new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		AbstractButton selected = (AbstractButton) actionEvent.getSource();
+            		String Selection = selected.getText();
+            		String Language = language.getSelectedItem();
+            		String Type = type.getSelectedItem();
+            		String Year = year.getSelectedItem();
+            		String Tag = tag.getText();
+            		authorTabInput.set_Selection(Selection);
+            		if (Selection == "In Language") {
+            			if (Language != "") {
+            				authorTabInput.set_Constraint(Language);
+            			} else {
+            				authorTabInput.set_Constraint(null);
+            			}
+            		}
+            		if (Selection == "Book Type") {
+            			if (Type != "") {
+            				authorTabInput.set_Constraint(Type);
+            			} else {
+            				authorTabInput.set_Constraint(null);
+            			}
+            		}
+            		if (Selection == "Published In") {
+            			if (Year != "") {
+            				authorTabInput.set_Constraint(Year);
+            			} else {
+            				authorTabInput.set_Constraint(null);
+            			}
+            		}
+            		if (Selection == "With Tag") {
+            			if (!Tag.trim().equals("") && !Tag.trim().equals("Please Enter Exact Tag")) {
+            				authorTabInput.set_Constraint(Tag);
+            			} else {
+            				authorTabInput.set_Constraint(null);
+            			}
+            		}
+            		
+            		//System.out.println(authorTabInput.get_Selection());
+            	}
+            };
+            
+
+            inLanguage.addActionListener(selectionListener);
+            withTag.addActionListener(selectionListener);
+            bookType.addActionListener(selectionListener);
+            publishedYear.addActionListener(selectionListener);
+            
+            language.addFocusListener(new FocusListener() {
+            	public void focusGained(FocusEvent e) {}
+            	public void focusLost(FocusEvent e) {
+            		String Language = language.getSelectedItem();
+            		if ((authorTabInput.get_Selection() == "In Language") && (Language != "")) {
+            			authorTabInput.set_Constraint(Language);
+            			//System.out.println(authorTabInput.get_Constraint());
+            		}
+            	}
+            });
+            
+            type.addFocusListener(new FocusListener() {
+            	public void focusGained(FocusEvent e) {}
+            	public void focusLost(FocusEvent e) {
+            		String Type = type.getSelectedItem();
+            		if ((authorTabInput.get_Selection() == "Book Type") && (Type != "")) {
+            			authorTabInput.set_Constraint(Type);
+            			//System.out.println(authorTabInput.get_Constraint());
+            		}
+            	}
+            });
+            
+            year.addFocusListener(new FocusListener() {
+            	public void focusGained(FocusEvent e) {}
+            	public void focusLost(FocusEvent e) {
+            		String Year = year.getSelectedItem();
+            		if ((authorTabInput.get_Selection() == "Published In") && (Year != "")) {
+            			authorTabInput.set_Constraint(Year);
+            			//System.out.println(authorTabInput.get_Constraint());
+            		}
+            	}
+            });
+            
+            authorTabInput.set_Which_Author("All Authors");
+            authors.addFocusListener(new FocusListener() {
+            	public void focusGained(FocusEvent e) {}
+            	public void focusLost(FocusEvent e) {
+            		String Authors = authors.getSelectedItem();
+            		authorTabInput.set_Which_Author(Authors);
+            		//System.out.println(authorTabInput.get_Which_Author());
+            	}
+            });
+            
+            tag.addFocusListener(new FocusListener() {
+            	public void focusGained(FocusEvent e) {
+            		String Tag = tag.getText();
+            		if (Tag.trim().equals("Please Enter Exact Tag")) {
+            			tag.setText("");
+            			tag.setForeground(Color.black);
+            		}
+            	}
+            	public void focusLost(FocusEvent e) {
+            		String Tag = tag.getText();
+            		if (Tag.trim().equals("")) {
+            			tag.setForeground(Color.gray);
+            			tag.setText("Please Enter Exact Tag");
+            			authorTabInput.set_Constraint(null);
+            		} else {
+            			if (authorTabInput.get_Selection() == "With Tag") {
+            				authorTabInput.set_Constraint(Tag);
+            			}
+            		}
+            	}
+            });
+            
             
             String[] avail_Languages = {"", "English", "French", "Chinese"};
             for (int i = 0; i < avail_Languages.length; i++) {
@@ -244,9 +368,7 @@ public class SpecificSearchPage {
             }
             
             
-            JTextField tag = new JTextField();
-            tag.setColumns(14);
-            tag.setEditable(true);
+            
             
             
             JLabel see = new JLabel("Search For Authors");
@@ -254,6 +376,51 @@ public class SpecificSearchPage {
             
             
             JButton search = new JButton("Search");
+            
+            
+            search.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent e) {
+            		table.setModel(new DefaultTableModel());
+            		System.out.println("");
+            		System.out.println("***********New Author Tab Search********");
+            		System.out.println(authorTabInput.get_Which_Author());
+            		System.out.println(authorTabInput.get_Selection());
+            		System.out.println(authorTabInput.get_Constraint());
+            		
+            		AuthorTabDAO authorTabDAO = new AuthorTabDAO();
+            		
+            		try {
+            			if ((authorTabInput.get_Selection() != null) && (authorTabInput.get_Constraint() == null)) {
+            				throw new Exception("Constraint Not Specified");
+            			} else {
+            				if (authorTabInput.get_Which_Author() == "All Authors") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchAllAuthor(authorTabInput);
+            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
+            					table.setModel(model);
+            				} else if (authorTabInput.get_Which_Author() == "Published-Most Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchMostPublAuthor(authorTabInput);
+            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
+            					table.setModel(model);
+            				} else if (authorTabInput.get_Which_Author() == "Oldest Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchOldestAuthor(authorTabInput);
+            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
+            					table.setModel(model);
+            				} else if (authorTabInput.get_Which_Author() == "Youngest Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchYoungestAuthor(authorTabInput);
+            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
+            					table.setModel(model);
+            				} else if (authorTabInput.get_Which_Author() == "Written-Most Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchMostWrittenAuthor(authorTabInput);
+            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
+            					table.setModel(model);
+            				}
+            			}
+            		}
+            		catch (Exception ex) {
+            			System.out.println(ex.getMessage());
+            		}
+            	}
+            });
             
             
             grid.anchor = GridBagConstraints.WEST;
@@ -313,6 +480,7 @@ public class SpecificSearchPage {
             scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setPreferredSize(new Dimension(710, 485));
+            scrollPane1.setViewportView(table);
             resultPanel.add(scrollPane1);
             
             add(fieldPanel, BorderLayout.NORTH);
@@ -373,6 +541,7 @@ public class SpecificSearchPage {
             scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setPreferredSize(new Dimension(710, 535));
+            scrollPane1.setViewportView(table);
             resultPanel.add(scrollPane1);
         	
         	add(fieldPanel, BorderLayout.NORTH);
