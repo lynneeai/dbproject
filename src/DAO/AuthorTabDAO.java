@@ -257,48 +257,52 @@ public class AuthorTabDAO {
     	List<AuthorTab> authorTabList = new ArrayList<>();
     	if (authorTabInput.get_Selection() == null) {
     		query = "SELECT AUTHOR_NAME " +
-    				"FROM (SELECT COUNT(T.TITLE_ID) AS NUM_TITLE " +
+    				"FROM (SELECT A.AUTHOR_NAME, COUNT(T.TITLE_ID) AS NUM_TITLE " +
     					  "FROM AUTHORS A, PUBLICATIONS P, WRITTEN_PUBL_AUT W, TITLES T, " +
     					  	   "PUBLISHED_PUBL_TITLE PT " +
     					  "WHERE  PT.PUBL_ID = P.PUBL_ID AND PT.TITLE_ID = T.TITLE_ID AND " +
     					  	   	 "P.PUBL_ID = W.PUBL_ID AND W.AUTHOR_ID = A.AUTHOR_ID " +
-    			     	  "GROUP BY A.AUTHOR_ID)";
+    			     	  "GROUP BY A.AUTHOR_ID, A.AUTHOR_NAME) " +
+    				"GROUP BY AUTHOR_NAME";
     	} else {
     		if (authorTabInput.get_Selection() == "In Language") {
     			String query1 = "SELECT AUTHOR_NAME " +
-        						"FROM (SELECT COUNT(T.TITLE_ID) AS NUM_TITLE " +
+        						"FROM (SELECT A.AUTHOR_NAME, COUNT(T.TITLE_ID) AS NUM_TITLE " +
         							  "FROM AUTHORS A, PUBLICATIONS P, WRITTEN_PUBL_AUT W, TITLES T, " +
         							  "PUBLISHED_PUBL_TITLE PT, LANGUAGES L ";
     			String query2 = "WHERE PT.PUBL_ID = P.PUBL_ID AND PT.TITLE_ID = T.TITLE_ID AND " +
-    					  	   	 	  "P.PUBL_ID = W.PUBL_ID AND W.AUTHOR_ID = A.AUTHOR_ID " +
+    					  	   	 	  "P.PUBL_ID = W.PUBL_ID AND W.AUTHOR_ID = A.AUTHOR_ID AND " +
     					  	   	 	  "A.AUTHOR_ID = W.AUTHOR_ID AND P.PUBL_ID = W.PUBL_ID AND " +
     					  	   	 	  "T.TITLE_ID = PT.TITLE_ID AND P.PUBL_ID = PT.PUBL_ID AND " +
     					  	   	 	  "T.LANGUAGE_ID = L.LANGUAGE_ID AND " +
     					  	   	 	  "L.LANGUAGE_NAME = '" + authorTabInput.get_Constraint() + "' " +
-    					  	   	 	  "GROUP BY A.AUTHOR_ID)";
+    					  	   	 	  "GROUP BY A.AUTHOR_ID, A.AUTHOR_NAME) " + 
+     							"GROUP BY AUTHOR_NAME";
     			query = query1 + query2;
     		} else if (authorTabInput.get_Selection() == "With Tag") {
     			String query1 = "SELECT AUTHOR_NAME " +
-						"FROM (SELECT COUNT(T.TITLE_ID) AS NUM_TITLE " +
-						  "FROM AUTHORS A, PUBLICATIONS P, WRITTEN_PUBL_AUT W, TITLES T, " +
-						  "PUBLISHED_PUBL_TITLE PT, TAGS, TAGGED_TITLE ";
+						"FROM (SELECT A.AUTHOR_NAME, COUNT(T.TITLE_ID) AS NUM_TITLE " +
+						  	  "FROM AUTHORS A, PUBLICATIONS P, WRITTEN_PUBL_AUT W, TITLES T, " +
+						  	  	   "PUBLISHED_PUBL_TITLE PT, TAGS, TAGGED_TITLE ";
     			String query2 = "WHERE PT.PUBL_ID = P.PUBL_ID AND PT.TITLE_ID = T.TITLE_ID AND " +
-    							"P.PUBL_ID = W.PUBL_ID AND W.AUTHOR_ID = A.AUTHOR_ID " +
-    							"TAGS.TAG_ID = TAGGED_TITLE.TAG_ID AND " +
-    							"TAG_NAME = '" + authorTabInput.get_Constraint() + "' " +
-    							"GROUP BY A.AUTHOR_ID)";
+    								  "P.PUBL_ID = W.PUBL_ID AND W.AUTHOR_ID = A.AUTHOR_ID AND " +
+    								  "TAGS.TAG_ID = TAGGED_TITLE.TAG_ID AND " +
+    								  "TAG_NAME = '" + authorTabInput.get_Constraint() + "' " +
+    							"GROUP BY A.AUTHOR_ID, A.AUTHOR_NAME) " + 
+    							"GROUP BY AUTHOR_NAME";
     			query = query1 + query2;
     					
     		} else if (authorTabInput.get_Selection() == "Published In") {
     			String query1 = "SELECT AUTHOR_NAME " +
-						"FROM (SELECT COUNT(T.TITLE_ID) AS NUM_TITLE " +
-						  "FROM AUTHORS A, PUBLICATIONS P, WRITTEN_PUBL_AUT W, TITLES T, " +
-						  "PUBLISHED_PUBL_TITLE PT ";
+						"FROM (SELECT A.AUTHOR_NAME, COUNT(T.TITLE_ID) AS NUM_TITLE " +
+							  "FROM AUTHORS A, PUBLICATIONS P, WRITTEN_PUBL_AUT W, TITLES T, " +
+							  	   "PUBLISHED_PUBL_TITLE PT ";
     			String query2 = "WHERE PT.PUBL_ID = P.PUBL_ID AND PT.TITLE_ID = T.TITLE_ID AND " +
-								"P.PUBL_ID = W.PUBL_ID AND W.AUTHOR_ID = A.AUTHOR_ID " +
-								"A.AUTHOR_ID = W.AUTHOR_ID AND P.PUBL_ID = W.PUBL_ID AND " + 
-								"extract(year from PUBL_DATE) = " + authorTabInput.get_Constraint() + " " +
-								"GROUP BY A.AUTHOR_ID)";
+									  "P.PUBL_ID = W.PUBL_ID AND W.AUTHOR_ID = A.AUTHOR_ID AND " +
+									  "A.AUTHOR_ID = W.AUTHOR_ID AND P.PUBL_ID = W.PUBL_ID AND " + 
+									  "extract(year from PUBL_DATE) = " + authorTabInput.get_Constraint() + " " +
+								"GROUP BY A.AUTHOR_ID, A.AUTHOR_NAME) " + 
+    							"GROUP BY AUTHOR_NAME";
     			query = query1 + query2;
     		}
     	}

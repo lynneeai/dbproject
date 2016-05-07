@@ -196,20 +196,34 @@ public class SpecificSearchPage {
             fieldPanel.setBorder(title);
             
             JTextField tag = new JTextField("Please Enter Exact Tag");
-            tag.setColumns(14);
+            JTextField awarded = new JTextField("Please Enter Award Category");
+            JTextField living = new JTextField("Please Enter Book Type");
+            tag.setColumns(15);
             tag.setEditable(true);
             tag.setForeground(Color.gray);
+            
+            awarded.setColumns(15);
+            awarded.setEditable(true);
+            awarded.setForeground(Color.gray);
+            
+            living.setColumns(15);
+            living.setEditable(true);
+            living.setForeground(Color.gray);
             
             
             JRadioButton inLanguage = new JRadioButton("In Language");
             JRadioButton withTag = new JRadioButton("With Tag");
             JRadioButton bookType = new JRadioButton("Book Type");
             JRadioButton publishedYear = new JRadioButton("Published In");
+            JRadioButton mostAwarded = new JRadioButton("Most Awarded In");
+            JRadioButton livingPublished = new JRadioButton("Living and Published");
             ButtonGroup bg = new ButtonGroup();
             bg.add(inLanguage);
             bg.add(withTag);
             bg.add(bookType);
             bg.add(publishedYear);
+            bg.add(mostAwarded);
+            bg.add(livingPublished);
             
             
             Choice language = new Choice();
@@ -217,10 +231,10 @@ public class SpecificSearchPage {
             Choice year = new Choice();
             Choice authors = new Choice();
             
-            language.setPreferredSize(new Dimension(180, 20));
-            type.setPreferredSize(new Dimension(180, 20));
-            year.setPreferredSize(new Dimension(180, 20));
-            authors.setPreferredSize(new Dimension(180, 20));
+            language.setPreferredSize(new Dimension(190, 20));
+            type.setPreferredSize(new Dimension(190, 20));
+            year.setPreferredSize(new Dimension(190, 20));
+            authors.setPreferredSize(new Dimension(190, 20));
             
             ActionListener selectionListener = new ActionListener() {
             	public void actionPerformed(ActionEvent actionEvent) {
@@ -230,6 +244,8 @@ public class SpecificSearchPage {
             		String Type = type.getSelectedItem();
             		String Year = year.getSelectedItem();
             		String Tag = tag.getText();
+            		String Awarded = awarded.getText();
+            		String Living = living.getText();
             		authorTabInput.set_Selection(Selection);
             		if (Selection == "In Language") {
             			if (Language != "") {
@@ -259,7 +275,20 @@ public class SpecificSearchPage {
             				authorTabInput.set_Constraint(null);
             			}
             		}
-            		
+            		if (Selection == "Most Awarded In") {
+            			if (!Awarded.trim().equals("") && !Awarded.trim().equals("Please Enter Award Category")) {
+            				authorTabInput.set_Constraint(Awarded);
+            			} else {
+            				authorTabInput.set_Constraint(null);
+            			}
+            		}
+            		if (Selection == "Living and Published") {
+            			if (!Living.trim().equals("") && !Living.trim().equals("Please Enter Book Type")) {
+            				authorTabInput.set_Constraint(Living);
+            			} else {
+            				authorTabInput.set_Constraint(null);
+            			}
+            		}
             		//System.out.println(authorTabInput.get_Selection());
             	}
             };
@@ -454,6 +483,20 @@ public class SpecificSearchPage {
             grid.ipady = 0;
             fieldPanel.add(tag, grid);
             
+            grid.gridx = 0;
+            grid.gridy = 4;
+            fieldPanel.add(mostAwarded, grid);
+            grid.gridx = 1;
+            grid.gridy = 4;
+            fieldPanel.add(awarded, grid);
+            
+            grid.gridx = 0;
+            grid.gridy = 5;
+            fieldPanel.add(livingPublished, grid);
+            grid.gridx = 1;
+            grid.gridy = 5;
+            fieldPanel.add(living, grid);
+            
             
             grid.ipady = 5;
             grid.anchor = GridBagConstraints.CENTER;
@@ -479,7 +522,7 @@ public class SpecificSearchPage {
             JScrollPane scrollPane1 = new JScrollPane();
             scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane1.setPreferredSize(new Dimension(710, 485));
+            scrollPane1.setPreferredSize(new Dimension(710, 430));
             scrollPane1.setViewportView(table);
             resultPanel.add(scrollPane1);
             
