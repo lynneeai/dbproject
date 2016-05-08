@@ -197,7 +197,6 @@ public class SpecificSearchPage {
             
             JTextField tag = new JTextField("Please Enter Exact Tag");
             JTextField awarded = new JTextField("Please Enter Award Category");
-            JTextField living = new JTextField("Please Enter Book Type");
             tag.setColumns(15);
             tag.setEditable(true);
             tag.setForeground(Color.gray);
@@ -206,24 +205,18 @@ public class SpecificSearchPage {
             awarded.setEditable(true);
             awarded.setForeground(Color.gray);
             
-            living.setColumns(15);
-            living.setEditable(true);
-            living.setForeground(Color.gray);
-            
             
             JRadioButton inLanguage = new JRadioButton("In Language");
             JRadioButton withTag = new JRadioButton("With Tag");
             JRadioButton bookType = new JRadioButton("Book Type");
             JRadioButton publishedYear = new JRadioButton("Published In");
-            JRadioButton mostAwarded = new JRadioButton("Most Awarded In");
-            JRadioButton livingPublished = new JRadioButton("Living and Published");
+            JRadioButton mostAwarded = new JRadioButton("Awarded In");
             ButtonGroup bg = new ButtonGroup();
             bg.add(inLanguage);
             bg.add(withTag);
             bg.add(bookType);
             bg.add(publishedYear);
             bg.add(mostAwarded);
-            bg.add(livingPublished);
             
             
             Choice language = new Choice();
@@ -231,10 +224,12 @@ public class SpecificSearchPage {
             Choice year = new Choice();
             Choice authors = new Choice();
             
-            language.setPreferredSize(new Dimension(190, 20));
-            type.setPreferredSize(new Dimension(190, 20));
-            year.setPreferredSize(new Dimension(190, 20));
-            authors.setPreferredSize(new Dimension(190, 20));
+           
+            
+            language.setPreferredSize(new Dimension(192, 20));
+            type.setPreferredSize(new Dimension(192, 20));
+            year.setPreferredSize(new Dimension(192, 20));
+            authors.setPreferredSize(new Dimension(192, 20));
             
             ActionListener selectionListener = new ActionListener() {
             	public void actionPerformed(ActionEvent actionEvent) {
@@ -245,7 +240,6 @@ public class SpecificSearchPage {
             		String Year = year.getSelectedItem();
             		String Tag = tag.getText();
             		String Awarded = awarded.getText();
-            		String Living = living.getText();
             		authorTabInput.set_Selection(Selection);
             		if (Selection == "In Language") {
             			if (Language != "") {
@@ -275,20 +269,14 @@ public class SpecificSearchPage {
             				authorTabInput.set_Constraint(null);
             			}
             		}
-            		if (Selection == "Most Awarded In") {
+            		if (Selection == "Awarded In") {
             			if (!Awarded.trim().equals("") && !Awarded.trim().equals("Please Enter Award Category")) {
             				authorTabInput.set_Constraint(Awarded);
             			} else {
             				authorTabInput.set_Constraint(null);
             			}
             		}
-            		if (Selection == "Living and Published") {
-            			if (!Living.trim().equals("") && !Living.trim().equals("Please Enter Book Type")) {
-            				authorTabInput.set_Constraint(Living);
-            			} else {
-            				authorTabInput.set_Constraint(null);
-            			}
-            		}
+            		
             		//System.out.println(authorTabInput.get_Selection());
             	}
             };
@@ -391,7 +379,7 @@ public class SpecificSearchPage {
             	}
             }
             
-            String[] which_Author = {"All Authors", "Best Author", "Published-Most Author", "Oldest Author", "Youngest Author", "Written-Most Author"};
+            String[] which_Author = {"All Authors", "Best Author", "Living Authors", "Most-Published Author", "Oldest Author", "Youngest Author", "Most-Written Author", "Most-Awarded Author", "Most-Awarded After Death Author", "Edited Most Review Author", "Largest Page/Dollar Ratio Author"};
             for (int i = 0; i < which_Author.length; i++) {
             	authors.add(which_Author[i]);
             }
@@ -426,23 +414,59 @@ public class SpecificSearchPage {
             					List<AuthorTab> authorTabList = authorTabDAO.searchAllAuthor(authorTabInput);
             					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
             					table.setModel(model);
-            				} else if (authorTabInput.get_Which_Author() == "Published-Most Author") {
-            					List<AuthorTab> authorTabList = authorTabDAO.searchMostPublAuthor(authorTabInput);
+            					
+            				} else if (authorTabInput.get_Which_Author() == "Best Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchBestAuthor(authorTabInput);
             					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
             					table.setModel(model);
+            					
+            				} else if (authorTabInput.get_Which_Author() == "Living Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchLivingAuthor(authorTabInput);
+            					AuthorTabBirthdateTableModel model = new AuthorTabBirthdateTableModel(authorTabList);
+            					table.setModel(model);
+            					
+            				} else if (authorTabInput.get_Which_Author() == "Most-Published Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchMostPublAuthor(authorTabInput);
+            					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
+            					table.setModel(model);
+            					
             				} else if (authorTabInput.get_Which_Author() == "Oldest Author") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchOldestAuthor(authorTabInput);
-            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
+            					AuthorTabBirthdateTableModel model = new AuthorTabBirthdateTableModel(authorTabList);
             					table.setModel(model);
+            					
             				} else if (authorTabInput.get_Which_Author() == "Youngest Author") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchYoungestAuthor(authorTabInput);
-            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
+            					AuthorTabBirthdateTableModel model = new AuthorTabBirthdateTableModel(authorTabList);
             					table.setModel(model);
-            				} else if (authorTabInput.get_Which_Author() == "Written-Most Author") {
+            					
+            				} else if (authorTabInput.get_Which_Author() == "Most-Written Author") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchMostWrittenAuthor(authorTabInput);
-            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
+            					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
+            					table.setModel(model);
+            					
+            				}  else if (authorTabInput.get_Which_Author() == "Most-Awarded Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchAwardedAuthor(authorTabInput);
+            					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
+            					table.setModel(model);
+            					
+            				}else if (authorTabInput.get_Which_Author() == "Most-Awarded After Death Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchAwardedDeadAuthor(authorTabInput);
+            					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
+            					table.setModel(model);
+            					
+            				} else if (authorTabInput.get_Which_Author() == "Edited Most Review Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchMostReviewAuthor(authorTabInput);
+            					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
+            					table.setModel(model);
+            					
+            				} else if (authorTabInput.get_Which_Author() == "Largest Page/Dollar Ratio Author") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchPageDollarAuthor(authorTabInput);
+            					AuthorTabRatioTableModel model = new AuthorTabRatioTableModel(authorTabList);
             					table.setModel(model);
             				}
+            				
+            				
             			}
             		}
             		catch (Exception ex) {
@@ -489,13 +513,6 @@ public class SpecificSearchPage {
             grid.gridx = 1;
             grid.gridy = 4;
             fieldPanel.add(awarded, grid);
-            
-            grid.gridx = 0;
-            grid.gridy = 5;
-            fieldPanel.add(livingPublished, grid);
-            grid.gridx = 1;
-            grid.gridy = 5;
-            fieldPanel.add(living, grid);
             
             
             grid.ipady = 5;
