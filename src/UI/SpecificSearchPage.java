@@ -1,9 +1,12 @@
 package UI;
 
 import Core.publicStat;
+import Core.bestBook;
 import Core.AuthorTab;
 import DAO.publicStatDAO;
 import DAO.publicStatInput;
+import DAO.bestBookInput;
+import DAO.bestBookDAO;
 import DAO.AuthorTabDAO;
 import DAO.AuthorTabInput;
 
@@ -99,7 +102,7 @@ public class SpecificSearchPage {
                 getAllAuthors();
             }
             else if (i == 2) {
-                getMostPopulars();
+                getBestBooks();
             }
             else if (i == 3 ) {
                 getBooksPublished();
@@ -549,13 +552,51 @@ public class SpecificSearchPage {
             
         }
         
-        private void getMostPopulars() {
+        public class bestBookValContainer {
+            private String query;
+            private String text;
+            private Boolean selected;
+            
+            public bestBookValContainer() {
+                this.query = null;
+                this.text = null;
+                this.selected = false;
+            }
+            
+            public void setQuery(String query) {
+                this.query = query;
+            }
+                
+            public void setText(String text) {
+                this.text = text;
+            }
+            
+            public void setSelected(Boolean selected) {
+                this.selected = selected;
+            }
+            
+            public String getQuery() {
+                return this.query;
+            }
+                
+            public String getText() {
+                return this.text;
+            } 
+            
+            public Boolean getSelected() {
+                return this.selected;
+            } 
+        }
+        
+        private void getBestBooks() {
+    
+            bestBookValContainer bestBookValContainer = new bestBookValContainer();
         	
-        	JPanel fieldPanel = new JPanel();
-        	JPanel resultPanel = new JPanel();
+            JPanel fieldPanel = new JPanel();
+            JPanel resultPanel = new JPanel();
         	
-        	// fieldPanel
-        	fieldPanel.setLayout(new GridBagLayout());
+            // fieldPanel
+            fieldPanel.setLayout(new GridBagLayout());
             GridBagConstraints grid = new GridBagConstraints();
             
             Border title = BorderFactory.createTitledBorder("Best Books");
@@ -563,51 +604,316 @@ public class SpecificSearchPage {
         	
             JLabel transparent = new JLabel("   ");
             
-        	JCheckBox reviewed = new JCheckBox("Most Reviewed Books");
-        	JCheckBox awarded = new JCheckBox("Most Awarded Books");
-        	JCheckBox translated = new JCheckBox("Most Translated Books");
+            JRadioButton reviewed = new JRadioButton("Most Reviewed Books");
+            JRadioButton awarded = new JRadioButton("Most Awarded Books");
+            JRadioButton awardedSeries= new JRadioButton("Most Awarded Series");
+            JRadioButton translated = new JRadioButton("Most Translated Book Types");
+            JRadioButton popular = new JRadioButton("Most Popular Books");
+	
+            reviewed.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (reviewed.isSelected() && bestBookValContainer.getSelected() == false) {
+                        bestBookValContainer.setQuery(reviewed.getText());
+                        bestBookValContainer.setSelected(true);
+                    }   		
+                    else if (!reviewed.isSelected() && bestBookValContainer.getSelected() == true) {
+			bestBookValContainer.setSelected(false);
+                    }	
+                }
+            });
+	
+            awarded.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (awarded.isSelected() && bestBookValContainer.getSelected() == false) {
+                        bestBookValContainer.setQuery(awarded.getText());
+                        bestBookValContainer.setSelected(true);
+                    }   		
+                    else if (!awarded.isSelected() && bestBookValContainer.getSelected() == true) {
+			bestBookValContainer.setSelected(false);
+                    }	
+                }
+            });
+	
+            awardedSeries.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (awardedSeries.isSelected() && bestBookValContainer.getSelected() == false) {
+			bestBookValContainer.setQuery(awardedSeries.getText());
+                        bestBookValContainer.setSelected(true);
+                    }   		
+                    else if (!awardedSeries.isSelected() && bestBookValContainer.getSelected() == true) {
+			bestBookValContainer.setSelected(false);
+                    }	
+                }
+            });
+	
+            translated.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (translated.isSelected() && bestBookValContainer.getSelected() == false) {
+			bestBookValContainer.setQuery(translated.getText());
+                        bestBookValContainer.setSelected(true);
+                    }   		
+                    else if (!translated.isSelected() && bestBookValContainer.getSelected() == true) {
+			bestBookValContainer.setSelected(false);
+                    }	
+                }
+            });
+	
+            popular.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (popular.isSelected() && bestBookValContainer.getSelected() == false) {
+			bestBookValContainer.setQuery(popular.getText());
+                        bestBookValContainer.setSelected(true);
+                    }   		
+                    else if (!popular.isSelected() && bestBookValContainer.getSelected() == true) {
+			bestBookValContainer.setSelected(false);
+                    }	
+                }
+            });
+	
+            JLabel webPresence = new JLabel("Most extensive web presence awarded as ");
+            JTextField webPresenceT = new JTextField("Please Enter an Award Type  ");
+            webPresenceT.setForeground(Color.gray);
+            webPresenceT.addFocusListener(new FocusListener() {
+                public void focusGained(FocusEvent e) {
+                    String content = webPresenceT.getText();
+                    if (content.trim().equals("Please Enter an Award Type") && bestBookValContainer.getSelected() == false) {
+                        webPresenceT.setEditable(true);
+                        webPresenceT.setText("");
+                        webPresenceT.setForeground(Color.black);
+                    }
+                    else {
+                        if(content.trim().equals("Please Enter an Award Type")) {
+                            webPresenceT.setEditable(false);
+                        }
+                    }
+                }
+                public void focusLost(FocusEvent e) {
+                    String content = webPresenceT.getText();
+                    if (content.trim().equals("")) {
+			bestBookValContainer.setSelected(false);
+                        webPresenceT.setForeground(Color.gray);
+                        webPresenceT.setText("Please Enter an Award Type  ");
+                    } 
+                    else {
+                        bestBookValContainer.setQuery("Most extensive web presence awarded as ");
+                        bestBookValContainer.setText(webPresenceT.getText());
+			bestBookValContainer.setSelected(true);
+                    }
+                }
+            });
+	
+            JLabel reviewedAuthor = new JLabel("  Most reviewed book of author ");
+            JTextField reviewedAuthorT = new JTextField("Please Enter an Author Name");
+            reviewedAuthorT.setForeground(Color.gray);
+            reviewedAuthorT.addFocusListener(new FocusListener() {
+		public void focusGained(FocusEvent e) {
+                    String content = reviewedAuthorT.getText();
+                    if (content.trim().equals("Please Enter an Author Name") && bestBookValContainer.getSelected() == false) {
+                        reviewedAuthorT.setEditable(true);
+	        	reviewedAuthorT.setText("");
+                        reviewedAuthorT.setForeground(Color.black);
+                    }
+                    else {
+                        if(content.trim().equals("Please Enter an Author Name")) {
+                            reviewedAuthorT.setEditable(false);
+                        }
+                    }
+                }
+                public void focusLost(FocusEvent e) {
+                    String content = reviewedAuthorT.getText();
+                    if (content.trim().equals("")) {
+			bestBookValContainer.setSelected(false);
+	        	reviewedAuthorT.setForeground(Color.gray);
+                        reviewedAuthorT.setText("Please Enter an Author Name");
+                    } 
+                    else {
+                        bestBookValContainer.setQuery("  Most reviewed book of author ");
+                        bestBookValContainer.setText(reviewedAuthorT.getText());
+			bestBookValContainer.setSelected(true);
+                    }
+                }
+            });
+	
+            JLabel seriesAward = new JLabel("Publication series with most book awarded as ");
+            JTextField seriesAwardT = new JTextField("Please Enter an Award Type  ");
+            seriesAwardT.setForeground(Color.gray);
+            seriesAwardT.addFocusListener(new FocusListener() {
+                public void focusGained(FocusEvent e) {
+                    String content = seriesAwardT.getText();
+                    if (content.trim().equals("Please Enter an Award Type") && bestBookValContainer.getSelected() == false) {
+                        seriesAwardT.setEditable(true);
+                        seriesAwardT.setText("");
+                        seriesAwardT.setForeground(Color.black);
+                    }
+                    else {
+                        if(content.trim().equals("Please Enter an Award Type")) {
+                            seriesAwardT.setEditable(false);
+                        }
+                    }
+                }
+                public void focusLost(FocusEvent e) {
+                    String content = seriesAwardT.getText();
+                    if (content.trim().equals("")) {
+			bestBookValContainer.setSelected(false);
+	        	seriesAwardT.setForeground(Color.gray);
+                        seriesAwardT.setText("Please Enter an Award Type  ");
+                    }    
+                    else {
+                        bestBookValContainer.setQuery("Publication series with most book awarded as ");
+                        bestBookValContainer.setText(seriesAwardT.getText());
+			bestBookValContainer.setSelected(true);
+                    }
+                }
+            });
         	
-        	JButton search = new JButton("Search");
+            JButton search = new JButton("Search");
+            search.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    table.setModel(new DefaultTableModel());   
+                    String query = bestBookValContainer.getQuery();
+                    String text = bestBookValContainer.getText();
+                    displayBestBook(query, text);    	
+                    System.out.println(query);
+                }
+            });
         	
         	
-        	grid.anchor = GridBagConstraints.WEST;
-        	grid.ipady = 5;
-        	grid.ipadx = 5;
-        	grid.gridx = 0;
-        	grid.gridy = 0;
-        	fieldPanel.add(reviewed, grid);
+            grid.anchor = GridBagConstraints.WEST;
+            grid.ipady = 5;
+            grid.ipadx = 5;
+            grid.gridx = 0;
+            grid.gridy = 0;
+            fieldPanel.add(reviewed, grid);
         	
-        	grid.gridx = 0;
-        	grid.gridy = 1;
-        	fieldPanel.add(awarded, grid);
+            grid.gridx = 0;
+            grid.gridy = 1;
+            fieldPanel.add(awarded, grid);
+	
+            grid.gridx = 0;
+            grid.gridy = 2;
+            fieldPanel.add(webPresence, grid);
+	
+            grid.gridx = 0;
+            grid.gridy = 3;
+            fieldPanel.add(reviewedAuthor, grid);
+	
+            grid.gridx = 0;
+            grid.gridy = 4;
+            fieldPanel.add(seriesAward, grid);
+	
+            grid.gridx = 0;
+            grid.gridy = 5;
+            fieldPanel.add(popular, grid);
         	
-        	grid.gridx = 1;
-        	grid.gridy = 0;
-        	fieldPanel.add(transparent, grid);
+            grid.gridx = 1;
+            grid.gridy = 0;
+            fieldPanel.add(transparent, grid);
         	
-        	grid.gridx = 2;
-        	grid.gridy = 0;
-        	fieldPanel.add(translated, grid);
+            grid.gridx = 2;
+            grid.gridy = 0;
+            fieldPanel.add(translated, grid);        	
+    
+            grid.gridx = 2;
+            grid.gridy = 1;
+            fieldPanel.add(awardedSeries, grid);
+	
+            grid.gridx = 2;
+            grid.gridy = 2;
+            fieldPanel.add(webPresenceT, grid);
+	
+            grid.gridx = 2;
+            grid.gridy = 3;
+            fieldPanel.add(reviewedAuthorT, grid);
+	
+            grid.gridx = 2;
+            grid.gridy = 4;
+            fieldPanel.add(seriesAwardT, grid);
+	
+            grid.ipady = 0;
+            grid.anchor = GridBagConstraints.CENTER;
+            grid.gridx = 2;
+            grid.gridy = 5;
+            fieldPanel.add(search, grid);
         	
-        	grid.anchor = GridBagConstraints.CENTER;
-        	grid.ipady = 0;
-        	grid.gridx = 2;
-        	grid.gridy = 1;
-        	fieldPanel.add(search, grid);
+            // resultPanel
         	
-        	// resultPanel
-        	
-        	JScrollPane scrollPane1 = new JScrollPane();
+            JScrollPane scrollPane1 = new JScrollPane();
             scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setPreferredSize(new Dimension(710, 535));
             scrollPane1.setViewportView(table);
             resultPanel.add(scrollPane1);
         	
-        	add(fieldPanel, BorderLayout.NORTH);
-        	add(resultPanel, BorderLayout.CENTER);
-            
+            add(fieldPanel, BorderLayout.NORTH);
+            add(resultPanel, BorderLayout.CENTER);
+      
         }
+
+    public void displayBestBook(String query, String text) { 
+        
+	bestBookInput bestBookInput = new bestBookInput();
+    
+	switch(query) {
+            case "Most Reviewed Books":
+            case "Most Awarded Books":
+            case "Most Awarded Series":
+            case "Most Translated Book Types": 
+            case "Most Popular Books":
+                bestBookInput.set_Query(query);
+            default:
+		bestBookInput.set_Query(query);
+		bestBookInput.set_TextInput(text);
+	}       
+	
+	bestBookDAO bestBookDAO = new bestBookDAO(bestBookInput);                                          
+                
+        System.out.println("");
+        System.out.println("***********NEW SEARCH************");
+        
+        List<bestBook> statsList; bestBookTableModel1 model1;
+        bestBookTableModel2 model2; bestBookTableModel3 model3;
+    
+        try {
+            switch(query)  {
+		case "Most Reviewed Books":
+		case "Most Awarded Books": 
+		case "Most Awarded Series": 
+		case "Most Translated Book Types":
+                    
+                    statsList = bestBookDAO.mostBook();
+	            model1 = new bestBookTableModel1(statsList);	               
+                    table.setModel(model1);
+                    break;
+			
+			
+		case "Most extensive web presence awarded as ":
+		case "Publication series with most book awarded as ": 
+            
+                    statsList = bestBookDAO.mostInputBook();
+	            model1 = new bestBookTableModel1(statsList);	               
+                    table.setModel(model1);
+                    break;
+          
+		case "Most Popular Books":
+            
+	   	    statsList = bestBookDAO.mostBook();
+	   	    model2 = new bestBookTableModel2(statsList);	               
+	   	    table.setModel(model2);
+                    break;
+
+		case "  Most reviewed book of author ":
+            
+                    statsList = bestBookDAO.mostInputBook();
+                    model3 = new bestBookTableModel3(statsList);	               
+                    table.setModel(model3);
+                    break;
+            
+            }                   					
+        } catch (Exception exc) {
+            JOptionPane.showMessageDialog(TabContent.this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE); 
+        }            			
+    }
+
         
         private void getBooksPublished() {
         	
@@ -744,11 +1050,11 @@ public class SpecificSearchPage {
         
         private void getAllComics() {
         	
-        	JPanel fieldPanel = new JPanel();
-        	JPanel resultPanel = new JPanel();
+            JPanel fieldPanel = new JPanel();
+            JPanel resultPanel = new JPanel();
         	
-        	// fieldPanel
-        	fieldPanel.setLayout(new GridBagLayout());
+            // fieldPanel
+            fieldPanel.setLayout(new GridBagLayout());
             GridBagConstraints grid = new GridBagConstraints();
             
             Border title = BorderFactory.createTitledBorder("Comics");
