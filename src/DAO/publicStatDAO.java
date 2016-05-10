@@ -9,50 +9,96 @@ public class publicStatDAO {
     private Connection myConn = connectDB.getConnection();
     private Statement myStmt = null;
     private ResultSet myRs = null;
-    private String Year;
+    private publicStatInput publicStatInput = null;
     
-    public publicStatDAO(String Year) {
-        this.Year = Year;
+    public publicStatDAO(publicStatInput publicStatInput) {
+        this.publicStatInput = publicStatInput;
     }
     
     private publicStat convertRowToBook(ResultSet myRs) throws SQLException {	
 	
-        try {
-            this.Year = myRs.getString("Year");
-        }
-        catch (SQLException e) {
-        } 
-	
-	String Count = myRs.getString("Count");
+        String query = this.publicStatInput.get_Query();
+        String choice = this.publicStatInput.get_Choice();
+        publicStat tempPublicStat = new publicStat();
         
-        publicStat tempPublicStat = new publicStat(this.Year, Count);
-              
+        String Year; String Total;String Name; 
+        String Currency; String AvgPublPrice; 
+        
+         switch(query)  {
+            case "Average Number of Publications per Series": 
+            case "Number of Comics with Size":
+
+                Total = myRs.getString("Total");
+                
+                tempPublicStat.set_Total(Total);
+                break;
+
+            case "Average Price of Title with Most Publications":
+                
+                Name = myRs.getString("Name");
+                Currency = myRs.getString("Currency");
+                AvgPublPrice = myRs.getString("AvgPublPrice");
+                
+                tempPublicStat.set_Name(Name);
+                tempPublicStat.set_Currency(Currency);
+                tempPublicStat.set_AvgPublPrice(AvgPublPrice);
+                break;
+                
+                
+            case "Statistics On Publications Per Year": 
+            case "Total Books Published In Year": 
+            
+                Total = myRs.getString("Total");
+                Year = myRs.getString("Year");
+                
+                tempPublicStat.set_Total(Total);
+                tempPublicStat.set_Year(Year);
+                break;
+            
+	}
+        
 	return tempPublicStat;
         
     }
     
-    public List<publicStat> searchStat(publicStatInput input) {
-	String select = "SELECT COUNT (Publ_ID) as Count ";
-	String from = "FROM PUBLICATIONS ";
-	String where = "WHERE extract(year from PUBL_DATE) = ";
+    public List<publicStat> showStat() {
+	
+        String query = this.publicStatInput.get_Query();   
+	String showQuery;		
+	List<publicStat> publicStatList = new ArrayList<>();
+	
+         switch(query) {
+            case "Average Number of Publications per Series":
+                showQuery = "SELECT AVG(COUNTS) as TOTAL " +
+                            "FROM ( SELECT COUNT(PUBL_ID) AS COUNTS " +
+                            "FROM PUBLICATIONS " +
+                            "GROUP BY PUBL_SERIES_ID)";
+                break;
+            case "Average Price of Title with Most Publications":
+                showQuery = "";
+                break;
+             case "Statistics On Publications Per Year": 
+                showQuery = "SELECT extract(year from PUBL_DATE) AS YEAR, COUNT (Publ_ID) AS TOTAL " +
+                            "FROM PUBLICATIONS " +
+                            "WHERE extract(year from PUBL_DATE) IS NOT NULL " +
+                            "GROUP BY extract(year from PUBL_DATE) " +
+                            "ORDER BY extract(year from PUBL_DATE) DESC" ;
+                break;
+             default: 
+                showQuery = "";
+                break;
+         }	
 		
-	List<publicStat> statList = new ArrayList<>();
-		
-	if (input.get_Year() != null) {
-            where = where + input.get_Year() + " ";
-	}		
-		
-	System.out.println(select);
-	System.out.println(from);
-	System.out.println(where);
+	System.out.println(showQuery);
+
 		
 	try {
             myStmt = myConn.createStatement();		
-            myRs = myStmt.executeQuery(select + from + where);
+            myRs = myStmt.executeQuery(showQuery);
             
             while (myRs.next()) {
-		publicStat tempPublicStat = convertRowToBook(myRs);
-		statList.add(tempPublicStat);
+		publicStat publicStat = convertRowToBook(myRs);
+		publicStatList.add(publicStat);
             }	
             
 	}
@@ -60,30 +106,40 @@ public class publicStatDAO {
             System.out.println("SQL exception occured " + e);
         } 
 		
-        return statList;       
+        return publicStatList;       
     
     }
     
-    public List<publicStat> showAllStat(publicStatInput input) {
-	String select = "SELECT extract(year from PUBL_DATE) as Year, COUNT (Publ_ID) as Count ";
-	String from = "FROM PUBLICATIONS ";
-        String group = "GROUP BY extract(year from PUBL_DATE) ";
-	String order = "ORDER BY extract(year from PUBL_DATE) DESC ";
-		
-	List<publicStat> statList = new ArrayList<>();		
-		
-	System.out.println(select);
-	System.out.println(from);
-	System.out.println(group);
-        System.out.println(order);
+    public List<publicStat> showInputStat() {
+	String query = this.publicStatInput.get_Query();  
+        String choice = this.publicStatInput.get_Choice();  
+	String showInputQuery;		
+	List<publicStat> publicStatList = new ArrayList<>();	
+        
+        switch(query) {
+            case "Total Books Published In Year":
+                showInputQuery = "SELECT extract(year from PUBL_DATE) AS YEAR, COUNT (PUBL_ID) AS TOTAL " +
+                                 "FROM PUBLICATIONS " +
+                                 "WHERE extract(year from PUBL_DATE) = " + choice + " " +
+                                 "GROUP BY extract(year from PUBL_DATE)";
+                break;
+            case "Number of Comics with Size":
+                showInputQuery = "";
+                break;
+             default: 
+                showInputQuery = "";
+                break;
+         }
+						
+	System.out.println(showInputQuery);
 		
 	try {
             myStmt = myConn.createStatement();		
-            myRs = myStmt.executeQuery(select + from + group + order);
+            myRs = myStmt.executeQuery(showInputQuery);
             
             while (myRs.next()) {
-		publicStat tempPublicStat = convertRowToBook(myRs);
-		statList.add(tempPublicStat);
+		publicStat publicStat = convertRowToBook(myRs);
+		publicStatList.add(publicStat);
             }	
             
 	}
@@ -91,6 +147,6 @@ public class publicStatDAO {
             System.out.println("SQL exception occured " + e);
         } 
 
-	return statList;           
+	return publicStatList;           
     }
 }

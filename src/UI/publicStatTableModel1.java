@@ -5,14 +5,14 @@ import javax.swing.table.AbstractTableModel;
 
 import Core.publicStat;
 
-public class publicStatTableModel extends AbstractTableModel {
+public class publicStatTableModel1 extends AbstractTableModel {
     private static final int Year_COL = 0;
-    private static final int Count_COL = 1;
+    private static final int Total_COL = 1;
     
-    private String[] columnNames = {"Year", "Count"};
+    private String[] columnNames = {"Year", "Total"};
     private List<publicStat> statsList;
     
-    public publicStatTableModel(List<publicStat> statsList) {
+    public publicStatTableModel1(List<publicStat> statsList) {
     	this.statsList = statsList;
     }
         
@@ -40,8 +40,8 @@ public class publicStatTableModel extends AbstractTableModel {
     	switch (col) {
             case Year_COL:
         	return tempPublicStat.get_Year();
-            case Count_COL:
-            	return tempPublicStat.get_Count();
+            case Total_COL:
+            	return tempPublicStat.get_Total();
             default:
             	return tempPublicStat.get_Year();
     	}

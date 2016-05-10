@@ -7,11 +7,11 @@ import Core.bestBook;
 
 public class bestBookTableModel2 extends AbstractTableModel {
     
-    private static final int Name_Col = 0;
-    private static final int Currency_Col = 1;
-    private static final int AvgPublPrice_Col = 2;
+    private static final int AuthorName_Col = 0;
+    private static final int TitleName_Col = 1;
+    private static final int NumReviews_Col = 2;
     
-    private String[] columnNames = {"Name", "Currency", "Average Publication Price"};
+    private String[] columnNames = {"Author Name", "Title Name", "Number of Reviews"};
     private List<bestBook> statsList;
     
     public bestBookTableModel2(List<bestBook> statsList) {
@@ -40,14 +40,14 @@ public class bestBookTableModel2 extends AbstractTableModel {
     	
     	
     	switch (col) {
-            case Name_Col:
-        	return tempBestBook.get_Name();
-            case Currency_Col:
-            	return tempBestBook.get_Currency();
-            case AvgPublPrice_Col:
-            	return tempBestBook.get_AvgPublPrice();
+            case AuthorName_Col:
+        	return tempBestBook.get_AuthorName();
+            case TitleName_Col:
+            	return tempBestBook.get_TitleName();
+            case NumReviews_Col:
+            	return tempBestBook.get_NumReviews();
             default:
-            	return tempBestBook.get_Name();
+            	return tempBestBook.get_AuthorName();
     	}
     }
 

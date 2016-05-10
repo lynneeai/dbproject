@@ -2,28 +2,29 @@ package DAO;
 
 public class publicStatInput {
     
-    private String Year;
-    private Boolean showAll;
-    
-    public publicStatInput(String Year, Boolean showAll) {
-	this.Year = Year;
-	this.showAll = showAll;
-    }
-    
-    public void set_Year(String Year) {
-	this.Year = Year;
-    }
-    
-    public void set_showAll(Boolean showAll) {
-	this.showAll = showAll;
+    private String query;
+    private String choice;
+	
+	
+    public publicStatInput() {
+	query = null;
+	choice = null;
     }
 	
-    public String get_Year() {
-	return this.Year;
+    public void set_Query(String query) {
+	this.query = query;
     }
 	
-    public Boolean get_showAll() {
-	return this.showAll;
+    public void set_Choice(String textInput) {
+	this.choice = textInput;
+    }
+	
+    public String get_Query() {
+	return query;
+    }
+	
+    public String get_Choice() {
+	return choice;
     }
 
 }

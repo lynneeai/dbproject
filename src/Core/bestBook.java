@@ -3,8 +3,6 @@ package Core;
 public class bestBook {
     private String Name;
     private String Total;
-    private String Currency;
-    private String AvgPublPrice;
     private String AuthorName;
     private String TitleName;
     private String NumReviews;
@@ -13,8 +11,6 @@ public class bestBook {
     public bestBook() {
 	this.Name = null;
 	this.Total = null;
-        this.Currency = null;
-        this.AvgPublPrice = null;
         this.AuthorName = null;
         this.TitleName = null;
         this.NumReviews = null;        
@@ -26,14 +22,6 @@ public class bestBook {
     
     public void set_Number(String Total) {
 	this.Total = Total;
-    }
-    
-    public void set_Currency(String Currency) {
-	this.Currency = Currency;
-    }
-    
-    public void set_AvgPublPrice(String AvgPublPrice) {
-	this.AvgPublPrice = AvgPublPrice;
     }
     
     public void set_AuthorName(String AuthorName) {
@@ -54,14 +42,6 @@ public class bestBook {
     
     public String get_Total() {
 	return this.Total;
-    }
-	
-    public String get_Currency() {
-	return this.Currency;
-    }
-    
-    public String get_AvgPublPrice() {
-	return this.AvgPublPrice;
     }
     
     public String get_AuthorName() {

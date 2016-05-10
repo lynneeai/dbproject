@@ -23,33 +23,22 @@ public class bestBookDAO {
         String input = this.bestBookInput.get_TextInput();
         bestBook tempBestBook = new bestBook();
         
-        String Name; String Number; String Currency; String AvgPublPrice; 
-        String AuthorName; String TitleName; String NumReviews;
+        String Name; String Number; String TitleName; String NumReviews;
 	
         switch(query)  {
+            case "Most Awarded Series": 
             case "Most Reviewed Books":
             case "Most Awarded Books": 
-            case "Most Awarded Series": 
+            case "Most Popular Books": 
             case "Most Translated Book Types":
             case "Most extensive web presence awarded as ":
             case "Publication series with most book awarded as ": 
-            
+
                 Name = myRs.getString("Name");
                 Number = myRs.getString("Total");
             
                 tempBestBook.set_Name(Name);
                 tempBestBook.set_Number(Number);
-                break;
-          
-            case "Most Popular Books":
-            
-                Name = myRs.getString("Name");
-                Currency = myRs.getString("Currency");
-                AvgPublPrice = myRs.getString("AvgPublPrice");
-            
-                tempBestBook.set_Name(Name);
-                tempBestBook.set_Currency(Currency);
-                tempBestBook.set_AvgPublPrice(AvgPublPrice);
                 break;
 
             case "  Most reviewed book of author ":
@@ -76,10 +65,42 @@ public class bestBookDAO {
         
         switch(query) {
             case "Most Reviewed Books":
-                mostQuery = "";    
+                mostQuery = "SELECT TITLE AS NAME, SUM_AR AS TOTAL FROM ( " +
+                            "SELECT TITLE_ID, SUM_AR FROM ( " +
+                            "SELECT REV.TITLE_ID,  SUM(NUMB_REVIEWS) AS SUM_AR " +
+                            "FROM (SELECT T.TITLE_ID, COUNT (REVIEW_ID) AS NUMB_REVIEWS " +
+                            "FROM TITLE_REVIEWS " +
+                            "RIGHT JOIN TITLES T ON T.TITLE_ID = TITLE_REVIEWS.TITLE_ID " +
+                            "GROUP BY T.TITLE_ID ORDER BY NUMB_REVIEWS DESC) REV " +
+                            "GROUP BY REV.TITLE_ID) ORDER BY SUM_AR DESC) HH, TITLES T " +
+                            "WHERE T.TITLE_ID = HH.TITLE_ID AND ROWNUM <= 3 ";  
                 break;
-            case"Most Awarded Books":
-                mostQuery = "";
+            case "Most Awarded Books":
+                mostQuery = "SELECT TITLE AS NAME, SUM_AR AS TOTAL FROM ( " +
+                            "SELECT TITLE_ID, SUM_AR FROM ( " +
+                            "SELECT AWD.TITLE_ID,  SUM(NUM_AWARDS) AS SUM_AR " +
+                            "FROM (SELECT T.TITLE_ID, COUNT (AWARD_ID) AS NUM_AWARDS " +
+                            "FROM WON_TITLE_AWD " +
+                            "RIGHT JOIN TITLES T ON T.TITLE_ID = WON_TITLE_AWD.TITLE_ID " +
+                            "GROUP BY T.TITLE_ID ORDER BY NUM_AWARDS DESC) AWD " +
+                            "GROUP BY AWD.TITLE_ID) ORDER BY SUM_AR DESC) HH, TITLES T " +
+                            "WHERE T.TITLE_ID = HH.TITLE_ID AND ROWNUM <= 3 ";
+                break;
+            case "Most Popular Books":
+                mostQuery = "SELECT TITLE AS NAME, SUM_AR AS TOTAL FROM ( " +
+                            "SELECT TITLE_ID, SUM_AR FROM ( " +
+                            "SELECT AWD.TITLE_ID,  SUM(NUM_AWARDS+NUMB_REVIEWS) AS SUM_AR " +
+                            "FROM (SELECT T.TITLE_ID, COUNT (AWARD_ID) AS NUM_AWARDS " +
+                            "FROM WON_TITLE_AWD " +
+                            "RIGHT JOIN TITLES T ON T.TITLE_ID = WON_TITLE_AWD.TITLE_ID " +
+                            "GROUP BY T.TITLE_ID ORDER BY NUM_AWARDS DESC) AWD , " +
+                            "(SELECT T.TITLE_ID, COUNT (REVIEW_ID) AS NUMB_REVIEWS " +
+                            "FROM TITLE_REVIEWS " +
+                            "RIGHT JOIN TITLES T ON T.TITLE_ID = TITLE_REVIEWS.TITLE_ID " +
+                            "GROUP BY T.TITLE_ID ORDER BY NUMB_REVIEWS DESC) REV " +
+                            "WHERE AWD.TITLE_ID = REV.TITLE_ID " +
+                            "GROUP BY AWD.TITLE_ID) ORDER BY SUM_AR DESC) HH, TITLES T " +
+                            "WHERE T.TITLE_ID = HH.TITLE_ID AND ROWNUM <= 3 ";
                 break;
             case "Most Awarded Series":
                 mostQuery = "SELECT TITLE_SERIES_TITLE as Name, NUM_AWARDS as TOTAL " +
@@ -89,16 +110,6 @@ public class bestBookDAO {
                             "GROUP BY TITLE_SERIES_ID " +
                             "ORDER BY NUM_AWARDS DESC) A , TITLE_SERIES T " +
                             "WHERE A.TITLE_SERIES_ID = T.TITLE_SERIES_ID AND ROWNUM <= 10 ";
-                break;
-            case "Most Translated Book Types":
-                mostQuery = "SELECT * FROM ( SELECT TITLE_TYPE as Name, COUNT(TITLE_ID) AS Total " +
-                            "FROM (SELECT TITLE_TYPE, TITLE_ID, TRANS_PARENT, LANGUAGE_ID " +
-                            "FROM titles WHERE NOT TRANS_PARENT = 0) " + 
-                            "GROUP BY TITLE_TYPE " +  "ORDER BY TOTAL DESC) " +
-                            "WHERE ROWNUM <= 10";
-                break;
-            case "Most Popular Books":
-                mostQuery = "";
                 break;
             default: 
                 mostQuery = "";
@@ -133,8 +144,52 @@ public class bestBookDAO {
 	List<bestBook> bestBookList = new ArrayList<>();	
         
         switch(query) {
+            case "Most Translated Book Types":
+                mostInputQuery = "SELECT * FROM ( SELECT TITLE_TYPE as Name, COUNT(TITLE_ID) AS Total " +
+                            "FROM (SELECT TITLES.TITLE_TYPE, TITLES.TITLE_ID, TITLES.TRANS_PARENT " +
+                            "FROM TITLES, LANGUAGES WHERE NOT TITLES.TRANS_PARENT = 0 AND LANGUAGES.LANGUAGE_NAME = '" + textInput + "' " + 
+                            "AND LANGUAGES.LANGUAGE_ID = TITLES.LANGUAGE_ID) " +
+                            "GROUP BY TITLE_TYPE " +  "ORDER BY TOTAL DESC) " +
+                            "WHERE ROWNUM <= 10";
+                break;
             case "Most extensive web presence awarded as ":
-                mostInputQuery = "";    
+                mostInputQuery = "WITH TEMP_PUBL1 AS (SELECT P.PUBL_ID, P.PUBLISHER_ID, P.PUBL_SERIES_ID " +
+                                 "FROM PUBLICATIONS P " +
+                                 "LEFT JOIN PUBLISHED_PUBL_TITLE PT ON PT.PUBL_ID = P.PUBL_ID " +
+                                 "LEFT JOIN TITLES T ON T.TITLE_ID = PT.TITLE_ID " +
+                                 "LEFT JOIN WON_TITLE_AWD TA ON TA.TITLE_ID = T.TITLE_ID " +
+                                 "LEFT JOIN AWARDS AW ON AW.AWARD_ID = TA.AWARD_ID " +
+                                 "WHERE AW.AWARD_TITLE LIKE '%" + textInput + "%') " +
+                                 "SELECT P.PUBL_TITLE AS NAME, TEMP_RESULT.NUM AS TOTAL FROM ( " +
+                                 "SELECT TEMP_AUTHORS.PUBL_ID AS PUBL_ID, (NUM1 + NUM2 + NUM3 + NUM4 + NUM5) AS NUM " +
+                                 "FROM (SELECT TEMP_PUBL1.PUBL_ID, COUNT(URL) AS NUM1 FROM TEMP_PUBL1 " +
+                                 "LEFT JOIN WRITTEN_PUBL_AUT PA ON PA.PUBL_ID = TEMP_PUBL1.PUBL_ID " +
+                                 "LEFT JOIN AUTHORS A ON A.AUTHOR_ID = PA.AUTHOR_ID " +
+                                 "LEFT JOIN AUTHOR_WEBPAGES W ON W.AUTHOR_ID = A.AUTHOR_ID " +
+                                 "GROUP BY TEMP_PUBL1.PUBL_ID ORDER BY NUM1 DESC) TEMP_AUTHORS, " +
+                                 "(SELECT TEMP_PUBL1.PUBL_ID, COUNT(URL) AS NUM2 FROM TEMP_PUBL1 " +
+                                 "LEFT JOIN PUBLISHED_PUBL_TITLE PT ON PT.PUBL_ID = TEMP_PUBL1.PUBL_ID " +
+                                 "LEFT JOIN TITLES T ON T.TITLE_ID = PT.TITLE_ID " +
+                                 "LEFT JOIN TITLE_WEBPAGES W ON W.TITLE_ID = T.TITLE_ID " +
+                                 "GROUP BY TEMP_PUBL1.PUBL_ID ORDER BY NUM2 DESC) TEMP_TITLES, " +
+                                 "(SELECT TEMP_PUBL1.PUBL_ID, COUNT(URL) AS NUM3 FROM TEMP_PUBL1 " +
+                                 "LEFT JOIN PUBLISHER_WEBPAGES W ON W.PUBLISHER_ID = TEMP_PUBL1.PUBLISHER_ID " +
+                                 "GROUP BY TEMP_PUBL1.PUBL_ID ORDER BY NUM3 DESC) TEMP_PUBLISHERS," +
+                                 "(SELECT TEMP_PUBL1.PUBL_ID, COUNT(URL) AS NUM4 FROM TEMP_PUBL1 " +
+                                 "LEFT JOIN PUBL_SERIES_WEBPAGES W ON W.PUBL_SERIES_ID = TEMP_PUBL1.PUBL_SERIES_ID " +
+                                 "GROUP BY TEMP_PUBL1.PUBL_ID ORDER BY NUM4 DESC) TEMP_PUBL_SERIES, "+
+                                 "(SELECT TEMP_PUBL1.PUBL_ID, COUNT(URL) AS NUM5 FROM TEMP_PUBL1 " +
+                                 "LEFT JOIN PUBLISHED_PUBL_TITLE PT ON PT.PUBL_ID = TEMP_PUBL1.PUBL_ID " +
+                                 "LEFT JOIN TITLES T ON T.TITLE_ID = PT.TITLE_ID " +
+                                 "LEFT JOIN TITLE_SERIES_WEBPAGES W ON W.TITLE_SERIES_ID = T.TITLE_SERIES_ID " +
+                                 "GROUP BY TEMP_PUBL1.PUBL_ID ORDER BY NUM5 DESC) TEMP_TITLE_SERIES " +
+                                 "WHERE TEMP_TITLES.PUBL_ID = TEMP_AUTHORS.PUBL_ID AND " +
+                                 "TEMP_PUBLISHERS.PUBL_ID = TEMP_TITLES.PUBL_ID AND " +
+                                 "TEMP_PUBL_SERIES.PUBL_ID = TEMP_PUBLISHERS.PUBL_ID AND " +
+                                 "TEMP_TITLE_SERIES.PUBL_ID = TEMP_PUBL_SERIES.PUBL_ID " +
+                                 "ORDER BY NUM DESC) TEMP_RESULT " +
+                                 "LEFT JOIN PUBLICATIONS P ON P.PUBL_ID = TEMP_RESULT.PUBL_ID " +
+                                 "WHERE ROWNUM <= 10";    
                 break;
             case "  Most reviewed book of author ":
                 mostInputQuery = "SELECT T.TITLE as TitleName, R.NUM_REVIEWS as NumReviews " +
