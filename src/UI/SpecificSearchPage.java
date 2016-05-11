@@ -45,6 +45,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.AbstractButton;
+import javax.swing.JComboBox;
 
 
 public class SpecificSearchPage {
@@ -186,6 +187,15 @@ public class SpecificSearchPage {
             JPanel resultPanel = new JPanel();
             
             AuthorTabInput authorTabInput = new AuthorTabInput();
+            
+            // resultPanel
+            
+            JScrollPane scrollPane1 = new JScrollPane();
+            scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setPreferredSize(new Dimension(710, 475));
+            scrollPane1.setViewportView(table);
+            resultPanel.add(scrollPane1);
         	
             // fieldPanel
             
@@ -196,7 +206,7 @@ public class SpecificSearchPage {
             fieldPanel.setBorder(title);
             
             JTextField tag = new JTextField("Please Enter Exact Tag");
-            JTextField awarded = new JTextField("Please Enter Award Category");
+            JTextField awarded = new JTextField("Enter Award Category");
             tag.setColumns(15);
             tag.setEditable(true);
             tag.setForeground(Color.gray);
@@ -219,25 +229,25 @@ public class SpecificSearchPage {
             bg.add(mostAwarded);
             
             
-            Choice language = new Choice();
-            Choice type = new Choice();
-            Choice year = new Choice();
-            Choice authors = new Choice();
+            JComboBox language = new JComboBox();
+            JComboBox type = new JComboBox();
+            JComboBox year = new JComboBox();
+            JComboBox authors = new JComboBox();
             
            
             
             language.setPreferredSize(new Dimension(192, 20));
             type.setPreferredSize(new Dimension(192, 20));
             year.setPreferredSize(new Dimension(192, 20));
-            authors.setPreferredSize(new Dimension(192, 20));
+            //authors.setPreferredSize(new Dimension(270, 20));
             
             ActionListener selectionListener = new ActionListener() {
             	public void actionPerformed(ActionEvent actionEvent) {
             		AbstractButton selected = (AbstractButton) actionEvent.getSource();
             		String Selection = selected.getText();
-            		String Language = language.getSelectedItem();
-            		String Type = type.getSelectedItem();
-            		String Year = year.getSelectedItem();
+            		String Language = language.getSelectedItem().toString();
+            		String Type = type.getSelectedItem().toString();
+            		String Year = year.getSelectedItem().toString();
             		String Tag = tag.getText();
             		String Awarded = awarded.getText();
             		authorTabInput.set_Selection(Selection);
@@ -270,7 +280,7 @@ public class SpecificSearchPage {
             			}
             		}
             		if (Selection == "Awarded In") {
-            			if (!Awarded.trim().equals("") && !Awarded.trim().equals("Please Enter Award Category")) {
+            			if (!Awarded.trim().equals("") && !Awarded.trim().equals("Enter Award Category")) {
             				authorTabInput.set_Constraint(Awarded);
             			} else {
             				authorTabInput.set_Constraint(null);
@@ -286,11 +296,11 @@ public class SpecificSearchPage {
             withTag.addActionListener(selectionListener);
             bookType.addActionListener(selectionListener);
             publishedYear.addActionListener(selectionListener);
+            mostAwarded.addActionListener(selectionListener);
             
-            language.addFocusListener(new FocusListener() {
-            	public void focusGained(FocusEvent e) {}
-            	public void focusLost(FocusEvent e) {
-            		String Language = language.getSelectedItem();
+            language.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent event) {
+            		String Language = language.getSelectedItem().toString();
             		if ((authorTabInput.get_Selection() == "In Language") && (Language != "")) {
             			authorTabInput.set_Constraint(Language);
             			//System.out.println(authorTabInput.get_Constraint());
@@ -298,10 +308,10 @@ public class SpecificSearchPage {
             	}
             });
             
-            type.addFocusListener(new FocusListener() {
-            	public void focusGained(FocusEvent e) {}
-            	public void focusLost(FocusEvent e) {
-            		String Type = type.getSelectedItem();
+            
+            type.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent event) {
+            		String Type = type.getSelectedItem().toString();
             		if ((authorTabInput.get_Selection() == "Book Type") && (Type != "")) {
             			authorTabInput.set_Constraint(Type);
             			//System.out.println(authorTabInput.get_Constraint());
@@ -309,10 +319,9 @@ public class SpecificSearchPage {
             	}
             });
             
-            year.addFocusListener(new FocusListener() {
-            	public void focusGained(FocusEvent e) {}
-            	public void focusLost(FocusEvent e) {
-            		String Year = year.getSelectedItem();
+            year.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent event) {
+            		String Year = year.getSelectedItem().toString();
             		if ((authorTabInput.get_Selection() == "Published In") && (Year != "")) {
             			authorTabInput.set_Constraint(Year);
             			//System.out.println(authorTabInput.get_Constraint());
@@ -320,15 +329,341 @@ public class SpecificSearchPage {
             	}
             });
             
+            
             authorTabInput.set_Which_Author("All Authors");
-            authors.addFocusListener(new FocusListener() {
-            	public void focusGained(FocusEvent e) {}
-            	public void focusLost(FocusEvent e) {
-            		String Authors = authors.getSelectedItem();
+            authors.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent event) {
+            		JComboBox comboBox = (JComboBox) event.getSource();
+            		Object selected = comboBox.getSelectedItem();
+            		String Authors = selected.toString();
             		authorTabInput.set_Which_Author(Authors);
-            		//System.out.println(authorTabInput.get_Which_Author());
+            		
+            		if (Authors.equals("All Authors")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(true);
+                        year.setVisible(true);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(true);
+                        tag.setVisible(true);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Living Authors")) {
+            			inLanguage.setVisible(false);
+                        language.setVisible(false);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(false);
+                        year.setVisible(false);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(false);
+                        tag.setVisible(false);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(true);
+                        type.setVisible(true);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        bookType.setSelected(true);
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection("Book Type");
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Most-Published Author")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(true);
+                        year.setVisible(true);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(true);
+                        tag.setVisible(true);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Oldest Author")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(true);
+                        year.setVisible(true);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(true);
+                        tag.setVisible(true);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Youngest Author")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(true);
+                        year.setVisible(true);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(true);
+                        tag.setVisible(true);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Most-Written Author")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(true);
+                        year.setVisible(true);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(true);
+                        tag.setVisible(true);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Most-Awarded Author")) {
+            			inLanguage.setVisible(false);
+                        language.setVisible(false);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(false);
+                        year.setVisible(false);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(false);
+                        tag.setVisible(false);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(true);
+                        awarded.setVisible(true);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        mostAwarded.setSelected(true);
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection("Awarded In");
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Most-Awarded After Death Author")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(true);
+                        year.setVisible(true);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(true);
+                        tag.setVisible(true);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Reviewed Most Titles Author")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(true);
+                        year.setVisible(true);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(true);
+                        tag.setVisible(true);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Largest Page/Dollar Ratio Authors")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(true);
+                        year.setVisible(true);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(true);
+                        tag.setVisible(true);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		} else if (Authors.equals("Most Translated Novel Authors")) {
+            			inLanguage.setVisible(true);
+                        language.setVisible(true);
+                        language.setSelectedIndex(0);
+                        
+                        publishedYear.setVisible(false);
+                        year.setVisible(false);
+                        year.setSelectedIndex(0);
+                        
+                        withTag.setVisible(false);
+                        tag.setVisible(false);
+                        tag.setText("Please Enter Exact Tag");
+                        tag.setForeground(Color.gray);
+                        
+                        bookType.setVisible(false);
+                        type.setVisible(false);	
+                        type.setSelectedIndex(0);
+                        
+                        mostAwarded.setVisible(false);
+                        awarded.setVisible(false);
+                        awarded.setText("Enter Award Category");
+                        awarded.setForeground(Color.gray);
+                        
+                        bg.clearSelection();
+                        authorTabInput.set_Constraint(null);
+                        authorTabInput.set_Selection(null);
+                        
+                        table.setModel(new DefaultTableModel());
+                        
+            		}
+            		
             	}
             });
+             
             
             tag.addFocusListener(new FocusListener() {
             	public void focusGained(FocusEvent e) {
@@ -352,18 +687,40 @@ public class SpecificSearchPage {
             	}
             });
             
+            awarded.addFocusListener(new FocusListener() {
+            	public void focusGained(FocusEvent e) {
+            		String Awarded = awarded.getText();
+            		if (Awarded.trim().equals("Enter Award Category")) {
+            			awarded.setText("");
+            			awarded.setForeground(Color.black);
+            		}
+            	}
+            	public void focusLost(FocusEvent e) {
+            		String Awarded = awarded.getText();
+            		if (Awarded.trim().equals("")) {
+            			awarded.setForeground(Color.gray);
+            			awarded.setText("Enter Award Category");
+            			authorTabInput.set_Constraint(null);
+            		} else {
+            			if (authorTabInput.get_Selection() == "Awarded In") {
+            				authorTabInput.set_Constraint(Awarded);
+            			}
+            		}
+            	}
+            });
+            
             
             String[] avail_Languages = {"", "English", "French", "Chinese"};
             for (int i = 0; i < avail_Languages.length; i++) {
-            	language.add(avail_Languages[i]);
+            	language.addItem(avail_Languages[i]);
             }
             
             String[] avail_Type = {"", "ANTHOLOGY", "BACKCOVERART", "COLLECTION", "COVERART", "INTERIORART", "EDITOR", "ESSAY", "INTERVIEW", "NOVEL", "NONFICTION", "OMNIBUS", "POEM", "REVIEW", "SERIAL", "SHORTFICTION", "CHAPBOOK", "MAGAZINE", "FANZINE"};
             for (int i = 0; i < avail_Type.length; i++) {
-            	type.add(avail_Type[i]);
+            	type.addItem(avail_Type[i]);
             }
             
-            year.add("");
+            year.addItem("");
             for (int i = 2016; i >= 1; i--) {
             	if (i >= 1000) {
             		year.addItem(Integer.toString(i));
@@ -379,9 +736,9 @@ public class SpecificSearchPage {
             	}
             }
             
-            String[] which_Author = {"All Authors", "Best Author", "Living Authors", "Most-Published Author", "Oldest Author", "Youngest Author", "Most-Written Author", "Most-Awarded Author", "Most-Awarded After Death Author", "Edited Most Review Author", "Largest Page/Dollar Ratio Author"};
+            String[] which_Author = {"All Authors", "Living Authors", "Most-Published Author", "Oldest Author", "Youngest Author", "Most-Written Author", "Most-Awarded Author", "Most-Awarded After Death Author", "Reviewed Most Titles Author", "Largest Page/Dollar Ratio Authors", "Most Translated Novel Authors"};
             for (int i = 0; i < which_Author.length; i++) {
-            	authors.add(which_Author[i]);
+            	authors.addItem(which_Author[i]);
             }
             
             
@@ -415,12 +772,7 @@ public class SpecificSearchPage {
             					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
             					table.setModel(model);
             					
-            				} else if (authorTabInput.get_Which_Author() == "Best Author") {
-            					List<AuthorTab> authorTabList = authorTabDAO.searchBestAuthor(authorTabInput);
-            					AuthorTabTableModel model = new AuthorTabTableModel(authorTabList);
-            					table.setModel(model);
-            					
-            				} else if (authorTabInput.get_Which_Author() == "Living Author") {
+            				} else if (authorTabInput.get_Which_Author() == "Living Authors") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchLivingAuthor(authorTabInput);
             					AuthorTabBirthdateTableModel model = new AuthorTabBirthdateTableModel(authorTabList);
             					table.setModel(model);
@@ -450,19 +802,25 @@ public class SpecificSearchPage {
             					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
             					table.setModel(model);
             					
+            					
             				}else if (authorTabInput.get_Which_Author() == "Most-Awarded After Death Author") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchAwardedDeadAuthor(authorTabInput);
             					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
             					table.setModel(model);
             					
-            				} else if (authorTabInput.get_Which_Author() == "Edited Most Review Author") {
+            					
+            				} else if (authorTabInput.get_Which_Author() == "Reviewed Most Titles Author") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchMostReviewAuthor(authorTabInput);
             					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
             					table.setModel(model);
             					
-            				} else if (authorTabInput.get_Which_Author() == "Largest Page/Dollar Ratio Author") {
+            				} else if (authorTabInput.get_Which_Author() == "Largest Page/Dollar Ratio Authors") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchPageDollarAuthor(authorTabInput);
             					AuthorTabRatioTableModel model = new AuthorTabRatioTableModel(authorTabList);
+            					table.setModel(model);
+            				} else if (authorTabInput.get_Which_Author() == "Most Translated Novel Authors") {
+            					List<AuthorTab> authorTabList = authorTabDAO.searchMostTranslatedNovelAuthor(authorTabInput);
+            					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
             					table.setModel(model);
             				}
             				
@@ -485,6 +843,9 @@ public class SpecificSearchPage {
             grid.gridy = 0;
             fieldPanel.add(language, grid);
             
+            inLanguage.setVisible(true);
+            language.setVisible(true);
+            
             grid.gridx = 0;
             grid.gridy = 1;
             fieldPanel.add(publishedYear, grid);
@@ -492,28 +853,39 @@ public class SpecificSearchPage {
             grid.gridy = 1;
             fieldPanel.add(year, grid);
             
-            grid.gridx = 0;
-            grid.gridy = 2;
-            fieldPanel.add(bookType, grid);
-            grid.gridx = 1;
-            grid.gridy = 2;
-            fieldPanel.add(type, grid);
+            publishedYear.setVisible(true);
+            year.setVisible(true);
             
             grid.gridx = 0;
-            grid.gridy = 3;
+            grid.gridy = 2;
             fieldPanel.add(withTag, grid);
             grid.gridx = 1;
-            grid.gridy = 3;
-            grid.ipady = 0;
+            grid.gridy = 2;
             fieldPanel.add(tag, grid);
             
+            withTag.setVisible(true);
+            tag.setVisible(true);
+            
             grid.gridx = 0;
-            grid.gridy = 4;
+            grid.gridy = 0;
+            fieldPanel.add(bookType, grid);
+            grid.gridx = 1;
+            grid.gridy = 0;
+            fieldPanel.add(type, grid);
+            
+            bookType.setVisible(false);
+            type.setVisible(false);
+            
+            
+            grid.gridx = 0;
+            grid.gridy = 0;
             fieldPanel.add(mostAwarded, grid);
             grid.gridx = 1;
-            grid.gridy = 4;
+            grid.gridy = 0;
             fieldPanel.add(awarded, grid);
             
+            mostAwarded.setVisible(false);
+            awarded.setVisible(false);
             
             grid.ipady = 5;
             grid.anchor = GridBagConstraints.CENTER;
@@ -534,17 +906,10 @@ public class SpecificSearchPage {
             fieldPanel.add(search, grid);
             
             
-            // resultPanel
             
-            JScrollPane scrollPane1 = new JScrollPane();
-            scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane1.setPreferredSize(new Dimension(710, 430));
-            scrollPane1.setViewportView(table);
-            resultPanel.add(scrollPane1);
             
             add(fieldPanel, BorderLayout.NORTH);
-            add(resultPanel, BorderLayout.CENTER);
+            add(resultPanel, BorderLayout.SOUTH);
             
             
         }
