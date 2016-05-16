@@ -38,6 +38,13 @@ public class AuthorTabDAO {
     	return new AuthorTab(authorName, ratio, "page_dollar");
     }
     
+    private AuthorTab convertRowToAuthorTab_Language(ResultSet myRS) throws SQLException {
+    	String language = myRs.getString("LANGUAGE_NAME");
+    	String name = myRs.getString("AUTHOR_NAME");
+    	
+    	return new AuthorTab(language, name);
+    }
+    
     public List<AuthorTab> searchAllAuthor(AuthorTabInput authorTabInput) {
     	String query = "";
     	List<AuthorTab> authorTabList = new ArrayList<>();
@@ -665,19 +672,20 @@ public class AuthorTabDAO {
     	String query = "";
     	List<AuthorTab> authorTabList = new ArrayList<>();
     	if (authorTabInput.get_Selection() == null) {
-    		query = "SELECT * " +
-        			"FROM (SELECT TEMP_AUTHORS.AUTHOR_NAME AS AUTHOR_NAME, COUNT(TITLE_ID) AS NUM " +
-        				  "FROM (SELECT TEMP_TITLES.TITLE_ID, A.AUTHOR_NAME, A.LANGUAGE_ID " +
-    							"FROM (SELECT DISTINCT T1.TITLE_ID, T1.TITLE_TYPE " +
-    								  "FROM TITLES T1 " +
-    								  "INNER JOIN TITLES T2 ON T1.TITLE_ID = T2.TRANS_PARENT) TEMP_TITLES " +
-    								  "LEFT OUTER JOIN PUBLISHED_PUBL_TITLE PT ON TEMP_TITLES.TITLE_ID = PT.TITLE_ID " +
-    								  "LEFT OUTER JOIN WRITTEN_PUBL_AUT PA ON PT.PUBL_ID = PA.PUBL_ID " +
-    								  "LEFT OUTER JOIN AUTHORS A ON PA.AUTHOR_ID = A.AUTHOR_ID " +
-    								  "WHERE TEMP_TITLES.TITLE_TYPE = 'NOVEL' AND A.AUTHOR_NAME IS NOT NULL) TEMP_AUTHORS " +
-    					  "GROUP BY TEMP_AUTHORS.AUTHOR_NAME " +
-    					  "ORDER BY NUM DESC) " + 
-    				"WHERE ROWNUM <= 3";
+    		query = "WITH TEMP_AUTHORS AS (SELECT COUNT(TEMP_TITLES.TITLE_ID) AS COUNTS, A.AUTHOR_NAME, A.LANGUAGE_ID " +
+                     	           	      "FROM (SELECT DISTINCT T1.TITLE_ID, T1.TITLE_TYPE " +
+                            		     	    "FROM TITLES T1 " +
+                            		     	    "INNER JOIN TITLES T2 ON T1.TITLE_ID = T2.TRANS_PARENT) TEMP_TITLES " +
+                            		      "LEFT OUTER JOIN PUBLISHED_PUBL_TITLE PT ON TEMP_TITLES.TITLE_ID = PT.TITLE_ID " +
+                      	                  "LEFT OUTER JOIN WRITTEN_PUBL_AUT PA ON PT.PUBL_ID = PA.PUBL_ID " +
+                      	          	      "LEFT OUTER JOIN AUTHORS A ON PA.AUTHOR_ID = A.AUTHOR_ID " +
+                      	                  "WHERE TEMP_TITLES.TITLE_TYPE = 'NOVEL' " +
+                     	                  "GROUP BY A.AUTHOR_NAME, A.LANGUAGE_ID) " +
+                    "SELECT LANGUAGE_NAME, AUTHOR_NAME " +
+                    "FROM (SELECT LANGUAGE_ID, AUTHOR_NAME, RANK() OVER (PARTITION BY LANGUAGE_ID ORDER BY COUNTS DESC) AS RANK1 " +
+                    	  "FROM TEMP_AUTHORS) TEMP_RESULT " +
+                    "LEFT JOIN LANGUAGES ON LANGUAGES.LANGUAGE_ID = TEMP_RESULT.LANGUAGE_ID " +
+                    "WHERE RANK1 <= 3";
     	} else {
     		query = "SELECT * " +
         			"FROM (SELECT TEMP_AUTHORS.AUTHOR_NAME AS AUTHOR_NAME, COUNT(TITLE_ID) AS NUM " +
@@ -704,8 +712,13 @@ public class AuthorTabDAO {
             myRs = myStmt.executeQuery(query);
             
             while (myRs.next()) {
-           		AuthorTab tempAuthorTab = convertRowToAuthorTab_Num(myRs);
-           		authorTabList.add(tempAuthorTab);
+            	if (authorTabInput.get_Selection() == null) {
+            		AuthorTab tempAuthorTab = convertRowToAuthorTab_Language(myRs);
+            		authorTabList.add(tempAuthorTab);         		
+            	} else {
+            		AuthorTab tempAuthorTab = convertRowToAuthorTab_Num(myRs);
+            		authorTabList.add(tempAuthorTab);
+            	}	
            	}	
             	
             

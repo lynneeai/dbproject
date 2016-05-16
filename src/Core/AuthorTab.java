@@ -5,6 +5,7 @@ public class AuthorTab {
 	private String Birthdate;
 	private String Total_Number;
 	private String Page_Dollar;
+	private String Language;
 	
 	public AuthorTab() {
 		Author_Name = null;
@@ -25,6 +26,11 @@ public class AuthorTab {
 		}
 	}
 	
+	public AuthorTab(String language, String name) {
+		Author_Name = name;
+		Language = language;
+	}
+	
 	
 	public void set_Author_Name(String name) {
 		this.Author_Name = name;
@@ -42,6 +48,10 @@ public class AuthorTab {
 		this.Page_Dollar = ratio;
 	}
 	
+	public void set_Language(String language) {
+		this.Language = language;
+	}
+	
 	public String get_Author_Name() {
 		return Author_Name;
 	}
@@ -56,5 +66,9 @@ public class AuthorTab {
 	
 	public String get_Page_Dollar() {
 		return Page_Dollar;
+	}
+	
+	public String get_Language() {
+		return Language;
 	}
 }

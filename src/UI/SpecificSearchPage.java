@@ -3,12 +3,15 @@ package UI;
 import Core.publicStat;
 import Core.bestBook;
 import Core.AuthorTab;
+import Core.Publisher;
 import DAO.publicStatDAO;
 import DAO.publicStatInput;
 import DAO.bestBookInput;
 import DAO.bestBookDAO;
 import DAO.AuthorTabDAO;
 import DAO.AuthorTabInput;
+import DAO.PublisherInput;
+import DAO.PublisherDAO;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -111,74 +114,158 @@ public class SpecificSearchPage {
         }
         
         private void getAllPublishers() {
+        	JPanel fieldPanel = new JPanel();
+            JPanel resultPanel = new JPanel();
             
-            JPanel panel1 = new JPanel();
-            panel1.setSize(100, 30);
-            FlowLayout flowLayout1 = (FlowLayout) panel1.getLayout();
-            flowLayout1.setAlignment(FlowLayout.LEFT);
-            add(panel1); 
-            panel1.setLayout(new GridLayout(3,2));
+            PublisherInput publisherInput = new PublisherInput();
+            
+            
+            
+            // resultPanel
+            
+            JScrollPane scrollPane1 = new JScrollPane();
+            scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane1.setPreferredSize(new Dimension(710, 510));
+            scrollPane1.setViewportView(table);
+            resultPanel.add(scrollPane1);
+            
+            // fieldPanel
+            
+            fieldPanel.setLayout(new GridBagLayout());
+            GridBagConstraints grid = new GridBagConstraints();
             
             Border title = BorderFactory.createTitledBorder("Publishers");
-            panel1.setBorder(title);
+            fieldPanel.setBorder(title);
             
-            JCheckBox minAllPublisher = new JCheckBox("Show minimum price of their books");
-            minAllPublisher.addFocusListener(new FocusListener() {
-        	public void focusGained(FocusEvent e) {}
-        	public void focusLost(FocusEvent e) {
-        		//UserInput.set_Awarded(awardedBook.isSelected());
-        	}
-            });
-            panel1.add(minAllPublisher);
+            JComboBox year = new JComboBox();
+            year.setPreferredSize(new Dimension(200, 20));
+            year.addItem("");
+            for (int i = 2016; i >= 1; i--) {
+            	if (i >= 1000) {
+            		year.addItem(Integer.toString(i));
+            	}
+            	if ((i >= 100) && (i <= 999)) {
+            		year.addItem("0" + Integer.toString(i));
+            	}
+            	if ((i >= 10) && (i <= 99)) {
+            		year.addItem("00" + Integer.toString(i));
+            	}
+            	if ((i >= 1) && (i <= 9)) {
+            		year.addItem("000" + Integer.toString(i));
+            	}
+            }
             
-            JCheckBox avgAllPublisher = new JCheckBox("Show average price of their books");
-            avgAllPublisher.addFocusListener(new FocusListener() {
-        	public void focusGained(FocusEvent e) {}
-        	public void focusLost(FocusEvent e) {
-        		//UserInput.set_Awarded(awardedBook.isSelected());
-        	}
-            });
-            panel1.add(avgAllPublisher);
-            
-            JTextField publisherTextField = new JTextField();
-            panel1.add(publisherTextField);
-            publisherTextField.setColumns(10);
-            publisherTextField.setForeground(Color.gray);
-            publisherTextField.setText("Publisher (Leave empty to show all)");
-        
-            publisherTextField.addFocusListener(new FocusListener() {
-                public void focusGained(FocusEvent e) {
-                    String content = publisherTextField.getText();
-                    if (content.trim().equals("Publisher'('Leave empty to show all')")) {
-                        publisherTextField.setText("");
-                        publisherTextField.setForeground(Color.black);
-                    }
-                }
-                public void focusLost(FocusEvent e) {
-                    String content = publisherTextField.getText();
-                    if (content.trim().equals("")) {
-                        publisherTextField.setForeground(Color.gray);
-                        publisherTextField.setText("Publisher'('Leave empty to show all')");
-                    } 
-                }
+            year.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		String Year = year.getSelectedItem().toString();
+            		if ((publisherInput.get_Selection() == "Most Number Of Publications In Year") && Year != "") {
+            			publisherInput.set_Year(Year);
+            		} else {
+            			publisherInput.set_Year(null);
+            		}
+            	}
             });
             
-            JButton btnSearch = new JButton("Search");;
-            btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
-            panel1.add(btnSearch);
+            JRadioButton publNum = new JRadioButton("Most Number Of Publications In Year");
+            JRadioButton authorNum = new JRadioButton("Average Number Of Authors Per Year");
+            JRadioButton avgPrice = new JRadioButton("Average Price of Novels");
+            ButtonGroup bg = new ButtonGroup();
+            bg.add(publNum);
+            bg.add(authorNum);
+            bg.add(avgPrice);
             
-            btnSearch.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    String name = publisherTextField.getText();
-                    //publisherResult(name);
-                 }
+            ActionListener selectionListener = new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		AbstractButton selected = (AbstractButton) actionEvent.getSource();
+            		String Selection = selected.getText();
+            		String Year = year.getSelectedItem().toString();
+            		publisherInput.set_Selection(Selection);
+            		
+            		if (Selection == "Most Number Of Publications In Year") {
+            			if (Year != "") {
+            				publisherInput.set_Year(Year);
+            			}
+            		} else {
+            			publisherInput.set_Year(null);
+            		}
+            	}
+            };
+            
+            publNum.addActionListener(selectionListener);
+            authorNum.addActionListener(selectionListener);
+            avgPrice.addActionListener(selectionListener);
+            
+            
+            
+            JButton search = new JButton("Search");
+            
+            search.addActionListener(new ActionListener(){
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		System.out.println("");
+            		System.out.println("************New Search***********");
+            		System.out.println("Selection: " + publisherInput.get_Selection());
+            		System.out.println("Year: " + publisherInput.get_Year());
+            		
+            		String Selection = publisherInput.get_Selection();
+            		String Year = publisherInput.get_Year();
+            		
+            		PublisherDAO publisherDAO = new PublisherDAO();
+            		
+            		try {
+            			if (Selection == null) {
+            				throw new Exception("Selection not made!");
+            			} else if ((Selection == "Most Number Of Publications In Year") && Year == null) {
+            				throw new Exception("Year not selected!");
+            			} else if (Selection == "Most Number Of Publications In Year") {
+            				List<Publisher> publisherList = publisherDAO.searchPublisher_Publ(publisherInput);
+            				PublisherPublTableModel model = new PublisherPublTableModel(publisherList);
+            				table.setModel(model);
+            				
+            			} else if (Selection == "Average Number Of Authors Per Year") {
+            				List<Publisher> publisherList = publisherDAO.searchPublisher_Author(publisherInput);
+            				PublisherAuthorTableModel model = new PublisherAuthorTableModel(publisherList);
+            				table.setModel(model);
+            				
+            			} else if (Selection == "Average Price of Novels") {
+            				List<Publisher> publisherList = publisherDAO.searchPublisher_Price(publisherInput);
+        					PublisherPriceTableModel model = new PublisherPriceTableModel(publisherList);
+        					table.setModel(model);
+            			}
+            		}
+            		catch (Exception e2) {
+            			System.out.println("Error: " + e2);
+            		}
+            	}
             });
             
-            JScrollPane scrollPane = new JScrollPane();
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.setPreferredSize(new Dimension(710, 510));
-            add(scrollPane);
+            
+            grid.anchor = GridBagConstraints.WEST;
+            grid.ipady = 5;
+            grid.gridx = 0;
+            grid.gridy = 0;
+            fieldPanel.add(publNum, grid);
+            grid.gridx = 1;
+            grid.gridy = 0;
+            fieldPanel.add(year, grid);
+            
+            grid.gridx = 0;
+            grid.gridy = 1;
+            fieldPanel.add(authorNum, grid);
+            
+            grid.gridx = 0;
+            grid.gridy = 2;
+            fieldPanel.add(avgPrice, grid);
+            
+            grid.anchor = GridBagConstraints.EAST;
+            grid.ipady = 0;
+            grid.gridx = 1;
+            grid.gridy = 2;
+            fieldPanel.add(search, grid);
+            
+            
+            add(fieldPanel, BorderLayout.NORTH);
+            add(resultPanel, BorderLayout.SOUTH);
             
         }
         
@@ -820,8 +907,13 @@ public class SpecificSearchPage {
             					table.setModel(model);
             				} else if (authorTabInput.get_Which_Author() == "Most Translated Novel Authors") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchMostTranslatedNovelAuthor(authorTabInput);
-            					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
-            					table.setModel(model);
+            					if (authorTabInput.get_Selection() == null) {
+            						AuthorTabLanguageTableModel model = new AuthorTabLanguageTableModel(authorTabList);
+            						table.setModel(model);
+            					} else {
+            						AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
+            						table.setModel(model);
+            					}
             				}
             				
             				
