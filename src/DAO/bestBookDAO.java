@@ -120,8 +120,6 @@ public class bestBookDAO {
             myStmt = myConn.createStatement();		
             myRs = myStmt.executeQuery(mostQuery);
             
-            System.out.println("HELLO");
-            
             while (myRs.next()) {
 		bestBook bestBook = convertRowToBook(myRs);
 		bestBookList.add(bestBook);
