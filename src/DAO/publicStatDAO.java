@@ -124,7 +124,19 @@ public class publicStatDAO {
                                  "GROUP BY extract(year from PUBL_DATE)";
                 break;
             case "Number of Comics with Size":
-                showInputQuery = "";
+                if (choice.equals("Small (<50 pages)")) {
+                    choice = "PUBL_PAGES < 50";
+                }
+                else if (choice.equals("Medium (<100 pages)")) {
+                    choice = "PUBL_PAGES < 100";
+                }
+                else {
+                    choice = "PUBL_PAGES >= 100";
+                }
+                showInputQuery = "SELECT COUNT(DISTINCT P.Publ_ID) as Total " +
+                        "FROM PUBLICATIONS P, TITLES T, PUBLISHED_PUBL_TITLE PT " +
+                        "WHERE PT.TITLE_ID = T.TITLE_ID AND PT.PUBL_ID = P.PUBL_ID " +
+                        "AND T.TITLE_GRAPHIC = 'Yes' AND " + choice;
                 break;
              default: 
                 showInputQuery = "";

@@ -87,19 +87,17 @@ public class bestBookDAO {
                             "WHERE T.TITLE_ID = HH.TITLE_ID AND ROWNUM <= 3 ";
                 break;
             case "Most Popular Books":
-                mostQuery = "SELECT TITLE AS NAME, SUM_AR AS TOTAL FROM ( " +
+                mostQuery = "SELECT TITLE as NAME, SUM_AR AS TOTAL FROM ( " +
                             "SELECT TITLE_ID, SUM_AR FROM ( " +
                             "SELECT AWD.TITLE_ID,  SUM(NUM_AWARDS+NUMB_REVIEWS) AS SUM_AR " +
                             "FROM (SELECT T.TITLE_ID, COUNT (AWARD_ID) AS NUM_AWARDS " +
-                            "FROM WON_TITLE_AWD " +
-                            "RIGHT JOIN TITLES T ON T.TITLE_ID = WON_TITLE_AWD.TITLE_ID " +
-                            "GROUP BY T.TITLE_ID ORDER BY NUM_AWARDS DESC) AWD , " +
+                            "FROM WON_TITLE_AWD RIGHT JOIN TITLES T ON T.TITLE_ID = WON_TITLE_AWD.TITLE_ID " +
+                            "GROUP BY T.TITLE_ID ORDER BY NUM_AWARDS DESC) AWD, " +
                             "(SELECT T.TITLE_ID, COUNT (REVIEW_ID) AS NUMB_REVIEWS " +
-                            "FROM TITLE_REVIEWS " +
-                            "RIGHT JOIN TITLES T ON T.TITLE_ID = TITLE_REVIEWS.TITLE_ID " +
+                            "FROM TITLE_REVIEWS RIGHT JOIN TITLES T ON T.TITLE_ID = TITLE_REVIEWS.TITLE_ID " +
                             "GROUP BY T.TITLE_ID ORDER BY NUMB_REVIEWS DESC) REV " +
-                            "WHERE AWD.TITLE_ID = REV.TITLE_ID " +
-                            "GROUP BY AWD.TITLE_ID) ORDER BY SUM_AR DESC) HH, TITLES T " +
+                            "WHERE AWD.TITLE_ID = REV.TITLE_ID GROUP BY AWD.TITLE_ID) " +
+                            "ORDER BY SUM_AR DESC) HH, TITLES T " +
                             "WHERE T.TITLE_ID = HH.TITLE_ID AND ROWNUM <= 3 ";
                 break;
             case "Most Awarded Series":
@@ -121,6 +119,8 @@ public class bestBookDAO {
 	try {
             myStmt = myConn.createStatement();		
             myRs = myStmt.executeQuery(mostQuery);
+            
+            System.out.println("HELLO");
             
             while (myRs.next()) {
 		bestBook bestBook = convertRowToBook(myRs);
