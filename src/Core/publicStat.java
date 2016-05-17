@@ -28,7 +28,7 @@ public class publicStat {
     }
     
     public void set_Currency(String Currency) {
-	this.Total = Total;
+	this.Currency = Currency;
     }
     
     public void set_AvgPublPrice(String AvgPublPrice) {

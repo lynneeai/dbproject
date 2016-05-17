@@ -37,7 +37,7 @@ public class publicStatDAO {
                 
                 Name = myRs.getString("Name");
                 Currency = myRs.getString("Currency");
-                AvgPublPrice = myRs.getString("AvgPublPrice");
+                AvgPublPrice = myRs.getString("Average_Publication_Price");
                 
                 tempPublicStat.set_Name(Name);
                 tempPublicStat.set_Currency(Currency);
@@ -75,7 +75,13 @@ public class publicStatDAO {
                             "GROUP BY PUBL_SERIES_ID)";
                 break;
             case "Average Price of Title with Most Publications":
-                showQuery = "";
+                showQuery = "WITH NUMBEROFPUBL AS (SELECT TITLE_ID, COUNT(PUBL_ID) AS NUM_PUBL " +
+                        "FROM PUBLISHED_PUBL_TITLE GROUP BY TITLE_ID) " +
+                        "SELECT DISTINCT TITLE AS NAME, P.PRICE_CURRENCY as CURRENCY, AVG(P.PRICE) as Average_Publication_Price " +
+                        "FROM PUBLICATIONS P, PUBLISHED_PUBL_TITLE PT, NUMBEROFPUBL X, TITLES " +
+                        "WHERE PT.PUBL_ID = P.PUBL_ID AND X.TITLE_ID = PT.TITLE_ID AND P.PRICE_CURRENCY IS NOT NULL AND TITLES.TITLE_ID = PT.TITLE_ID " +
+                        "AND X.NUM_PUBL = (SELECT MAX(NUM_PUBL) FROM NUMBEROFPUBL) " +
+                        "GROUP BY P.PRICE_CURRENCY, TITLE";
                 break;
              case "Statistics On Publications Per Year": 
                 showQuery = "SELECT extract(year from PUBL_DATE) AS YEAR, COUNT (Publ_ID) AS TOTAL " +
