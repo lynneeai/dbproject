@@ -48,11 +48,16 @@ public class DetailSearchPage extends JPanel {
         JScrollPane scrollPane1 = new JScrollPane();
         scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane1.setPreferredSize(new Dimension(775, 437));
+        scrollPane1.setPreferredSize(new Dimension(775, 400));
+        
+        ImageIcon backgroundIcon = new ImageIcon("src/background.jpg");
+        JLabel backgroundPic = new JLabel(backgroundIcon);
+        scrollPane1.add(backgroundPic);
+        
         panelResult.add(scrollPane1);
         
         JTable tableTemp = new JTable();
-        scrollPane1.setViewportView(tableTemp);
+        //scrollPane1.setViewportView(tableTemp);
         
         detailSearchPanel.add(panelResult, BorderLayout.SOUTH);
         
@@ -280,7 +285,14 @@ public class DetailSearchPage extends JPanel {
         	}
         });
         
-        JButton search = new JButton("Search");
+        ImageIcon searchIcon = new ImageIcon("src/search-button.png");
+        Image searchImg = searchIcon.getImage();
+        Image newSearchImg = searchImg.getScaledInstance(80, 30,  java.awt.Image.SCALE_SMOOTH );
+        searchIcon = new ImageIcon(newSearchImg);
+        JButton search = new JButton(searchIcon);
+        search.setOpaque(false);
+        search.setContentAreaFilled(false);
+        search.setBorderPainted(false);
         search.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		System.out.println("");
@@ -307,7 +319,14 @@ public class DetailSearchPage extends JPanel {
         	}
         });
         
-        JButton back = new JButton("Back");
+        ImageIcon backIcon = new ImageIcon("src/back-button.png");
+        Image backImg = backIcon.getImage();
+        Image newBackImg = backImg.getScaledInstance(80, 30,  java.awt.Image.SCALE_SMOOTH );
+        backIcon = new ImageIcon(newBackImg);
+        JButton back = new JButton(backIcon);
+        back.setOpaque(false);
+        back.setContentAreaFilled(false);
+        back.setBorderPainted(false);
         back.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		panelResult.removeAll();
@@ -429,21 +448,19 @@ public class DetailSearchPage extends JPanel {
         
         grid.gridx = 4;
         grid.gridy = 7;
-        grid.ipady = 0;
+        grid.ipady = 5;
         panelFields.add(search, grid);
         
-        grid.anchor = GridBagConstraints.CENTER;
-        grid.gridx = 0;
+        grid.anchor = GridBagConstraints.WEST;
+        grid.gridx = 1;
         grid.gridy = 6;
-        grid.ipady = 0;
-        grid.weightx = 0;
-        grid.gridwidth = 2;
+        grid.ipady = 30;
         panelFields.add(specificSearch, grid);
         
         grid.anchor = GridBagConstraints.WEST;
         grid.gridx = 1;
         grid.gridy = 7;
-        grid.ipady = 0;
+        grid.ipady = 5;
         panelFields.add(back, grid);
         
         

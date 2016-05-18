@@ -1,8 +1,11 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
+
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 import java.awt.event.ActionListener;
@@ -44,7 +47,14 @@ public class SpecificSearchPage {
         }
         
         JPanel backPanel = new JPanel();
-        JButton back = new JButton("back");
+        ImageIcon backIcon = new ImageIcon("src/back-button.png");
+        Image backImg = backIcon.getImage();
+        Image newBackImg = backImg.getScaledInstance(70, 30,  java.awt.Image.SCALE_SMOOTH );
+        backIcon = new ImageIcon(newBackImg);
+        JButton back = new JButton(backIcon);
+        back.setOpaque(false);
+        back.setContentAreaFilled(false);
+        back.setBorderPainted(false);
         back.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
         	backPanel.removeAll();

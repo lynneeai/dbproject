@@ -8,12 +8,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -301,7 +303,14 @@ public class bestBookTabView extends JPanel{
             }
         });
         	
-        JButton search = new JButton("Search");
+        ImageIcon searchIcon = new ImageIcon("src/search-button.png");
+        Image searchImg = searchIcon.getImage();
+        Image newSearchImg = searchImg.getScaledInstance(70, 30,  java.awt.Image.SCALE_SMOOTH );
+        searchIcon = new ImageIcon(newSearchImg);
+        JButton search = new JButton(searchIcon);
+        search.setOpaque(false);
+        search.setContentAreaFilled(false);
+        search.setBorderPainted(false);
         search.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 table.setModel(new DefaultTableModel());   
@@ -368,6 +377,7 @@ public class bestBookTabView extends JPanel{
         grid.anchor = GridBagConstraints.CENTER;
         grid.gridx = 2;
         grid.gridy = 5;
+        grid.gridheight = 2;
         fieldPanel.add(search, grid);
         	
         // resultPanel
@@ -375,7 +385,7 @@ public class bestBookTabView extends JPanel{
         JScrollPane scrollPane1 = new JScrollPane();
         scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane1.setPreferredSize(new Dimension(710, 535));
+        scrollPane1.setPreferredSize(new Dimension(710, 375));
         scrollPane1.setViewportView(table);
         resultPanel.add(scrollPane1);
         	

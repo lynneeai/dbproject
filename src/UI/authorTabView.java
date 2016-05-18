@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -16,6 +17,7 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -45,7 +47,7 @@ public class authorTabView extends JPanel{
             JScrollPane scrollPane1 = new JScrollPane();
             scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane1.setPreferredSize(new Dimension(710, 475));
+            scrollPane1.setPreferredSize(new Dimension(710, 460));
             scrollPane1.setViewportView(table);
             resultPanel.add(scrollPane1);
         	
@@ -601,9 +603,14 @@ public class authorTabView extends JPanel{
             JLabel transparent = new JLabel("     ");
             
             
-            JButton search = new JButton("Search");
-            
-            
+            ImageIcon searchIcon = new ImageIcon("src/search-button.png");
+            Image searchImg = searchIcon.getImage();
+            Image newSearchImg = searchImg.getScaledInstance(70, 30,  java.awt.Image.SCALE_SMOOTH );
+            searchIcon = new ImageIcon(newSearchImg);
+            JButton search = new JButton(searchIcon);
+            search.setOpaque(false);
+            search.setContentAreaFilled(false);
+            search.setBorderPainted(false); 
             search.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent e) {
             		table.setModel(new DefaultTableModel());
@@ -758,8 +765,9 @@ public class authorTabView extends JPanel{
             fieldPanel.add(authors, grid);
             
             grid.gridx = 4;
-            grid.gridy = 3;
+            grid.gridy = 2;
             grid.ipady = 0;
+            grid.gridheight = 2;
             fieldPanel.add(search, grid);
             
             

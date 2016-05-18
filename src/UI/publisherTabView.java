@@ -7,12 +7,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -41,7 +43,7 @@ public class publisherTabView extends JPanel {
         JScrollPane scrollPane1 = new JScrollPane();
         scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane1.setPreferredSize(new Dimension(710, 510));
+        scrollPane1.setPreferredSize(new Dimension(710, 465));
         scrollPane1.setViewportView(table);
         resultPanel.add(scrollPane1);
             
@@ -112,8 +114,14 @@ public class publisherTabView extends JPanel {
         authorNum.addActionListener(selectionListener);
         avgPrice.addActionListener(selectionListener);      
             
-        JButton search = new JButton("Search");
-            
+        ImageIcon searchIcon = new ImageIcon("src/search-button.png");
+        Image searchImg = searchIcon.getImage();
+        Image newSearchImg = searchImg.getScaledInstance(70, 30,  java.awt.Image.SCALE_SMOOTH );
+        searchIcon = new ImageIcon(newSearchImg);
+        JButton search = new JButton(searchIcon);
+        search.setOpaque(false);
+        search.setContentAreaFilled(false);
+        search.setBorderPainted(false); 
         search.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("");
@@ -171,6 +179,7 @@ public class publisherTabView extends JPanel {
         grid.ipady = 0;
         grid.gridx = 1;
         grid.gridy = 2;
+        grid.gridheight = 2;
         fieldPanel.add(search, grid);
             
         add(fieldPanel, BorderLayout.NORTH);
