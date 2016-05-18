@@ -95,7 +95,7 @@ public class publicStatTabView extends JPanel {
         
         ImageIcon backgroundIcon = new ImageIcon("src/background.jpg");
         Image backgroundImg = backgroundIcon.getImage();
-        Image newBackgroundImg = backgroundImg.getScaledInstance(700, 370,  java.awt.Image.SCALE_SMOOTH );
+        Image newBackgroundImg = backgroundImg.getScaledInstance(700, 440,  java.awt.Image.SCALE_SMOOTH );
         backgroundIcon = new ImageIcon(newBackgroundImg);
         JLabel backgroundPic = new JLabel(backgroundIcon);
         scrollPane1.getViewport().add(backgroundPic, scrollPane1);
