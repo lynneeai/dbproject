@@ -43,6 +43,7 @@ public class DetailSearchPage extends JPanel {
         Main.mainFrame.repaint();
         
         // Result
+        
         JPanel panelResult = new JPanel();
         
         JScrollPane scrollPane1 = new JScrollPane();
@@ -51,8 +52,11 @@ public class DetailSearchPage extends JPanel {
         scrollPane1.setPreferredSize(new Dimension(775, 400));
         
         ImageIcon backgroundIcon = new ImageIcon("src/background.jpg");
+        Image backgroundImg = backgroundIcon.getImage();
+        Image newBackgroundImg = backgroundImg.getScaledInstance(760, 390,  java.awt.Image.SCALE_SMOOTH );
+        backgroundIcon = new ImageIcon(newBackgroundImg);
         JLabel backgroundPic = new JLabel(backgroundIcon);
-        scrollPane1.add(backgroundPic);
+        scrollPane1.getViewport().add(backgroundPic, scrollPane1);
         
         panelResult.add(scrollPane1);
         
@@ -295,6 +299,8 @@ public class DetailSearchPage extends JPanel {
         search.setBorderPainted(false);
         search.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		backgroundPic.setVisible(false);
+        		scrollPane1.setViewportView(tableTemp);
         		System.out.println("");
         		System.out.println("****System*******NEW SEARCH************");
                         System.out.println("Author Name = " + UserInput.get_Author_Name());

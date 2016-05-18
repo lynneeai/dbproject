@@ -48,7 +48,15 @@ public class authorTabView extends JPanel{
             scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane1.setPreferredSize(new Dimension(710, 460));
-            scrollPane1.setViewportView(table);
+            
+            ImageIcon backgroundIcon = new ImageIcon("src/background.jpg");
+            Image backgroundImg = backgroundIcon.getImage();
+            Image newBackgroundImg = backgroundImg.getScaledInstance(700, 455,  java.awt.Image.SCALE_SMOOTH );
+            backgroundIcon = new ImageIcon(newBackgroundImg);
+            JLabel backgroundPic = new JLabel(backgroundIcon);
+            scrollPane1.getViewport().add(backgroundPic, scrollPane1);
+            
+            //scrollPane1.setViewportView(table);
             resultPanel.add(scrollPane1);
         	
             // fieldPanel
@@ -613,6 +621,8 @@ public class authorTabView extends JPanel{
             search.setBorderPainted(false); 
             search.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent e) {
+            		backgroundPic.setVisible(false);
+            		scrollPane1.setViewportView(table);
             		table.setModel(new DefaultTableModel());
             		System.out.println("");
             		System.out.println("***********New Author Tab Search********");

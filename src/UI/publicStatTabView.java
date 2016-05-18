@@ -85,6 +85,23 @@ public class publicStatTabView extends JPanel {
         	
         JPanel fieldPanel = new JPanel();
         JPanel resultPanel = new JPanel();
+        
+        // resultPanel
+    	
+        JScrollPane scrollPane1 = new JScrollPane();
+        scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane1.setPreferredSize(new Dimension(710, 445));
+        
+        ImageIcon backgroundIcon = new ImageIcon("src/background.jpg");
+        Image backgroundImg = backgroundIcon.getImage();
+        Image newBackgroundImg = backgroundImg.getScaledInstance(700, 370,  java.awt.Image.SCALE_SMOOTH );
+        backgroundIcon = new ImageIcon(newBackgroundImg);
+        JLabel backgroundPic = new JLabel(backgroundIcon);
+        scrollPane1.getViewport().add(backgroundPic, scrollPane1);
+        
+        resultPanel.add(scrollPane1);
+        //scrollPane1.setViewportView(table);
         	
         // fieldPanel
         fieldPanel.setLayout(new GridBagLayout());
@@ -174,6 +191,8 @@ public class publicStatTabView extends JPanel {
         search.setBorderPainted(false);
         search.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	backgroundPic.setVisible(false);
+            	scrollPane1.setViewportView(table);
                 table.setModel(new DefaultTableModel());   
                 String query = publicStatValContainer.getQuery();
                 String choice = publicStatValContainer.getChoice();
@@ -184,6 +203,8 @@ public class publicStatTabView extends JPanel {
             
         stats.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) { 
+            	backgroundPic.setVisible(false);
+            	scrollPane1.setViewportView(table);
                 publicStatValContainer.setQuery(stats.getText());
                 table.setModel(new DefaultTableModel()); 
                 String query = publicStatValContainer.getQuery();
@@ -254,14 +275,7 @@ public class publicStatTabView extends JPanel {
         grid.gridheight = 2;
         fieldPanel.add(search, grid);
             
-        // resultPanel
-        	
-        JScrollPane scrollPane1 = new JScrollPane();
-        scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane1.setPreferredSize(new Dimension(710, 445));
-        resultPanel.add(scrollPane1);
-        scrollPane1.setViewportView(table);
+        
             
         add(fieldPanel, BorderLayout.NORTH);
         add(resultPanel, BorderLayout.CENTER);
