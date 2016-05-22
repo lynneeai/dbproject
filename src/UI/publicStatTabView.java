@@ -19,8 +19,10 @@ import java.awt.font.TextAttribute;
 import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -61,20 +63,12 @@ public class publicStatTabView extends JPanel {
             this.choice = choice;
         }
             
-        public void setSelected(Boolean selected) {
-            this.selected = selected;
-        }
-            
         public String getQuery() {
             return this.query;
         }
                 
         public String getChoice() {
             return this.choice;
-        } 
-            
-        public Boolean getSelected() {
-            return this.selected;
         } 
     }
 	
@@ -109,37 +103,38 @@ public class publicStatTabView extends JPanel {
             
         Border title = BorderFactory.createTitledBorder("Publication Statistics");
         fieldPanel.setBorder(title);
-            
-        JRadioButton avgSeries= new JRadioButton("Average Number of Publications per Series");
-        JRadioButton avgTitle= new JRadioButton("Average Price of Title with Most Publications");
-           
-        avgSeries.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (avgSeries.isSelected() && publicStatValContainer.getSelected() == false) {
-                    publicStatValContainer.setQuery(avgSeries.getText());
-                    publicStatValContainer.setSelected(true);
-                }   		
-                else if (!avgSeries.isSelected() && publicStatValContainer.getSelected() == true) {
-                    publicStatValContainer.setSelected(false);
-                }	
+        
+        JRadioButton searchPublStat = new JRadioButton("Search for Publica Statistics   ");
+        JComboBox publstats = new JComboBox();
+        publstats.setPreferredSize( new Dimension( 330, 24 ) );
+        String[] which_Book = {"Average Number of Publications per Series", 
+                               "Average Price of Title with Most Publications", 
+                               "Statistics On Publications Per Year"};
+        for (int i = 0; i < which_Book.length; i++) {
+            publstats.addItem(which_Book[i]);
+        }
+        publstats.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                JComboBox comboBox = (JComboBox) event.getSource();
+            	Object selected = comboBox.getSelectedItem();
+            	String Stats = selected.toString();
+            		
+            	if (Stats.equals("Average Number of Publications per Series")) {
+                    publicStatValContainer.setQuery("Average Number of Publications per Series");               
+                }
+                else if (Stats.equals("Average Price of Title with Most Publications")) {
+                    publicStatValContainer.setQuery("Average Price of Title with Most Publications");                  
+                }
+                else if(Stats.equals("Statistics On Publications Per Year")) {
+                    publicStatValContainer.setQuery("Statistics On Publications Per Year");
+                }
             }
         });
+ 
             
-        avgTitle.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (avgTitle.isSelected() && publicStatValContainer.getSelected() == false) {
-                    publicStatValContainer.setQuery(avgTitle.getText());
-                    publicStatValContainer.setSelected(true);
-                }   		
-                else if (!avgTitle.isSelected() && publicStatValContainer.getSelected() == true) {
-                    publicStatValContainer.setSelected(false);
-                }	
-            }
-        });
-            
-        JLabel bookNum = new JLabel("Total Books Published In Year");            
+        JRadioButton bookNum = new JRadioButton("Total Books Published In Year");            
         Choice year = new Choice();
-        year.setPreferredSize(new Dimension(195, 20));
+        year.setPreferredSize(new Dimension(330, 24));
         year.add("");
         for (int i = 2016; i >= 1; i--) {
             if (i >= 1000) {
@@ -159,14 +154,14 @@ public class publicStatTabView extends JPanel {
         year.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {}
             public void focusLost(FocusEvent e) {
-                publicStatValContainer.setQuery(bookNum.getText());
+                publicStatValContainer.setQuery("Total Books Published In Year");
                 publicStatValContainer.setChoice(year.getSelectedItem());
             }
         });
             
-        JLabel comicSize = new JLabel("Number of Comics with Size");
+        JRadioButton comicSize = new JRadioButton("Number of Comics with Size  ");
         Choice size = new Choice();
-        size.setPreferredSize(new Dimension(200, 20));
+        size.setPreferredSize(new Dimension(330, 24));
         size.add("");
         size.addItem("Small (<50 pages)");
         size.addItem("Medium (<100 pages)");
@@ -175,7 +170,7 @@ public class publicStatTabView extends JPanel {
         size.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {}
             public void focusLost(FocusEvent e) {
-                publicStatValContainer.setQuery(comicSize.getText());
+                publicStatValContainer.setQuery("Number of Comics with Size");
                 publicStatValContainer.setChoice(size.getSelectedItem());
             }
         });
@@ -201,19 +196,6 @@ public class publicStatTabView extends JPanel {
             }
         });
             
-        stats.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { 
-            	backgroundPic.setVisible(false);
-            	scrollPane1.setViewportView(table);
-                publicStatValContainer.setQuery(stats.getText());
-                table.setModel(new DefaultTableModel()); 
-                String query = publicStatValContainer.getQuery();
-                String choice = publicStatValContainer.getChoice();
-                displayPublicStat(query, choice);    	
-                System.out.println(query);     			
-            }
-        });
-            
         stats.setBorder(null);
         stats.setOpaque(true);
         stats.setForeground(Color.blue);
@@ -224,18 +206,24 @@ public class publicStatTabView extends JPanel {
         stats.setFont(font.deriveFont(attributes));       
         stats.setFocusPainted(true);
         stats.setBorderPainted(true);
+        
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(searchPublStat);
+        bg.add(bookNum);
+        bg.add(comicSize);
+        searchPublStat.setSelected(true); 
             
         grid.ipadx = 5;
         grid.ipady = 5;
         grid.gridx = 0;
         grid.gridy = 0;
-        fieldPanel.add(avgSeries, grid);
+        fieldPanel.add(searchPublStat, grid);
 			
         grid.ipadx = 5;
         grid.ipady = 5;
         grid.gridx = 1;
         grid.gridy = 0;
-        fieldPanel.add(avgTitle, grid);			
+        fieldPanel.add(publstats, grid);			
 		
         grid.anchor = GridBagConstraints.EAST;
         grid.ipadx = 5;
@@ -261,11 +249,6 @@ public class publicStatTabView extends JPanel {
         grid.gridy = 2;
         fieldPanel.add(size, grid);			
             
-        grid.anchor = GridBagConstraints.EAST;
-        grid.gridx = 0;
-        grid.gridy = 3;
-        fieldPanel.add(stats, grid);
-            
         grid.anchor = GridBagConstraints.CENTER;
         grid.gridwidth = 1;
         grid.ipadx = 0;
@@ -273,9 +256,7 @@ public class publicStatTabView extends JPanel {
         grid.gridx = 1;
         grid.gridy = 3;
         grid.gridheight = 2;
-        fieldPanel.add(search, grid);
-            
-        
+        fieldPanel.add(search, grid);  
             
         add(fieldPanel, BorderLayout.NORTH);
         add(resultPanel, BorderLayout.CENTER);

@@ -31,6 +31,7 @@ public class bestBookDAO {
             case "Most Awarded Books": 
             case "Most Popular Books": 
             case "Most Translated Book Types":
+            case "Most translated type of all languages":
             case "Most extensive web presence awarded as ":
             case "Publication series with most book awarded as ": 
 
@@ -108,6 +109,18 @@ public class bestBookDAO {
                             "GROUP BY TITLE_SERIES_ID " +
                             "ORDER BY NUM_AWARDS DESC) A , TITLE_SERIES T " +
                             "WHERE A.TITLE_SERIES_ID = T.TITLE_SERIES_ID AND ROWNUM <= 10 ";
+                break;
+            case "Most translated type of all languages":
+                mostQuery = "WITH ALL_RESULT AS ( " +
+                            "SELECT TITLE_TYPE, LANGUAGE_NAME, COUNT(TITLE_ID) AS TOTAL " +
+                            "FROM ( SELECT TITLES.TITLE_TYPE, TITLES.TITLE_ID, LANGUAGE_NAME " +
+                            "FROM TITLES, LANGUAGES " +
+                            "WHERE NOT TITLES.TRANS_PARENT = 0 AND LANGUAGES.LANGUAGE_ID = TITLES.LANGUAGE_ID) " +
+                            "GROUP BY TITLE_TYPE, LANGUAGE_NAME ORDER BY TOTAL DESC) " +
+                            "SELECT LANGUAGE_NAME as Name, TITLE_TYPE as Total FROM ( " +
+                            "SELECT TITLE_TYPE, TOTAL,LANGUAGE_NAME, " +
+                            "ROW_NUMBER() OVER (PARTITION BY LANGUAGE_NAME ORDER BY TOTAL DESC) AS ROWNUMBER " +
+                            "FROM ALL_RESULT) WHERE ROWNUMBER <= 3 ";
                 break;
             default: 
                 mostQuery = "";
