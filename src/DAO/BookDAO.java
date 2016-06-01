@@ -43,8 +43,8 @@ public class BookDAO {
 			if (!firstConstraint) {
 				where = where + " AND ";
 			}
-			where = where + "PUBLICATIONS.PUBL_TITLE='" + input.get_Publication_Name() + " AND "
-					  	  + "ROWNUM<=20";
+			where = where + "PUBLICATIONS.PUBL_TITLE='" + input.get_Publication_Name() + "'";
+					  	 
 			firstConstraint = false;
 		}
 		
@@ -55,8 +55,7 @@ public class BookDAO {
 			from = from + ", AUTHORS, WRITTEN_PUBL_AUT ";
 			where = where + "AUTHORS.AUTHOR_NAME='" + input.get_Author_Name() + "'" + " AND "
 					      + "WRITTEN_PUBL_AUT.AUTHOR_ID=AUTHORS.AUTHOR_ID" + " AND "
-					      + "PUBLICATIONS.PUBL_ID=WRITTEN_PUBL_AUT.PUBL_ID" + " AND "
-						  + "ROWNUM<=20";
+					      + "PUBLICATIONS.PUBL_ID=WRITTEN_PUBL_AUT.PUBL_ID";
 			firstConstraint = false;
 		}
 		
@@ -66,8 +65,7 @@ public class BookDAO {
 			}
 			from = from + ", PUBLISHERS ";
 			where = where + "PUBLISHERS.PUBLISHER_NAME='" + input.get_Publisher_Name() + "'" + " AND "
-						  + "PUBLICATIONS.PUBLISHER_ID=PUBLISHERS.PUBLISHER_ID" + " AND "
-						  + "ROWNUM<=20";
+						  + "PUBLICATIONS.PUBLISHER_ID=PUBLISHERS.PUBLISHER_ID";
 			firstConstraint = false;
 		}
 		
@@ -78,8 +76,7 @@ public class BookDAO {
 			}
 			from = from + ", PUBL_SERIES ";
 			where = where + "PUBL_SERIES.PUBL_SERIES_NAME='" + input.get_Publication_Series_Name() + "'" + " AND "
-						  + "PUBLICATIONS.PUBL_SERIES_ID=PUBL_SERIES.PUBL_SERIES_ID" + " AND "
-						  + "ROWNUM<=20";
+						  + "PUBLICATIONS.PUBL_SERIES_ID=PUBL_SERIES.PUBL_SERIES_ID";
 			firstConstraint = false;
 		}
 		
@@ -95,8 +92,7 @@ public class BookDAO {
 			where = where + "LANGUAGES.LANGUAGE_NAME='" + input.get_Language() + "'" + " AND "
 						  + "TITLES.LANGUAGE_ID=LANGUAGES.LANGUAGE_ID" + " AND "
 						  + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID" + " AND "
-						  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID" + " AND "
-						  + "ROWNUM<=20";
+						  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID";
 			firstConstraint = false;
 		}
 		
@@ -110,8 +106,7 @@ public class BookDAO {
 			}
 			where = where + "TITLES.TITLE_TYPE='" + input.get_Publication_Type() + "'" + " AND "
 						  + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID" + " AND "
-						  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID" + " AND "
-						  + "ROWNUM<=20";
+						  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID";
 			firstConstraint = false;
 		}
 		
@@ -119,8 +114,7 @@ public class BookDAO {
 			if (!firstConstraint) {
 				where = where + " AND ";
 			}
-			where = where + "PUBLICATIONS.PUBL_DATE>='" + input.get_Start_Date() + "'" + " AND "
-						  + "ROWNUM<=20";
+			where = where + "PUBLICATIONS.PUBL_DATE>='" + input.get_Start_Date() + "'";
 			firstConstraint = false;
 		}
 		
@@ -128,8 +122,7 @@ public class BookDAO {
 			if (!firstConstraint) {
 				where = where + " AND ";
 			}
-			where = where + "PUBLICATIONS.PUBL_DATE<='" + input.get_End_Date() + "'" + " AND "
-						  + "ROWNUM<=20";
+			where = where + "PUBLICATIONS.PUBL_DATE<='" + input.get_End_Date() + "'";
 			firstConstraint = false;
 		}
 		

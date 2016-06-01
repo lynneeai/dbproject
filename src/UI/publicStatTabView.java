@@ -104,7 +104,7 @@ public class publicStatTabView extends JPanel {
         Border title = BorderFactory.createTitledBorder("Publication Statistics");
         fieldPanel.setBorder(title);
         
-        JRadioButton searchPublStat = new JRadioButton("Search for Publica Statistics   ");
+        JRadioButton searchPublStat = new JRadioButton("Statistics on Publication        ");
         JComboBox publstats = new JComboBox();
         publstats.setPreferredSize( new Dimension( 330, 24 ) );
         String[] which_Book = {"Average Number of Publications per Series", 
