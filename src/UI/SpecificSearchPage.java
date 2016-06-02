@@ -1,7 +1,9 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -21,9 +23,17 @@ public class SpecificSearchPage {
         statsPanel.setBorder(new EmptyBorder(10, 10, 18, 10));
         statsPanel.setLayout(new BorderLayout(0, 0));    
         
+        //Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	    //Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+        
+        
         Main.mainFrame.add(statsPanel);
         Main.mainFrame.revalidate();
-        Main.mainFrame.repaint();       
+        Main.mainFrame.repaint();  
+        
+        //Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	    //Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+       
         
         String[] tabContents = {"Publishers", "Authors", "Best Books", "Publication Statistics", "Comics"};
         
@@ -61,6 +71,10 @@ public class SpecificSearchPage {
         	pane.removeAll();
         	statsPanel.removeAll();
         	Main.mainFrame.remove(statsPanel);
+        	
+        	//Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    	    //Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+    	    
         	DetailSearchPage detailSearchPage = new DetailSearchPage();
         	detailSearchPage.detailSearch();
             }

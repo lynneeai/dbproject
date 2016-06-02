@@ -188,6 +188,7 @@ public class bestBookTabView extends JPanel{
                 else {
                     webPresenceT.setEditable(true);
                     String content = webPresenceT.getText();
+                    System.out.println(content.trim());
                     if (content.trim().equals("Please Enter an Award Name")) {
                         webPresenceT.setText("");
                         webPresenceT.setForeground(Color.black);
@@ -272,7 +273,7 @@ public class bestBookTabView extends JPanel{
                     bestBookValContainer.setQuery("Most Translated Book Types");
                 }
                 webPresenceT.setForeground(Color.gray);
-                webPresenceT.setText("Please Enter an Award Type"); 
+                webPresenceT.setText("Please Enter an Award Name"); 
                 reviewedAuthorT.setForeground(Color.gray);
                 reviewedAuthorT.setText("Please Enter an Author Name");
                 seriesAwardT.setForeground(Color.gray);
@@ -288,7 +289,7 @@ public class bestBookTabView extends JPanel{
                 translatedT.setForeground(Color.gray);
                 translatedT.setText("Please Enter a Language");
                 webPresenceT.setForeground(Color.gray);
-                webPresenceT.setText("Please Enter an Award Type"); 
+                webPresenceT.setText("Please Enter an Award Name"); 
                 seriesAwardT.setForeground(Color.gray);
                 seriesAwardT.setText("Please Enter an Award Type");
             }
@@ -318,7 +319,7 @@ public class bestBookTabView extends JPanel{
                 reviewedAuthorT.setForeground(Color.gray);
                 reviewedAuthorT.setText("Please Enter an Author Name");
                 webPresenceT.setForeground(Color.gray);
-                webPresenceT.setText("Please Enter an Award Type"); 
+                webPresenceT.setText("Please Enter an Award Name"); 
             }
         });
         
@@ -329,7 +330,7 @@ public class bestBookTabView extends JPanel{
                 reviewedAuthorT.setForeground(Color.gray);
                 reviewedAuthorT.setText("Please Enter an Author Name");
                 webPresenceT.setForeground(Color.gray);
-                webPresenceT.setText("Please Enter an Award Type"); 
+                webPresenceT.setText("Please Enter an Award Name"); 
                 seriesAwardT.setForeground(Color.gray);
                 seriesAwardT.setText("Please Enter an Award Type");
             }

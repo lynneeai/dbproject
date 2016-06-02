@@ -38,9 +38,15 @@ public class DetailSearchPage extends JPanel {
         detailSearchPanel.setBorder(new EmptyBorder(10, 10, 18, 10));
         detailSearchPanel.setLayout(new BorderLayout(0, 0));
         
+        //Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	    //Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+       
+        
         Main.mainFrame.add(detailSearchPanel);
         Main.mainFrame.revalidate();
         Main.mainFrame.repaint();
+        
+        
         
         // Result
         
@@ -195,6 +201,7 @@ public class DetailSearchPage extends JPanel {
         JComboBox startYear = new JComboBox();
         JComboBox endYear = new JComboBox();
         
+        
         String[] avail_Languages = {"", "English", "French", "Chinese", "Spanish", "Arabic", "German", "Other"};
         for (int i = 0; i < avail_Languages.length; i++) {
         	languageChoice.addItem(avail_Languages[i]);
@@ -336,6 +343,10 @@ public class DetailSearchPage extends JPanel {
         		detailSearchPanel.removeAll();
         		Main.mainFrame.remove(detailSearchPanel);
         		Main.mainFrame.setBounds(100, 100, 800, 180);
+        		
+        		//Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        	    //Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+        		
         		SearchApp searchApp = new SearchApp();
         		searchApp.initialPage();
         	}
@@ -362,6 +373,10 @@ public class DetailSearchPage extends JPanel {
                 //Main.mainFrame.pack();
                 //Main.mainFrame.setVisible(true);
                 //Main.mainFrame.setBounds(100, 100, 800, 1000);
+                
+                //Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        	    //Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+        	    
             	SpecificSearchPage specificSearchPage = new SpecificSearchPage();
             	specificSearchPage.specificSearch();       	
             }

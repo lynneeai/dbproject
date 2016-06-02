@@ -1,6 +1,5 @@
 package UI;
 
-import java.awt.BorderLayout;
 import java.awt.*; 
 import java.awt.event.*; 
 
@@ -12,7 +11,6 @@ import javax.swing.table.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import java.awt.FlowLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -59,9 +57,15 @@ public class SearchApp extends JPanel {
         contentPane.setSize(100, 100);
         contentPane.setBorder(new EmptyBorder(5, 5, 18, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
-        Main.mainFrame.add(contentPane);
+        
+        
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	    Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2 - 100);
+        
+	    Main.mainFrame.add(contentPane);
         Main.mainFrame.revalidate();
         Main.mainFrame.repaint();
+        
         
         Main.mainFrame.setTitle(" The Two Billions Books Search Engine ");
 		
@@ -154,6 +158,10 @@ public class SearchApp extends JPanel {
                 contentPane.removeAll();
                 Main.mainFrame.remove(contentPane);
                 Main.mainFrame.setBounds(100, 100, 800, 1000);
+                
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        	    Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+                
             	DetailSearchPage detailSearchPage = new DetailSearchPage();
             	detailSearchPage.detailSearch();
             	
@@ -171,6 +179,10 @@ public class SearchApp extends JPanel {
                 contentPane.removeAll();
                 Main.mainFrame.remove(contentPane);
                 Main.mainFrame.setBounds(100, 100, 800, 1000);
+                
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        	    Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+        	    
                 searchResult(name, searchChoiceContent, methodChoiceContent);
             }
         });
@@ -222,9 +234,16 @@ public class SearchApp extends JPanel {
         contentPane.setBorder(new EmptyBorder(10, 0, 18, 0));
         contentPane.setLayout(gridbag);
         
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	    Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+        
         Main.mainFrame.add(contentPane);
         Main.mainFrame.revalidate();
         Main.mainFrame.repaint();
+        
+        //Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	    //Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+       
 		
         panel1 = new JPanel();
         FlowLayout flowLayout1 = (FlowLayout) panel1.getLayout();
@@ -328,6 +347,10 @@ public class SearchApp extends JPanel {
                 Main.mainFrame.remove(contentPane);
                 table.setModel(new DefaultTableModel());
                 Main.mainFrame.setBounds(100, 100, 800, 1000);
+                
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        	    Main.mainFrame.setLocation(dim.width/2 - Main.mainFrame.getSize().width/2, dim.height/2 - Main.mainFrame.getSize().height/2);
+                
             	DetailSearchPage detailSearchPage = new DetailSearchPage();
             	detailSearchPage.detailSearch();
             }
