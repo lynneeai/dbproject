@@ -399,9 +399,8 @@ public class authorTabView extends JPanel{
                         awarded.setForeground(Color.gray);
                         
                         bg.clearSelection();
-                        mostAwarded.setSelected(true);
                         authorTabInput.set_Constraint(null);
-                        authorTabInput.set_Selection("Awarded In");
+                        authorTabInput.set_Selection(null);
                         
                         table.setModel(new DefaultTableModel());
                         
@@ -668,9 +667,13 @@ public class authorTabView extends JPanel{
             					
             				}  else if (authorTabInput.get_Which_Author() == "Most-Awarded Author") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchAwardedAuthor(authorTabInput);
-            					AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
-            					table.setModel(model);
-            					
+            					if (authorTabInput.get_Selection() == null) {
+            						AuthorTabAwardTableModel model = new AuthorTabAwardTableModel(authorTabList);
+            						table.setModel(model);
+            					} else {
+            						AuthorTabNumberTableModel model = new AuthorTabNumberTableModel(authorTabList);
+            						table.setModel(model);
+            					}
             					
             				}else if (authorTabInput.get_Which_Author() == "Most-Awarded After Death Author") {
             					List<AuthorTab> authorTabList = authorTabDAO.searchAwardedDeadAuthor(authorTabInput);

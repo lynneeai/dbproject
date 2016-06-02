@@ -176,7 +176,7 @@ public class bestBookTabView extends JPanel{
         
 
 	
-        JTextField webPresenceT = new JTextField("Please Enter an Award Type");
+        JTextField webPresenceT = new JTextField("Please Enter an Award Name");
         webPresenceT.setPreferredSize( new Dimension( 270, 24 ) );
         webPresenceT.setForeground(Color.gray);
         webPresenceT.addFocusListener(new FocusListener() {
@@ -188,7 +188,7 @@ public class bestBookTabView extends JPanel{
                 else {
                     webPresenceT.setEditable(true);
                     String content = webPresenceT.getText();
-                    if (content.trim().equals("Please Enter an Award Type")) {
+                    if (content.trim().equals("Please Enter an Award Name")) {
                         webPresenceT.setText("");
                         webPresenceT.setForeground(Color.black);
                     }
@@ -198,7 +198,7 @@ public class bestBookTabView extends JPanel{
                 String content = webPresenceT.getText();
                 if (content.trim().equals("")) {
                     webPresenceT.setForeground(Color.gray);
-                    webPresenceT.setText("Please Enter an Award Type");
+                    webPresenceT.setText("Please Enter an Award Name");
                 } 
                 else {
                     bestBookValContainer.setText(webPresenceT.getText());

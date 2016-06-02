@@ -86,13 +86,13 @@ public class BookDAO {
 			}
 			if (!titleIncluded) {
 				from = from + ", TITLES, PUBLISHED_PUBL_TITLE ";
+				where = where + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID AND "
+					  	  	  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID AND ";
 				titleIncluded = true;
 			}
 			from = from + ", LANGUAGES ";
 			where = where + "LANGUAGES.LANGUAGE_NAME='" + input.get_Language() + "'" + " AND "
-						  + "TITLES.LANGUAGE_ID=LANGUAGES.LANGUAGE_ID" + " AND "
-						  + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID" + " AND "
-						  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID";
+						  + "TITLES.LANGUAGE_ID=LANGUAGES.LANGUAGE_ID";
 			firstConstraint = false;
 		}
 		
@@ -102,11 +102,11 @@ public class BookDAO {
 			}
 			if (!titleIncluded) {
 				from = from + ", TITLES, PUBLISHED_PUBL_TITLE ";
+				where = where + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID AND "
+				  	  	      + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID AND ";
 				titleIncluded = true;
 			}
-			where = where + "TITLES.TITLE_TYPE='" + input.get_Publication_Type() + "'" + " AND "
-						  + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID" + " AND "
-						  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID";
+			where = where + "TITLES.TITLE_TYPE='" + input.get_Publication_Type() + "'";
 			firstConstraint = false;
 		}
 		
@@ -124,6 +124,22 @@ public class BookDAO {
 			}
 			where = where + "PUBLICATIONS.PUBL_DATE<='" + input.get_End_Date() + "'";
 			firstConstraint = false;
+		}
+		
+		if (input.get_Awarded()) {
+			if (!firstConstraint) {
+				where = where + " AND ";
+			}
+			
+			if (!titleIncluded) {
+				from = from + ", TITLES, PUBLISHED_PUBL_TITLE ";
+				where = where + "PUBLISHED_PUBL_TITLE.TITLE_ID=TITLES.TITLE_ID AND "
+						  	  + "PUBLICATIONS.PUBL_ID=PUBLISHED_PUBL_TITLE.PUBL_ID AND ";
+				titleIncluded = true;
+			}
+			from = from + ", WON_TITLE_AWD TA, AWARDS A ";
+			where = where + "(TITLES.TITLE_ID IN TA.TITLE_ID) AND "
+						  + "(TA.AWARD_ID IN A.AWARD_ID)";
 		}
 		
 		System.out.println(select);

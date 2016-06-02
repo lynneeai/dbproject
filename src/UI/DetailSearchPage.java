@@ -190,20 +190,19 @@ public class DetailSearchPage extends JPanel {
         });
         
         
-        Choice languageChoice = new Choice();
-        Choice bookType = new Choice();
-        Choice startYear = new Choice();
-        Choice endYear = new Choice();
+        JComboBox languageChoice = new JComboBox();
+        JComboBox bookType = new JComboBox();
+        JComboBox startYear = new JComboBox();
+        JComboBox endYear = new JComboBox();
         
         String[] avail_Languages = {"", "English", "French", "Chinese", "Spanish", "Arabic", "German", "Other"};
         for (int i = 0; i < avail_Languages.length; i++) {
         	languageChoice.addItem(avail_Languages[i]);
         }
         languageChoice.setPreferredSize(new Dimension(255, 25));
-        languageChoice.addFocusListener(new FocusListener() {
-        	public void focusGained(FocusEvent e) {}
-        	public void focusLost(FocusEvent e) {
-        		String language = languageChoice.getSelectedItem();
+        languageChoice.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent actionEvent) {
+        		String language = languageChoice.getSelectedItem().toString();
         		if (language != "") {
         			UserInput.set_Language(language);
         		} else {
@@ -218,10 +217,9 @@ public class DetailSearchPage extends JPanel {
         	bookType.addItem(avail_Type[i]);
         }
         bookType.setPreferredSize(new Dimension(255, 25));
-        bookType.addFocusListener(new FocusListener() {
-        	public void focusGained(FocusEvent e) {}
-        	public void focusLost(FocusEvent e) {
-        		String type = bookType.getSelectedItem();
+        bookType.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent actionEvent) {
+        		String type = bookType.getSelectedItem().toString();
         		if (type != "") {
         			UserInput.set_Title_Type(type);
         			UserInput.set_Publication_Type(type);
@@ -255,10 +253,9 @@ public class DetailSearchPage extends JPanel {
         }
         
         startYear.setPreferredSize(new Dimension(255, 25));
-        startYear.addFocusListener(new FocusListener() {
-        	public void focusGained(FocusEvent e) {}
-        	public void focusLost(FocusEvent e) {
-        		String start_Year = startYear.getSelectedItem();
+        startYear.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent actionEvent) {
+        		String start_Year = startYear.getSelectedItem().toString();
         		if (start_Year != "") {
         			UserInput.set_Start_Date(start_Year + "-01-01");
         		} else {
@@ -268,10 +265,9 @@ public class DetailSearchPage extends JPanel {
         });
 
         endYear.setPreferredSize(new Dimension(255, 25));
-        endYear.addFocusListener(new FocusListener() {
-        	public void focusGained(FocusEvent e) {}
-        	public void focusLost(FocusEvent e) {
-        		String end_Year = endYear.getSelectedItem();
+        endYear.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent actionEvent) {
+        		String end_Year = endYear.getSelectedItem().toString();
         		if (end_Year != "") {
         			UserInput.set_End_Date(end_Year + "-01-01");
         		} else {

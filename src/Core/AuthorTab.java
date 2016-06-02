@@ -6,6 +6,7 @@ public class AuthorTab {
 	private String Total_Number;
 	private String Page_Dollar;
 	private String Language;
+	private String Award_Cat;
 	
 	public AuthorTab() {
 		Author_Name = null;
@@ -15,14 +16,19 @@ public class AuthorTab {
 		this.Author_Name = name;
 	}
 	
-	public AuthorTab(String name, String data, String choice) {
-		Author_Name = name;
+	public AuthorTab(String one, String two, String choice) {
 		if (choice == "birthdate") {
-			Birthdate = data;
+			Author_Name = one;
+			Birthdate = two;
 		} else if (choice == "number") {
-			Total_Number = data;
+			Author_Name = one;
+			Total_Number = two;
 		} else if (choice == "page_dollar") {
-			Page_Dollar = data;
+			Author_Name = one;
+			Page_Dollar = two;
+		} else if (choice == "award") {
+			Award_Cat = one;
+			Author_Name = two;
 		}
 	}
 	
@@ -52,6 +58,10 @@ public class AuthorTab {
 		this.Language = language;
 	}
 	
+	public void set_Award_Cat(String award) {
+		this.Award_Cat = award;
+	}
+	
 	public String get_Author_Name() {
 		return Author_Name;
 	}
@@ -70,5 +80,9 @@ public class AuthorTab {
 	
 	public String get_Language() {
 		return Language;
+	}
+	
+	public String get_Award_Cat() {
+		return Award_Cat;
 	}
 }

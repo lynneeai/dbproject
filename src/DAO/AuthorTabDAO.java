@@ -45,6 +45,13 @@ public class AuthorTabDAO {
     	return new AuthorTab(language, name);
     }
     
+    private AuthorTab convertRowToAuthorTab_Award(ResultSet myRs) throws SQLException {
+    	String award = myRs.getString("AWARD_CAT_NAME");
+    	String name = myRs.getString("AUTHOR_NAME");
+    	
+    	return new AuthorTab(award, name, "award");
+    }
+    
     public List<AuthorTab> searchAllAuthor(AuthorTabInput authorTabInput) {
     	String query = "";
     	List<AuthorTab> authorTabList = new ArrayList<>();
@@ -395,7 +402,25 @@ public class AuthorTabDAO {
     	String query = "";
     	List<AuthorTab> authorTabList = new ArrayList<>();
     	
-    	query = "SELECT AUTHOR_NAME, NUM " +
+    	if (authorTabInput.get_Selection() == null) {
+    		query = "WITH TOTAL_RESULT AS (SELECT AUTHOR_ID, AWARD_CAT_ID, COUNT(AUTHOR_ID) AS TOTAL " +
+    									"FROM WRITTEN_PUBL_AUT " +
+    									"INNER JOIN(SELECT DISTINCT A.TITLE_ID, PUBL_ID, AWARD_CAT_ID " +
+    												"FROM PUBLISHED_PUBL_TITLE " +
+    												"INNER JOIN (SELECT TITLE_ID, AWARDS.AWARD_ID, AWARD_CAT_ID " +
+    															"FROM WON_TITLE_AWD, AWARDS " +
+    															"WHERE WON_TITLE_AWD.AWARD_ID = AWARDS.AWARD_ID) A   " +
+    												"ON A.TITLE_ID = PUBLISHED_PUBL_TITLE.TITLE_ID) B " +
+    									"ON B.PUBL_ID = WRITTEN_PUBL_AUT.PUBL_ID " +
+    									"GROUP BY AUTHOR_ID, AWARD_CAT_ID " +
+    									"ORDER BY TOTAL DESC) " +
+    				"SELECT AWARD_CAT_NAME, AUTHOR_NAME " +
+    				"FROM (SELECT AUTHOR_NAME, AWARD_CAT_NAME, TOTAL, ROW_NUMBER() OVER (PARTITION BY TOTAL_RESULT.AWARD_CAT_ID ORDER BY TOTAL DESC) AS ROWNUMBER " +
+    						"FROM TOTAL_RESULT, AUTHORS, AWARD_CATS " +
+    						"WHERE AWARD_CATS.AWARD_CAT_ID = TOTAL_RESULT.AWARD_CAT_ID AND AUTHORS.AUTHOR_ID = TOTAL_RESULT.AUTHOR_ID)  " +
+    				"WHERE ROWNUMBER <= 3";	
+    	} else {
+    		query = "SELECT AUTHOR_NAME, NUM " +
 				"FROM AUTHORS " +
 				"INNER JOIN (SELECT COUNT(A.TITLE_ID) AS NUM, AUTHOR_ID " +
 							"FROM (SELECT Z.AWARD_ID, AWARD_CAT_ID, TITLE_ID " +
@@ -418,6 +443,7 @@ public class AuthorTabDAO {
 							"ORDER BY NUM DESC) C " +
 				"ON C.AUTHOR_ID = AUTHORS.AUTHOR_ID " +
 				"WHERE ROWNUM <= 3";
+    	}
     	
     	System.out.println(query);
     	
@@ -425,10 +451,17 @@ public class AuthorTabDAO {
             myStmt = myConn.createStatement();		
             myRs = myStmt.executeQuery(query);
             
-            while (myRs.next()) {
-           		AuthorTab tempAuthorTab = convertRowToAuthorTab_Num(myRs);
-           		authorTabList.add(tempAuthorTab);
-           	}	
+            if (authorTabInput.get_Selection() == null) {
+            	while (myRs.next()) {
+            		AuthorTab tempAuthorTab = convertRowToAuthorTab_Award(myRs);
+            		authorTabList.add(tempAuthorTab);
+            	}
+            } else {
+            	while (myRs.next()) {
+            		AuthorTab tempAuthorTab = convertRowToAuthorTab_Num(myRs);
+            		authorTabList.add(tempAuthorTab);
+            	}	
+            }
             	
             
 		}
